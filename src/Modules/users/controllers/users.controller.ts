@@ -8,6 +8,7 @@ import {
   UploadedFile,
   UploadedFiles,
   Response,
+  Param,
 } from "@nestjs/common";
 
 import {
@@ -15,55 +16,52 @@ import {
   FileFieldsInterceptor,
   AnyFilesInterceptor,
 } from "@nestjs/platform-express";
+import { responseInterface } from "src/Response/interfaces/interfaces.index";
 
 import { UsersService } from "../services/services.index";
 
 @Controller("users")
 export class UsersController {
+  _Response: responseInterface;
+
   constructor(private _userService: UsersService) {}
 
   @Get()
-  getHello(): Promise<any> 
-  {
-    
+  getHello(): Promise<any> {
     return this._userService.getAll();
   }
 
-  @Post()
-  async createUser(@Body() body: any, @Response() res: any): Promise<any> {
-    // return await this._userService.pruebaGuardar(body);
-    console.log("data que llega", body);
-    // res.end();
 
-    let resp: any = null;
-    await this._userService.pruebaGuardar(body).then(
-      (r) => {
-        resp = r;
-        console.log("recibe", r);
-      },
-      (err) => {
-        console.log("error", err);
-      }
-    );
-
-    console.log("la puta respuesta", resp);
-
-    return res.status(resp.status).json(resp);
-  }
-
-
-
-  @Post("upload")
-  @UseInterceptors(AnyFilesInterceptor())
-  uploadFile(
-    @UploadedFiles() files,
-    @Request() req: any,
+  @Get(":id")
+  async getOneUser(
+    @Param("id") id: string,
     @Response() res: any
-  ) {
-    console.log(files);
+  ): Promise<responseInterface> {
+    this._Response = await this._userService.getOne(id);
 
-    console.log("prueba req", req.body);
-
-    res.end();
+    return res.status(this._Response.status).json(this._Response);
   }
+
+
+  @Get()
+  async getUsers(@Response() res: any): Promise<responseInterface> {
+    this._Response = await this._userService.getAll();
+
+    return res.status(this._Response.status).json(this._Response);
+  }
+
+
+  // @Post("upload")
+  // @UseInterceptors(AnyFilesInterceptor())
+  // uploadFile(
+  //   @UploadedFiles() files,
+  //   @Request() req: any,
+  //   @Response() res: any
+  // ) {
+  //   console.log(files);
+
+  //   console.log("prueba req", req.body);
+
+  //   res.end();
+  // }
 }

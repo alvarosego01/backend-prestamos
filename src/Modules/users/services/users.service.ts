@@ -5,25 +5,26 @@ import { Users } from "../models/schemas/userSchema";
 // import { model } from "../models/schemas/userSchema";
 
 // servicios de response handler y process data
-import { responseInterface } from "src/Response/interfaces/interfaces.index";
+import { responseInterface, _argsFind } from "src/Response/interfaces/interfaces.index";
 
 import { ProcessDataService } from "src/Classes/classes.index";
 
 import { _configPaginator, _dataPaginator, _argsPagination} from 'src/Response/interfaces/interfaces.index';
 
 @Injectable()
-export class UsersService 
+export class UsersService
 {
+
+  _Response: responseInterface;
 
   constructor
   (
     @InjectModel(Users.name) private UsersModel: Model<Users>,
-    private _processData: ProcessDataService,
-    private _Response: responseInterface
-    
+    private _processData: ProcessDataService
+
   ){}
 
-  
+
   async getAll(): Promise<responseInterface> {
 
 
@@ -47,32 +48,34 @@ export class UsersService
       this._Response = r;
     }, err => {
       this._Response = err;
+      // this._Response.message =
     });
 
     return this._Response;
 
   }
 
-  async pruebaGuardar(data: any): Promise<any> 
-  {
-    const datarecibida = new this.UsersModel(data);
-    console.log("datarecibida", datarecibida);
-    let response = null;
 
 
-    await this._processData._saveDB(datarecibida).then(
-      (r: responseInterface) => {
-        r.data.pass = "*";
-        response = r;
+  async getOne(id: string): Promise<responseInterface> {
+
+    const args: _argsFind = {
+      findObject: {
+        _id: id,
       },
-      (err: responseInterface) => {
-        response = err;
-      }
-    );
+      populate: null
+      // select: "rol"
+    }
 
-    return response;
+    await this._processData._findOneDB(this.UsersModel, args).then(r => {
+      this._Response = r;
+    }, err => {
+      this._Response = err;
+      this._Response.data = "Usuario inexistente"
+    });
+
+    return this._Response;
   }
-  
 
 }
 

@@ -37,6 +37,7 @@ export class ProcessDataService {
           const resp: responseInterface = {
             ok: false,
             status: 404,
+            message: 'No hay resultados en este momento'
 
           };
           reject(resp);
@@ -81,7 +82,7 @@ export class ProcessDataService {
           console.log('inexistente');
           const resp: responseInterface = {
             ok: false,
-            status: 404,
+            status: 404
           };
           reject(resp);
         }
@@ -103,7 +104,7 @@ export class ProcessDataService {
     return new Promise(async (resolve, reject) => {
 
       console.log('DATA', dataBody);
-      
+
       dataBody.save((err, response) => {
         if (err) {
           //if exists problem for update user, return sttus 400
@@ -115,7 +116,7 @@ export class ProcessDataService {
 
           };
           console.log('ERRORR', err);
-          
+
           reject(resp);
 
         }
