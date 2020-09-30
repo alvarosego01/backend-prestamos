@@ -7,9 +7,10 @@ import { Users } from "../models/schemas/userSchema";
 // servicios de response handler y process data
 import { responseInterface, _argsFind } from "src/Response/interfaces/interfaces.index";
 
-import { ProcessDataService } from "src/Classes/classes.index";
+import { ProcessDataService, DateProcessService } from "src/Classes/classes.index";
 
-import { _configPaginator, _dataPaginator, _argsPagination} from 'src/Response/interfaces/interfaces.index';
+import { _configPaginator, _dataPaginator, _argsPagination, _argsUpdate} from 'src/Response/interfaces/interfaces.index';
+import { UserDto, responseUserDTO } from "../models/dto/dto.index";
 
 @Injectable()
 export class UsersService
@@ -20,7 +21,8 @@ export class UsersService
   constructor
   (
     @InjectModel(Users.name) private UsersModel: Model<Users>,
-    private _processData: ProcessDataService
+    private _processData: ProcessDataService,
+    private _dateProcessService: DateProcessService
 
   ){}
 
@@ -72,6 +74,67 @@ export class UsersService
     }, err => {
       this._Response = err;
       this._Response.data = "Usuario inexistente"
+    });
+
+    return this._Response;
+  }
+
+  async saveUser(user:Users): Promise<responseInterface>
+  {
+    const data = new this.UsersModel(user);
+
+    await this._processData._saveDB(data).then(r => {
+      this._Response = r;
+    }, err => {
+      this._Response = err;
+      this._Response.data = "Error en los parámetros"
+    });
+
+    return this._Response;
+  }
+
+  async updateUsers(user:UserDto, id:string): Promise<responseInterface>
+  {
+    // se crea un objeto con los nuevos valores
+    const data: responseUserDTO = {
+      name: user.name,
+      last_name: user.last_name,
+      status: user.status,
+      id_card: user.id_card,
+      pass: user.pass,
+      email: user.email,
+      updatedAt: this._dateProcessService.setDate(),
+      _test: null
+    }
+    // se crea el objeto de argumentos con el id de busqueda en especifico y la data a reemplazar en set
+    const args: _argsUpdate = {
+      findObject: {
+        _id: id,
+      },
+      set: {
+        $set: data
+      }
+    }
+    
+    await this._processData._updateDB(this.UsersModel, args).then(r => {
+      this._Response = r;
+    }, err => {
+      this._Response = err;
+      this._Response.data = "Error en los parámetros";
+    });
+    
+    return this._Response;
+  }
+
+  async deleteUsers(id:string):Promise<responseInterface>
+  {
+    await this._processData._deleteSoftDB(this.UsersModel, id ).then(r  => {
+
+      this._Response = r;
+      this._Response.message = 'Usuario eliminado';
+
+    }, err => {
+      this._Response = err;
     });
 
     return this._Response;

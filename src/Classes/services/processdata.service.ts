@@ -250,7 +250,7 @@ export class ProcessDataService {
 
           if(response){
 
-            dataBody.delete({
+            await dataBody.delete({
               _id: id
             }).exec(function (error, response) {
               if (error) {
