@@ -34,8 +34,8 @@ export class RoleController {
 
     ) {}
 
-  @RolesDecorator('ADMIN_ROLE')
-  @UseGuards(AuthGuard(), RoleGuard)
+  //@RolesDecorator('ADMIN_ROLE')
+  //@UseGuards(AuthGuard(), RoleGuard)
   @Get(':id')
   async getRole(@Param('id') id: string, @Response() res: any): Promise<responseInterface> {
 
@@ -45,8 +45,8 @@ export class RoleController {
     return res.status(this._Response.status).json(this._Response);
   }
 
-  @RolesDecorator('ADMIN_ROLE')
-  @UseGuards(AuthGuard(), RoleGuard)
+  //@RolesDecorator('ADMIN_ROLE')
+  //@UseGuards(AuthGuard(), RoleGuard)
   @Get()
   async getRoles(@Response() res: any): Promise<responseInterface> {
 
@@ -55,8 +55,8 @@ export class RoleController {
     return res.status(this._Response.status).json(this._Response);
   }
 
-  @RolesDecorator('ADMIN_ROLE')
-  @UseGuards(AuthGuard(), RoleGuard)
+  //@RolesDecorator('ADMIN_ROLE')
+  //@UseGuards(AuthGuard(), RoleGuard)
   @Post()
   async createRole(@Body() body: Roles ,@Response() res: any): Promise<responseInterface> {
 
@@ -65,9 +65,9 @@ export class RoleController {
     return res.status(this._Response.status).json(this._Response);
   }
 
-  @RolesDecorator('ADMIN_ROLE')
-  @UseGuards(AuthGuard(), RoleGuard)
-  @UsePipes(ValidationPipe)
+  //@RolesDecorator('ADMIN_ROLE')
+  //@UseGuards(AuthGuard(), RoleGuard)
+  //@UsePipes(ValidationPipe)
   @Put(':id')
   async updateRole(@Param('id') id: string, @Body() body: RolesDto, @Response() res: any) {
 
@@ -76,9 +76,9 @@ export class RoleController {
     return res.status(this._Response.status).json(this._Response);
   }
 
-  @RolesDecorator('ADMIN_ROLE')
-  @UseGuards(AuthGuard(), RoleGuard)
-  @UsePipes(ValidationPipe)
+  //@RolesDecorator('ADMIN_ROLE')
+  //@UseGuards(AuthGuard(), RoleGuard)
+  //@UsePipes(ValidationPipe)
   @Delete(':id')
   async deleteRole(@Param('id') id: string, @Response() res: any) {
 

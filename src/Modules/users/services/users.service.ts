@@ -10,7 +10,9 @@ import { responseInterface } from "src/Response/interfaces/interfaces.index";
 import { ProcessDataService } from "src/Classes/classes.index";
 
 @Injectable()
-export class UsersService {
+export class UsersService 
+{
+
   constructor(
     @InjectModel(Users.name) private UsersModel: Model<Users>,
     private _processData: ProcessDataService
@@ -24,7 +26,8 @@ export class UsersService {
 
   }
 
-  async pruebaGuardar(data: any): Promise<any> {
+  async pruebaGuardar(data: any): Promise<any> 
+  {
     const datarecibida = new this.UsersModel({
       name: data.name,
       pass: data.pass,
@@ -58,10 +61,7 @@ export class UsersService {
 
     return response;
   }
+  
 
-  async pruebaRecibir(datos) {
-    console.log("prueba datos", datos);
-    return;
-  }
 }
 

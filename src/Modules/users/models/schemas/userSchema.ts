@@ -34,6 +34,7 @@ export class Users extends Document {
     default: null,
   })
   name: string;
+  
   @Prop({
     required: true,
     // default: null,

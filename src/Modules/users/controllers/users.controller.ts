@@ -23,11 +23,13 @@ export class UsersController {
   constructor(private _userService: UsersService) {}
 
   @Get()
-  getHello(): string {
+  getHello(): string 
+  {
+    
     return this._userService.pruebaRuta("users");
   }
 
-  @Post("pruebaDatos")
+  @Post()
   async createUser(@Body() body: any, @Response() res: any): Promise<any> {
     // return await this._userService.pruebaGuardar(body);
     console.log("data que llega", body);
@@ -49,14 +51,7 @@ export class UsersController {
     return res.status(resp.status).json(resp);
   }
 
-  // @Post('formaVieja')
-  // async createUser2(@Body() data: any, @Response() res: any): Promise<any> {
-  //   const resp = await this._userService.pruebaGuardar2(data);
 
-  //   console.log('la puta respuesta', resp);
-
-  //   return res.status(resp.status).json(resp);
-  // }
 
   @Post("upload")
   @UseInterceptors(AnyFilesInterceptor())
