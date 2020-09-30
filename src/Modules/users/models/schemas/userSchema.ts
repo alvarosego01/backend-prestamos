@@ -29,6 +29,7 @@ const _testSchema = SchemaFactory.createForClass(_test);
 
 @Schema()
 export class Users extends Document {
+  
   @Prop({
     required: true,
     default: null,
@@ -37,15 +38,11 @@ export class Users extends Document {
   
   @Prop({
     required: true,
-    // default: null,
-    unique: true,
+    unique: true
   })
   email: string;
 
-  @Prop({
-    default: "culo",
-    required: true,
-  })
+  @Prop({required: true})
   pass: string;
 
   @Prop({

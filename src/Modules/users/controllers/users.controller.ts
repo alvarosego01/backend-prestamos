@@ -23,10 +23,10 @@ export class UsersController {
   constructor(private _userService: UsersService) {}
 
   @Get()
-  getHello(): string 
+  getHello(): Promise<any> 
   {
     
-    return this._userService.pruebaRuta("users");
+    return this._userService.getAll();
   }
 
   @Post()

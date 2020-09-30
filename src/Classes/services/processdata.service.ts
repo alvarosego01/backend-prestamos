@@ -102,6 +102,8 @@ export class ProcessDataService {
   async _saveDB(dataBody: any): Promise<responseInterface> {
     return new Promise(async (resolve, reject) => {
 
+      console.log('DATA', dataBody);
+      
       dataBody.save((err, response) => {
         if (err) {
           //if exists problem for update user, return sttus 400
@@ -112,6 +114,8 @@ export class ProcessDataService {
             err: err,
 
           };
+          console.log('ERRORR', err);
+          
           reject(resp);
 
         }

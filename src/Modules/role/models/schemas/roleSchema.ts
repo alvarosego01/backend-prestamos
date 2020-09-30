@@ -28,12 +28,13 @@ export class Roles extends Document {
   @Prop({
     type: String,
     required: true,
-    default: 'ARTIST_ROLE',
+    default: 'DEFAULT_ROLE',
     enum: roles,
     unique: true,
 
   })
   rol: string;
+  
   @Prop({
     type: String,
     required: false,

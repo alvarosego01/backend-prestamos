@@ -9,41 +9,53 @@ import { responseInterface } from "src/Response/interfaces/interfaces.index";
 
 import { ProcessDataService } from "src/Classes/classes.index";
 
+import { _configPaginator, _dataPaginator, _argsPagination} from 'src/Response/interfaces/interfaces.index';
+
 @Injectable()
 export class UsersService 
 {
 
-  constructor(
+  constructor
+  (
     @InjectModel(Users.name) private UsersModel: Model<Users>,
-    private _processData: ProcessDataService
-  ) {}
+    private _processData: ProcessDataService,
+    private _Response: responseInterface
+    
+  ){}
 
-  pruebaRuta(ruta: string) {
-    console.log("prueba de ruta", ruta);
-    return `prueba de ruta ${ruta}`;
+  
+  async getAll(): Promise<responseInterface> {
 
 
+    const parameters: _dataPaginator = { // <- paginate parameters
+
+      page: 1 || _configPaginator.page,
+      limit: 12 || _configPaginator.limit,
+      customLabels: _configPaginator.customLabels,
+      sort: { _id: -1 },
+
+    }
+
+    const args: _argsPagination = {
+
+      findObject: {},
+      options: parameters
+
+    }
+
+    await this._processData._findDB(this.UsersModel, args).then(r => {
+      this._Response = r;
+    }, err => {
+      this._Response = err;
+    });
+
+    return this._Response;
 
   }
 
   async pruebaGuardar(data: any): Promise<any> 
   {
-    const datarecibida = new this.UsersModel({
-      name: data.name,
-      pass: data.pass,
-      email: '1aaa2a@gmail.com',
-      ddd: "ssdfdf",
-      _test: [{
-        otro: "otro",
-      },
-      {
-        otro: "otro",
-      },
-      {
-        otro: "otro",
-      }
-    ],
-    });
+    const datarecibida = new this.UsersModel(data);
     console.log("datarecibida", datarecibida);
     let response = null;
 
@@ -54,7 +66,6 @@ export class UsersService
         response = r;
       },
       (err: responseInterface) => {
-
         response = err;
       }
     );
