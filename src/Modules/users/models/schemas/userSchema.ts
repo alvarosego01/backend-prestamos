@@ -2,13 +2,9 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
 import * as Mongoose from "mongoose";
-
-import * as Moment from "moment-timezone";
-const dateMoment = Moment().tz("America/Montevideo");
-
 import * as uniqueValidator from "mongoose-unique-validator";
 import * as mongoosePaginate from "mongoose-paginate-v2";
-import { Roles } from "src/Modules/role/models/schemas/roleSchema";
+import * as mongoose_delete from "mongoose-delete";
 import { DateProcessService } from "src/Classes/classes.index";
 
 // SCHMA DE EJEMPLO
@@ -152,4 +148,5 @@ export const UsersSchema = SchemaFactory.createForClass(Users)
   .plugin(uniqueValidator, {
     message: "El {PATH} {VALUE} ya está registrado en sistema",
   })
-  .plugin(mongoosePaginate);
+  .plugin(mongoosePaginate)
+  .plugin(mongoose_delete, { overrideMethods: 'all' });
