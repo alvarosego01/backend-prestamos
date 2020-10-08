@@ -17,7 +17,13 @@ export class AdminController
     @Get("users")
     async getUser():Promise<responseInterface>
     {
-        return this._admin.getUsers();
+        return await this._admin.getUsers();
+    }
+
+    @Get("users/licencias")
+    async getUserLicense()
+    {
+        return "usuarios licenciados";
     }
 
     @Post("users/roles/:id")
@@ -33,4 +39,11 @@ export class AdminController
     {
         return await this._admin.getRoles();
     }
+
+    @Get("licencias")
+    async getSavedLicenses()
+    {
+        return "lincencias registradas";
+    }
+
 }
