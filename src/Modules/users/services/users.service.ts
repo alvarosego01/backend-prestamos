@@ -86,7 +86,7 @@ export class UsersService
     await this._processData._saveDB(data).then(r => {
       this._Response = r;
     }, err => {
-      this._Response = err;
+      this._Response = null;
       this._Response.data = "Error en los parámetros"
     });
 
