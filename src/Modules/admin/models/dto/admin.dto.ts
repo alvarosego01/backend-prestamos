@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsArray, IsNumber } from "class-validator";
+import { IsNotEmpty, IsString, IsArray } from "class-validator";
 
 export class RoleUserDto 
 {
