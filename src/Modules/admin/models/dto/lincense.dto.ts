@@ -4,21 +4,30 @@ export class LicenseDto
 {
   @IsNotEmpty()
   @IsString()
-  nombre:   string;
+  nombre: string;
   @IsNotEmpty()
   @IsString()
   duracion: string;
   @IsNotEmpty()
   @IsString()
-  usuario:  string;
+  usuario: string;
   @IsNotEmpty()
   @IsString()
-  admin:    string;
+  admin: string;
   @IsNotEmpty()
   @IsNumber()
-  precio:   number;
+  precio: number;
   @IsNotEmpty()
   @IsString()
-  status:   string;
+  status: string;
+}
 
+export class LicenseChangeStatusDto 
+{
+  @IsNotEmpty()
+  @IsString()
+  status: string;
+
+  @IsArray()
+  updatedAt: string[];
 }
