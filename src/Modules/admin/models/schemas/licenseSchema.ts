@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document, Mongoose } from "mongoose";
-
+import { Document } from "mongoose";
+import * as Mongoose from "mongoose";
 
 
 import * as uniqueValidator from "mongoose-unique-validator";
