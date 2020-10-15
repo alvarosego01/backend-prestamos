@@ -60,7 +60,6 @@ export class License extends Document
         required: true,
         default: 'ACTIVE',
         enum: statusLicense,
-        unique: true,
     })
     status: string;
 

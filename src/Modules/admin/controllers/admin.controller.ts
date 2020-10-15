@@ -1,8 +1,7 @@
 import { Controller, Get, Post, Body, Response, Param, Put, Delete } from "@nestjs/common";
 import { responseInterface } from "src/Response/interfaces/interfaces.index";
-import { AdminService,AdminLicService } from "../services/services.index";
+import { AdminService,AdminLicService, AdminHistService } from "../services/services.index";
 import { RoleUserDto } from "../models/dto/admin.dto";
-import { License } from '../models/schemas/licenseSchema';
 import { LicenseDto, LicenseChangeStatusDto } from "../models/dto/dto.index";
 
 
@@ -14,7 +13,8 @@ export class AdminController
     constructor
     (
         private _admin:AdminService,
-        private _licAdmin:AdminLicService
+        private _licAdmin:AdminLicService,
+        private _histAdmin:AdminHistService
     ){}
 
     @Get("users")
@@ -77,6 +77,14 @@ export class AdminController
     async changeStatusLic(@Body() body: LicenseChangeStatusDto, @Response() res: any, @Param('id') id:string): Promise<responseInterface>
     {
         this._Response = await this._licAdmin.changeUserLicense(body, id);
+
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+    @Get("/bitacora")
+    async getBitacoraAdmin(@Response() res: any): Promise<responseInterface>
+    {
+        //this._Response = await this._histAdmin;
 
         return res.status(this._Response.status).json(this._Response);
     }

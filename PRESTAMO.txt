@@ -13,3 +13,4 @@ fecha de creacion
 usuario_asignado
 admin_vendedor
 precio
+estado (active, paused, removed)
