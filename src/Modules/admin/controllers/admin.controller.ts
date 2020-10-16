@@ -84,7 +84,7 @@ export class AdminController
     @Get("/bitacora")
     async getBitacoraAdmin(@Response() res: any): Promise<responseInterface>
     {
-        //this._Response = await this._histAdmin;
+        this._Response = await this._histAdmin.getBitacora();
 
         return res.status(this._Response.status).json(this._Response);
     }

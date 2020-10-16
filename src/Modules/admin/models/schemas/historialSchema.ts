@@ -28,7 +28,7 @@ const descp =
 const _dateService = new DateProcessService();
 
 @Schema()
-export class Admin extends Document
+export class History extends Document
 {
     @Prop({
         type: String,
@@ -45,7 +45,7 @@ export class Admin extends Document
     })
     usuario: string;
 
-    @Prop({
+    @Prop({ 
         type        :Mongoose.Schema.Types.ObjectId,
         ref         :"Users",
         required    :true  
@@ -67,7 +67,7 @@ export class Admin extends Document
     createdAt: string;
 }
 
-export const AdminSchema = SchemaFactory.createForClass(Admin)
+export const HistSchema = SchemaFactory.createForClass(History)
 .plugin(uniqueValidator, {message: "Acción inválida"})
 .plugin(mongoosePaginate)
 .plugin(mongoose_delete, {overrideMethods: 'all'});

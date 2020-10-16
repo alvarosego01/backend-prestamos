@@ -18,6 +18,9 @@ export class LicenseDto
   @IsNumber()
   precio: number;
   @IsNotEmpty()
+  @IsNumber()
+  dayReaming: number;
+  @IsNotEmpty()
   @IsString()
   status: string;
 }
