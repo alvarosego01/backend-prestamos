@@ -18,5 +18,5 @@ export enum StatusLicense
 
 export enum ActionDescp
 {
-    SET_LICENSE = "Se le concedió una licencia al usuario mediante administración"
+    SET_LICENSE = "Se le otorgó la licencia al usuario"
 }

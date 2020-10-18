@@ -3,7 +3,7 @@ import { responseInterface, _configPaginator, _argsPagination, _dataPaginator, _
 import { ProcessDataService, DateProcessService } from 'src/Classes/classes.index';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { responseChangeRoleDTO, RoleUserDto, LicenseDto, LicenseChangeStatusDto  } from '../models/dto/dto.index';
+import { LicenseDto, LicenseChangeStatusDto, BitacoraDto  } from '../models/dto/dto.index';
 import { License } from '../models/schemas/licenseSchema';
 
 @Injectable()
@@ -119,6 +119,7 @@ export class AdminLicService
         await this._processData._updateDB(this._licenseModel, args).then(r =>
         {
             this._Response = r;
+
         }, err =>
         {
             this._Response = err;

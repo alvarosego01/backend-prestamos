@@ -4,7 +4,7 @@ import { ProcessDataService, DateProcessService } from 'src/Classes/classes.inde
 import { Model } from 'mongoose';
 import { History, HistSchema } from '../models/schemas/historialSchema';
 import { InjectModel } from '@nestjs/mongoose';
-import { BitacoraDto } from '../models/dto/dto.index';
+import { BitacoraInterface } from '../models/interfaces/bitacora.interface';
 
 @Injectable()
 export class AdminHistService 
@@ -48,10 +48,10 @@ export class AdminHistService
         return this._Response;
     }
 
-    async setUserLicense(bitacora:BitacoraDto):Promise<responseInterface>
+    async setBitacora(bitacora:BitacoraInterface)
     {
         const data = new this._historyModel(bitacora);
-
+        
         await this._processData._saveDB(data).then(r =>
         {
             this._Response = r;

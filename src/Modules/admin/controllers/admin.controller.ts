@@ -3,6 +3,7 @@ import { responseInterface } from "src/Response/interfaces/interfaces.index";
 import { AdminService,AdminLicService, AdminHistService } from "../services/services.index";
 import { RoleUserDto } from "../models/dto/admin.dto";
 import { LicenseDto, LicenseChangeStatusDto } from "../models/dto/dto.index";
+import { BitacoraInterface } from "../models/interfaces/bitacora.interface";
 
 
 @Controller("admin")
@@ -16,7 +17,7 @@ export class AdminController
         private _licAdmin:AdminLicService,
         private _histAdmin:AdminHistService
     ){}
-
+        
     @Get("users")
     async getUser(@Response() res:any):Promise<responseInterface>
     {
@@ -63,7 +64,7 @@ export class AdminController
         this._Response = await this._licAdmin.deleteUserLicense(id);
 
         return res.status(this._Response.status).json(this._Response);
-    }
+    }                                   
 
     @Get("users/licencias/:id")
     async getUserLicense(@Response() res:any, @Param('id') id:string):Promise<responseInterface>
@@ -81,7 +82,7 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @Get("/bitacora")
+    @Get("bitacora")
     async getBitacoraAdmin(@Response() res: any): Promise<responseInterface>
     {
         this._Response = await this._histAdmin.getBitacora();
@@ -89,4 +90,11 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    @Post("bitacora")
+    async setBitacora(@Body() body:BitacoraInterface, @Response() res: any)
+    {
+        console.log(await this._histAdmin.setBitacora(body));
+        
+        return res.status(200).json();
+    }
 }
