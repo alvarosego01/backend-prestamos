@@ -1,7 +1,9 @@
+import { ActionAdmin, ActionDescp } from "../actionTypes.enum";
+
 export interface BitacoraInterface
 {
-    stutus?         :string;
-    descripcion?    :string;
-    admin?          :string;
-    usuario?        :string;
+    status?         :any;
+    admin?          :any;
+    usuario?        :any;
+    descripcion?    :any;
 }

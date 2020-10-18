@@ -2,8 +2,9 @@ import { Controller, Get, Post, Body, Response, Param, Put, Delete } from "@nest
 import { responseInterface } from "src/Response/interfaces/interfaces.index";
 import { AdminService,AdminLicService, AdminHistService } from "../services/services.index";
 import { RoleUserDto } from "../models/dto/admin.dto";
-import { LicenseDto, LicenseChangeStatusDto } from "../models/dto/dto.index";
+import { LicenseDto, LicenseChangeStatusDto, BitacoraDto } from "../models/dto/dto.index";
 import { BitacoraInterface } from "../models/interfaces/bitacora.interface";
+import { ActionAdmin, ActionDescp } from "../models/actionTypes.enum";
 
 
 @Controller("admin")
@@ -90,11 +91,18 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    private body:BitacoraInterface;
     @Post("bitacora")
-    async setBitacora(@Body() body:BitacoraInterface, @Response() res: any)
+    async setBitacora( @Response() res: any)
     {
-        console.log(await this._histAdmin.setBitacora(body));
+        this.body = new BitacoraDto;
+        this.body.status = ActionAdmin.LICENSE;
+        this.body.admin = "5f74f168e6e4cd1f64bf0b93";
+        this.body.usuario = "5f74f168e6e4cd1f64bf0b93";
+        this.body.descripcion = ActionDescp.SET_LICENSE;
+
+        console.log("ActionAdmin", this.body);
         
-        return res.status(200).json();
+        return res.status(200).json(this.body);
     }
 }

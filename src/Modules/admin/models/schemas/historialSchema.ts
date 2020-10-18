@@ -15,14 +15,14 @@ const actionEnum = Object.values(ActionAdmin);
 const action =
 {
     values  : actionEnum,
-    message : 'Esta {VALUE} acción no esta permitida'
+    message : 'Esta acción no esta permitida'
 };
 
 const actionDescp = Object.values(ActionDescp);
 const descp =
 {
     values  : actionDescp,
-    message : 'Esta {VALUE} acción no esta permitida'
+    message : 'Esta acción no esta permitida'
 };
 
 const _dateService = new DateProcessService();
@@ -37,6 +37,20 @@ export class History extends Document
         enum        :action,
     })
     status: string;
+
+    @Prop({
+        type        :Mongoose.Schema.Types.ObjectId,
+        ref         :"Users",
+        required    :[true, "Hace falta dato"] 
+    })
+    usuario: string;
+
+    @Prop({ 
+        type        :Mongoose.Schema.Types.ObjectId,
+        ref         :"Users",
+        required    :[true, "Hace falta dato"]  
+    })
+    admin: string;
 
     @Prop({
         type        :String,

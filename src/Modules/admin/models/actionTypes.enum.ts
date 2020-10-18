@@ -3,10 +3,7 @@ export enum ActionAdmin
     CHANGE_ROLE = "CHANGE_ROLE",
     MOVED       = "MOVED",
     REMOVED     = "REMOVED",
-    SET_LICENSE = "SET_LICENSE", //establecimiento de licencia
-    DEL_LICENSE = "DEL_LICENSE", //borrado de licencia
-    STP_LICENSE = "STP_LICENSE", //pausa de licencia
-    CHG_LICENSE = "CHG_LICENSE" //cambio de licencia
+    LICENSE     = "LICENSE"
 }
 
 export enum StatusLicense
@@ -18,5 +15,8 @@ export enum StatusLicense
 
 export enum ActionDescp
 {
-    SET_LICENSE = "Se le otorgó la licencia al usuario"
+    SET_LICENSE = "Se le otorgó la licencia al usuario", //establecimiento de licencia
+    CHG_LICENSE = "Al usuario especificado se le ha cambiado el estatus de su licencia",//cambio de licencia
+    DEL_LICENSE = "Al usuario especificado se le ha revocado la licencia, por algún motivo...", //borrado de licencia
+    STP_LICENSE = "Al usuario especificado se le ha detenido la licencia por algún motivo..." //pausa de licencia
 }
