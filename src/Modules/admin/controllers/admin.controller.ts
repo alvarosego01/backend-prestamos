@@ -101,7 +101,7 @@ export class AdminController
         this.body.usuario = "5f74f168e6e4cd1f64bf0b93";
         this.body.descripcion = ActionDescp.SET_LICENSE;
 
-        console.log("ActionAdmin", this.body);
+        console.log("ActionAdmin", this.body, " ", this._histAdmin.setBitacora(this.body));
         
         return res.status(200).json(this.body);
     }

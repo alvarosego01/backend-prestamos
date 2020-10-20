@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { responseInterface, _dataPaginator, _configPaginator, _argsPagination } from 'src/Response/interfaces/interfaces.index';
 import { ProcessDataService, DateProcessService } from 'src/Classes/classes.index';
 import { Model } from 'mongoose';
-import { History, HistSchema } from '../models/schemas/historialSchema';
+import { History } from '../models/schemas/historialSchema';
 import { InjectModel } from '@nestjs/mongoose';
 import { BitacoraInterface } from '../models/interfaces/bitacora.interface';
 
@@ -18,7 +18,7 @@ export class AdminHistService
     )
     {}
 
-    async getBitacora():Promise<responseInterface>
+    async getBitacora()
     {
         const parameters: _dataPaginator = { // <- paginate parameters
 
@@ -51,7 +51,7 @@ export class AdminHistService
     async setBitacora(bitacora:BitacoraInterface)
     {
         const data = new this._historyModel(bitacora);
-        
+
         await this._processData._saveDB(data).then(r =>
         {
             this._Response = r;
