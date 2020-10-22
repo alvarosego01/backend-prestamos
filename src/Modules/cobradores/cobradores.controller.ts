@@ -1,4 +1,4 @@
-import { Controller, Response, Get, Param, Post } from '@nestjs/common';
+import { Controller, Response, Get, Param, Post, Body } from '@nestjs/common';
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
 
 @Controller('cobradores')
@@ -36,7 +36,13 @@ export class CobradoresController
     }
 
     @Post(':cobrador/cliente')
-    async setOneCliente(@Param('cobrador') cr:string, @Response() res:any):Promise<responseInterface>
+    async setOneCliente(@Param('cobrador') cr:string, @Body() body:any, @Response() res:any):Promise<responseInterface>
+    {
+        return res.status(200).json('Añadir cliente especifico del cobrador' + cr);
+    }
+
+    @Post(':cobrador/cliente/modificar')
+    async modOneCliente(@Param('cobrador') cr:string, @Body() body:any, @Response() res:any):Promise<responseInterface>
     {
         return res.status(200).json('Añadir cliente especifico del cobrador' + cr);
     }
