@@ -17,6 +17,7 @@ import {
   AdminModule,
   AuthModule,
   RoleModule,
+  CobradoresModule
 } from "./Modules/Routes.module.index";
 
 // MODULOS DE LOADING Y OTROS
@@ -39,6 +40,7 @@ import { _MONGOOSEMODULE } from "./Database/mongo-config";
     ChatModule,
     AdminModule,
     RoleModule,
+    CobradoresModule
   ],
   controllers: [AppController],
   providers: [ AppService],

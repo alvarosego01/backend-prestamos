@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { CobradoresController } from './cobradores.controller';
 
-@Module({})
+@Module({
+  controllers: [CobradoresController]
+})
 export class CobradoresModule {}

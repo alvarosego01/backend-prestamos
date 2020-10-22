@@ -53,7 +53,8 @@ export class AuthService {
 
   }
 
-  async signin(signinDto: SigninDto): Promise<responseInterface> {
+  async signin(signinDto: SigninDto): Promise<responseInterface>
+  {
     const { email, pass } = signinDto;
 
     const args: _argsFind = {
@@ -66,10 +67,12 @@ export class AuthService {
       },
       // select: "rol"
     }
-    await this._processData._findOneDB( this.UsersModel, args ).then(async (r: responseInterface) => {
+    await this._processData._findOneDB(this.UsersModel, args).then(async (r: responseInterface) =>
+    {
       this._Response = r;
 
-      if(!compareSync(pass, r.data.pass)) {
+      if (!compareSync(pass, r.data.pass))
+      {
 
         this._Response = {
           ok: false,
@@ -77,7 +80,8 @@ export class AuthService {
           message: 'Contraseña incorrecta'
         };
 
-      }else{
+      } else
+      {
 
         const payload: IJwtPayload = {
           _id: r.data._id,
@@ -98,9 +102,10 @@ export class AuthService {
 
       }
 
-    }, (err: responseInterface) => {
+    }, (err: responseInterface) =>
+    {
       this._Response = err;
-      this._Response.message = (err.status != 500)?`Usuario ${err.message}`: '';
+      this._Response.message = (err.status != 500) ? `Usuario ${err.message}` : '';
     })
 
 

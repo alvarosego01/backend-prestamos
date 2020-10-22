@@ -8,6 +8,7 @@ export { ContractsModule } from "./contracts/contracts.module"
 export { SearchModule } from "./search/search.module"
 export { ChatModule } from "./chat/chat.module"
 export { AdminModule } from "./admin/admin.module"
+export { CobradoresModule } from "./cobradores/cobradores.module"
 
 
 
