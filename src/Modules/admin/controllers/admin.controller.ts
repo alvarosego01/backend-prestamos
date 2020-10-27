@@ -91,6 +91,7 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    //to DO -> la siguiente ruta es de prueba de bitacora, tratar de implementar cuanto antes
     private body:BitacoraInterface;
     @Post("bitacora")
     async setBitacora( @Response() res: any)

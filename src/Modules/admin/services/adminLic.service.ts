@@ -135,7 +135,7 @@ export class AdminLicService
         {
 
             this._Response = r;
-            this._Response.message = 'Licencia eliminado';
+            this._Response.message = 'Licencia eliminada';
 
         }, err =>
         {
