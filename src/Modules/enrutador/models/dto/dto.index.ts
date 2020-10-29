@@ -1,0 +1,1 @@
+export { GenerarReferidoDto } from "./enrutador.dto";

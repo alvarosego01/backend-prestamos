@@ -34,7 +34,8 @@ export class AuthService {
     private _setUserMenu: SetUserMenuService
   ) {}
 
-  async signup(signupDto: SignupDto): Promise<responseInterface> {
+  async signup(signupDto: SignupDto): Promise<responseInterface> 
+  {
 
     const { email, pass, name, rol } = signupDto;
 
@@ -43,13 +44,42 @@ export class AuthService {
     const salt = await genSalt(15);
     user.pass = await hash(pass, salt);
 
-    await this._processData._saveDB(user).then((r: responseInterface) => {
+    await this._processData._saveDB(user).then((r: responseInterface) => 
+    {
       this._Response = r;
-    }, (err: responseInterface) => {
+
+    }, (err: responseInterface) => 
+    {
+
       this._Response = err;
+
     });
     return this._Response;
 
+  }
+
+  async signup2(signupDto: SignupDto, params:string[]): Promise<responseInterface> 
+  {
+
+    const { email, pass, name, rol } = signupDto;
+
+    const user        = new this.UsersModel(signupDto);
+    const salt        = await genSalt(15);
+    user.pass         = await hash(pass, salt);
+    user.rol          = params['rol'];
+    user.enrutator_id = params['ref'];
+
+    await this._processData._saveDB(user).then((r: responseInterface) => 
+    {
+      this._Response = r;
+
+    }, (err: responseInterface) => 
+    {
+
+      this._Response = err;
+
+    });
+    return this._Response;
 
   }
 
