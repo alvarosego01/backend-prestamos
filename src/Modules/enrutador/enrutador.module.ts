@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { EnrutadorController } from './controllers/controller.index';
+import { EnrutadorController, RutasController } from './controllers/controller.index';
 import { EnrutadorService } from './services/services.index';
 
 @Module({
   imports:[],
-  controllers: [EnrutadorController],
+  controllers: [EnrutadorController, RutasController],
   providers: [EnrutadorService]
 })
 export class EnrutadorModule {}

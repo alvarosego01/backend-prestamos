@@ -44,7 +44,8 @@ export class AdminController
 
         return res.status(this._Response.status).json(this._Response);
     }
-    /*
+
+    
     @Get("users/licencias")
     async getSavedLicenses(@Response() res:any):Promise<responseInterface>
     {
@@ -85,6 +86,7 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    /*
     @Get("bitacora")//obtiene todos los registro de bitacora
     async getBitacoraAdmin(@Response() res: any): Promise<responseInterface>
     {
