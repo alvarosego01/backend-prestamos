@@ -13,7 +13,7 @@ import { DateProcessService } from "src/Classes/classes.index";
 class _test extends Document {
   @Prop({
     default: "otro",
-  })
+  }) 
   otro: string;
 
   @Prop({

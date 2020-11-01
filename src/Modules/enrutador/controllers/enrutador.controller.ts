@@ -26,6 +26,8 @@ export class EnrutadorController
         return res.status(this._Response.status).json(this._Response);
     } 
 
+    
+
     //@Post("referir")
     //async registrarReferido()
 }

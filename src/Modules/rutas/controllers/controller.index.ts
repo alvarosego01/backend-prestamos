@@ -1,1 +1,0 @@
-export { RutasController } from "./rutas.controller";

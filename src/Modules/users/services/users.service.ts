@@ -73,7 +73,6 @@ export class UsersService
       this._Response = r;
     }, err => {
       this._Response = err;
-      this._Response.data = "Usuario inexistente"
     });
 
     return this._Response;
@@ -87,7 +86,7 @@ export class UsersService
       this._Response = r;
     }, err => {
       this._Response = null;
-      this._Response.data = "Error en los parámetros"
+      this._Response.message = err;
     });
 
     return this._Response;
@@ -116,11 +115,14 @@ export class UsersService
       }
     }
     
-    await this._processData._updateDB(this.UsersModel, args).then(r => {
+    await this._processData._updateDB(this.UsersModel, args).then(r => 
+    {
       this._Response = r;
-    }, err => {
+
+    }, err => 
+    {
+
       this._Response = err;
-      this._Response.data = "Error en los parámetros";
     });
     
     return this._Response;

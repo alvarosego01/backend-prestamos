@@ -1,3 +1,5 @@
+import { from } from "rxjs"
+
 export { RoleModule } from "./role/role.module"
 
 
@@ -9,6 +11,7 @@ export { SearchModule } from "./search/search.module"
 export { ChatModule } from "./chat/chat.module"
 export { AdminModule } from "./admin/admin.module"
 export { EnrutadorModule} from "./enrutador/enrutador.module"
+export { ClientesModule } from "./clientes/clientes.module"
 //export { CobradoresModule } from "./cobradores/cobradores.module"
 
 

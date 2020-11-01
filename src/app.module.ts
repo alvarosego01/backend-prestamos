@@ -17,7 +17,8 @@ import {
   AdminModule,
   AuthModule,
   RoleModule,
-  EnrutadorModule
+  EnrutadorModule,
+  ClientesModule
   //CobradoresModule,
 } from "./Modules/Routes.module.index";
 
@@ -41,7 +42,8 @@ import { _MONGOOSEMODULE } from "./Database/mongo-config";
     ChatModule,
     AdminModule,
     RoleModule,
-    EnrutadorModule
+    EnrutadorModule,
+    ClientesModule
     //CobradoresModule
   ],
   controllers: [AppController],

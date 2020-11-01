@@ -86,7 +86,7 @@ export class ConfigService {
 
     if (isDevelopmentEnv) {
       const envFilePath = __dirname + "/../../.env";
-      const existsPath = fs.existsSync(envFilePath);
+      const existsPath = fs.existsSync(envFilePath); 
 
       if (!existsPath) {
         console.log(".env file does not exist");
