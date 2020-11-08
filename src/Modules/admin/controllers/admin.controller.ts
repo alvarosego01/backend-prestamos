@@ -5,8 +5,6 @@ import { RoleUserDto } from "../models/dto/admin.dto";
 import { LicenseDto, LicenseChangeStatusDto, BitacoraDto} from "../models/dto/dto.index";
 import { BitacoraInterface } from "../models/interfaces/bitacora.interface";
 import { ActionAdmin, ActionDescp } from "../models/actionTypes.enum";
-import { ReplOptions } from "repl";
-import { UserDto } from "src/Modules/users/models/dto/user.dto";
 
 
 @Controller("admin")

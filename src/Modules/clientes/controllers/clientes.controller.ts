@@ -1,5 +1,4 @@
 import { Controller, Response, Get, Post, Body, Param, Delete } from '@nestjs/common';
-import { CobradorService } from 'src/Modules/cobradores/services/services.index';
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
 import { ClienteDto } from '../models/dto/dto.index';
 import { ClienteService, RutaClienteService } from '../services/services.index';

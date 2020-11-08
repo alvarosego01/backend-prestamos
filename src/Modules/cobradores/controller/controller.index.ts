@@ -1,1 +1,0 @@
-export { CobradoresController } from './cobradores.controller';

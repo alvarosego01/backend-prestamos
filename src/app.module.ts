@@ -11,15 +11,14 @@ import { AppService } from "./app.service";
 // MODULOS DE RUTAS
 import {
   UsersModule,
-  ContractsModule,
   SearchModule,
   ChatModule,
   AdminModule,
   AuthModule,
   RoleModule,
   EnrutadorModule,
-  ClientesModule
-  //CobradoresModule,
+  ClientesModule,
+  LicenciasModule
 } from "./Modules/Routes.module.index";
 
 // MODULOS DE LOADING Y OTROS
@@ -37,14 +36,13 @@ import { _MONGOOSEMODULE } from "./Database/mongo-config";
     AuthModule,
     MiddlewareModule,
     UsersModule,
-    ContractsModule,
     SearchModule,
     ChatModule,
     AdminModule,
     RoleModule,
     EnrutadorModule,
-    ClientesModule
-    //CobradoresModule
+    ClientesModule,
+    LicenciasModule
   ],
   controllers: [AppController],
   providers: [ AppService],
