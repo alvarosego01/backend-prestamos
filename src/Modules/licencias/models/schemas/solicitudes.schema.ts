@@ -8,8 +8,15 @@ import * as mongoosePaginate from "mongoose-paginate-v2";
 import * as mongoose_delete from "mongoose-delete";
 
 import { DateProcessService } from "src/Classes/classes.index";
+import { STATUS } from "../enums/licencia.status.enum";
 
 const _dateService = new DateProcessService();
+let status = Object.values(STATUS);
+const enumStatus =
+{
+    value: status,
+    message: 'Estatus no permitido ${VALUE}'
+}
 
 @Schema()
 export class LicenciaSolicitud extends Document
@@ -24,7 +31,9 @@ export class LicenciaSolicitud extends Document
 
     @Prop({
         type: String,
-        default: "Pendiente"
+        required: true,
+        default: "PENDIENTE",
+        enum: enumStatus
     })
     status:string
 

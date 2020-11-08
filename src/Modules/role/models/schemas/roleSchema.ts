@@ -17,7 +17,7 @@ const rolesEnum = Object.values(RoleType);
 const roles = {
     values: rolesEnum,
     message: 'El rol {VALUE} no esta permitido'
-}; //array de rolesEnum
+}; //array de rolesEnum 
 
 const _dateService = new DateProcessService();
 
