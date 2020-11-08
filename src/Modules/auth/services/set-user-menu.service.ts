@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { rolesMenu , subRolesMenu} from 'src/Modules/role/rolesMenu/rolesMenu.index';
+import { rolesMenu } from 'src/Modules/role/rolesMenu/rolesMenu.index';
 
 
 @Injectable()
@@ -25,13 +25,6 @@ export class SetUserMenuService {
             role: rolesMenu[role]
         })
 
-        if(subRole != null){
-
-            menu.push({
-                subRole: subRolesMenu[subRole]
-            })
-
-        }
 
 
         return menu;

@@ -7,18 +7,7 @@ export const rolesMenu = {
       icon: null,
       url: "profile",
     },
-    {
-      name: "Mensajeria",
-      icon: null,
-      url: "messages",
-      child: [
-        {
-          name: "Mensaje",
-          icon: null,
-          url: "message/:id",
-        },
-      ],
-    },
+
     {
       name: "Notificaciones",
       icon: null,
@@ -50,103 +39,79 @@ export const rolesMenu = {
       url: "usersControl",
       child: [
           {
-            name: "Usuario",
+            name: "Información de usuario",
           icon: null,
            url: "user/:id"
         }
         ],
     },
     {
-      name: "Gestión de contratos",
+      name: "Gestión de rutas",
       icon: null,
-      url: "contractsControl",
+      url: "routesControl",
       child: [
         {
-          name: "Contrato",
+          name: "Información de ruta",
         icon: null,
-         url: "contract/:id"
+         url: "route/:id"
       }
       ],
+    },
+    {
+      name: "Estadísticas generales",
+      icon: null,
+      url: "chartsControl"
+
     },
     {
       name: "Control de roles",
       icon: null,
       url: "rolesControl",
     },
-    {
-      name: "Atención al cliente",
-      icon: null,
-      url: "supportControl",
-      child: [
-        {
-          name: "Atención al cliente",
-        icon: null,
-         url: "support/:id"
-      }
-      ],
-    },
+
   ],
 
-  CONTRATISTA_ROLE: [
+  DEFAULT_ROLE: [
     {
-      name: "Historial de Contratos",
+      name: "Solicitar licencia",
       icon: null,
-      url: "contracts",
+      url: "licenseRequest",
+    },
+  ],
+  ENRUTATOR_ROLE: [
+    {
+      name: "Mis rutas",
+      icon: null,
+      url: "myRoutes",
       child: [
         {
-          name: "Contrato",
+          name: "Información de ruta",
         icon: null,
-         url: "contract/:id"
+         url: "myRoute/:id"
       }
       ],
     },
   ],
-  ARTISTA_ROLE: [
+  COLLECTOR_ROLE: [
     {
-      name: "Historial de Contratos",
+      name: "Mis rutas",
       icon: null,
-      url: "contracts",
+      url: "myRoutes",
       child: [
         {
-          name: "Contrato",
+          name: "Información de ruta",
         icon: null,
-         url: "contract/:id"
+         url: "myRoute/:id"
       }
       ],
     },
   ],
 };
 
-export const subRolesMenu = {
-  CANTANTE_ROLE: [
-    // {
-    //     name: "Contratos",
-    //     icon: null,
-    //     url: "contracts",
-    //   },
-  ],
 
-  INSTRUMENTISTA_ROLE: [
-    // {
-    //     name: "Contratos",
-    //     icon: null,
-    //     url: "contracts",
-    //   },
-  ],
 
-  ESCENADIRECTOR_ROLE: [
-    // {
-    //     name: "Contratos",
-    //     icon: null,
-    //     url: "contracts",
-    //   },
-  ],
 
-  ORQUESTADIRECTOR_ROLE: [
-    // {
-    //     name: "Contratos",
-    //     icon: null,
-    //     url: "contracts",
-    //   },
-  ],
-};
+// DEFAULT_ROLE
+// ADMIN_ROLE
+// ENRUTATOR_ROLE
+// COLLECTOR_ROLE

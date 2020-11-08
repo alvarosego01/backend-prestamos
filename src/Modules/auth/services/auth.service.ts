@@ -20,6 +20,7 @@ import { genSalt, hash } from 'bcryptjs';
 import { responseInterface, _argsFind } from 'src/Response/interfaces/interfaces.index';
 import { ProcessDataService } from 'src/Classes/classes.index';
 import { SetUserMenuService } from './authServices.index';
+import { UserDto } from 'src/Modules/users/models/dto/user.dto';
 
 
 @Injectable()
@@ -36,7 +37,7 @@ export class AuthService {
 
   async signup(signupDto: SignupDto): Promise<responseInterface> {
 
-    const { email, pass, name, rol } = signupDto;
+    const { email, pass, name  } = signupDto;
 
     const user = new this.UsersModel(signupDto);
     // user.email = email;
@@ -45,6 +46,7 @@ export class AuthService {
 
     await this._processData._saveDB(user).then((r: responseInterface) => {
       this._Response = r;
+      this._Response.message = 'Usuario registrado'
     }, (err: responseInterface) => {
       this._Response = err;
     });
@@ -88,20 +90,36 @@ export class AuthService {
         const l: sessionDTO = {
           _id: r.data._id,
           name: r.data.name,
+          last_name: r.data.last_name,
+          id_card: r.data.id_card,
+          pais: r.data.pais,
+          estado: r.data.estado,
+          ciudad: r.data.ciudad,
+          dir_domicilio: r.data.dir_domicilio,
+          nro_movil: r.data.nro_movil,
+          nro_fijo: r.data.nro_fijo,
+          edad: r.data.edad,
           email: r.data.email,
+          enrutator_id: r.data.enrutator_id,
           rol: r.data.rol.alias,
           token: token,
+          createdAt: r.data.createdAt,
+          updatedAt: r.data.updatedAt,
           userMenu: this._setUserMenu.setMenu(r.data.rol.rol)
 
         }
         this._Response.data = l;
 
+        this._Response.message = `Te damos la bienvenida, ${r.data.name}`;
+
       }
 
     }, (err: responseInterface) => {
       this._Response = err;
-      this._Response.message = (err.status != 500)?`Usuario ${err.message}`: '';
+      this._Response.message = (err.status != 500)?`Usuario o contraseña inválidos`: 'Algo ha salido mal, intente más tarde';
     })
+
+    console.log('prueba', this._Response);
 
 
     return this._Response;

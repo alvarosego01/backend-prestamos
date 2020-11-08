@@ -138,6 +138,7 @@ export class ProcessDataService {
   async _updateDB(dataBody: any, parameters: _argsUpdate): Promise<responseInterface> {
     return new Promise(async (resolve, reject) => {
 
+
       await dataBody.findOneAndUpdate(
 				parameters.findObject,
 				parameters.set,
@@ -170,7 +171,7 @@ export class ProcessDataService {
           };
           resolve(resp);
 
-				});
+				}).populate(parameters.populate);
 
 
     });

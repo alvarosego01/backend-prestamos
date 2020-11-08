@@ -4,12 +4,13 @@ import { AuthController } from './controllers/auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule } from '../../config/config.module';
+// import { ConfigModule } from '../../config/config.module';
 
 import { Configuration } from '../../Config/config.keys';
 import { ConfigService } from '../../Config';
 
 import { AuthService, SetUserMenuService } from './services/authServices.index';
+import { ConfigModule } from 'src/Config/config.module';
 // import { ModelsModule } from '../users/models/models.module';
 
 
@@ -27,7 +28,7 @@ import { AuthService, SetUserMenuService } from './services/authServices.index';
         return {
           secret: config.get(Configuration.JWT_SECRET),
           signOptions: {
-            expiresIn: 3600,
+            expiresIn: '2h',
           },
         };
       },
@@ -35,7 +36,10 @@ import { AuthService, SetUserMenuService } from './services/authServices.index';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, SetUserMenuService],
-  exports: [JwtStrategy, PassportModule],
+  exports: [JwtStrategy, PassportModule, SetUserMenuService],
 })
 
 export class AuthModule {}
+
+
+
