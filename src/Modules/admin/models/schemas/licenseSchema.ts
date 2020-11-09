@@ -56,11 +56,17 @@ export class License extends Document
     precio: number;
 
     @Prop({
+        type        :Number,
+        default     :0,
+        required    :[true, "Debe establecer el tiempo de la licencia"]
+    })
+    dayReaming: number;
+
+    @Prop({
         type: String,
         required: true,
         default: 'ACTIVE',
         enum: statusLicense,
-        unique: true,
     })
     status: string;
 

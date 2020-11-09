@@ -4,13 +4,16 @@ import { AuthController } from './controllers/auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-// import { ConfigModule } from '../../config/config.module';
+import { ConfigModule } from '../../config/config.module';
 
 import { Configuration } from '../../Config/config.keys';
 import { ConfigService } from '../../Config';
 
-import { AuthService, SetUserMenuService } from './services/authServices.index';
-import { ConfigModule } from 'src/Config/config.module';
+import { AuthService,SetUserMenuService } from './services/authServices.index';
+
+import { RoleService } from '../role/services/role.service';
+import { UsersService } from '../users/services/users.service';
+
 // import { ModelsModule } from '../users/models/models.module';
 
 
@@ -35,7 +38,7 @@ import { ConfigModule } from 'src/Config/config.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, SetUserMenuService],
+  providers: [AuthService, JwtStrategy, SetUserMenuService, RoleService, UsersService],
   exports: [JwtStrategy, PassportModule, SetUserMenuService],
 })
 

@@ -5,7 +5,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Users } from 'src/Modules/users/models/schemas/userSchema';
 import { Model } from 'mongoose';
 import { Roles } from 'src/Modules/role/models/schemas/roleSchema';
-import { responseChangeRoleDTO, RoleUserDto } from '../models/dto/dto.index';
+import { responseChangeRoleDTO, RoleUserDto} from '../models/dto/dto.index';
+import { UserDto } from 'src/Modules/users/models/dto/user.dto';
 
 @Injectable()
 export class AdminService 
@@ -112,4 +113,23 @@ export class AdminService
 
         return this._Response;
     }
+
+    /*
+    async generarRegistro(body:ReferenciaDto):Promise<responseInterface>
+    {
+        let url:string = body.url+"confirmar/ref="+body.idAdmin+"/rol="+body.rol;
+        this._Response.status = 200;
+        this._Response.data = url;
+
+        return this._Response;
+    }
+
+    async confirmarRegistro(params:string[], body:UserDto):Promise<responseInterface>
+    {
+        this._Response.status = 200;
+        this._Response.data = params;
+
+        return this._Response;
+    }
+    */
 }

@@ -3,7 +3,7 @@ import { responseInterface, _configPaginator, _argsPagination, _dataPaginator, _
 import { ProcessDataService, DateProcessService } from 'src/Classes/classes.index';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { responseChangeRoleDTO, RoleUserDto, LicenseDto, LicenseChangeStatusDto  } from '../models/dto/dto.index';
+import { LicenseDto, LicenseChangeStatusDto } from '../models/dto/dto.index';
 import { License } from '../models/schemas/licenseSchema';
 
 @Injectable()
@@ -66,7 +66,6 @@ export class AdminLicService
                 usuario:id
             },
             options: parameters
-
         }
 
         await this._processData._findDB(this._licenseModel, args).then(r =>
@@ -92,7 +91,7 @@ export class AdminLicService
         {
             this._Response = null;
             this._Response.data = null
-        });
+        }); 
 
         return this._Response;
     }
@@ -119,6 +118,7 @@ export class AdminLicService
         await this._processData._updateDB(this._licenseModel, args).then(r =>
         {
             this._Response = r;
+
         }, err =>
         {
             this._Response = err;
@@ -134,7 +134,7 @@ export class AdminLicService
         {
 
             this._Response = r;
-            this._Response.message = 'Licencia eliminado';
+            this._Response.message = 'Licencia eliminada';
 
         }, err =>
         {

@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Body, Response, Param, Put, Delete } from "@nestjs/common";
 import { responseInterface } from "src/Response/interfaces/interfaces.index";
-import { AdminService,AdminLicService } from "../services/services.index";
+import { AdminService,AdminLicService, AdminHistService } from "../services/services.index";
 import { RoleUserDto } from "../models/dto/admin.dto";
-import { License } from '../models/schemas/licenseSchema';
-import { LicenseDto, LicenseChangeStatusDto } from "../models/dto/dto.index";
+import { LicenseDto, LicenseChangeStatusDto, BitacoraDto} from "../models/dto/dto.index";
+import { BitacoraInterface } from "../models/interfaces/bitacora.interface";
+import { ActionAdmin, ActionDescp } from "../models/actionTypes.enum";
 
 
 @Controller("admin")
@@ -14,9 +15,10 @@ export class AdminController
     constructor
     (
         private _admin:AdminService,
-        private _licAdmin:AdminLicService
+        private _licAdmin:AdminLicService,
+        private _histAdmin:AdminHistService
     ){}
-
+        
     @Get("users")
     async getUser(@Response() res:any):Promise<responseInterface>
     {
@@ -41,6 +43,7 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    
     @Get("users/licencias")
     async getSavedLicenses(@Response() res:any):Promise<responseInterface>
     {
@@ -57,15 +60,15 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @Delete("users/licencias/:id")
+    @Delete("users/licencias/:id") //borrar la licencia de un usuario
     async deleteUserLicense(@Response() res:any, @Param('id') id:string):Promise<responseInterface>
     {
         this._Response = await this._licAdmin.deleteUserLicense(id);
 
         return res.status(this._Response.status).json(this._Response);
-    }
+    }                                   
 
-    @Get("users/licencias/:id")
+    @Get("users/licencias/:id") //ver la licencia de un usuario en particular
     async getUserLicense(@Response() res:any, @Param('id') id:string):Promise<responseInterface>
     {
         this._Response = await this._licAdmin.getUserLicense(id);
@@ -73,7 +76,7 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @Put("users/licencias/:id")
+    @Put("users/licencias/:id") //modificar licencia a un usuario
     async changeStatusLic(@Body() body: LicenseChangeStatusDto, @Response() res: any, @Param('id') id:string): Promise<responseInterface>
     {
         this._Response = await this._licAdmin.changeUserLicense(body, id);
@@ -81,4 +84,31 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    /*
+    @Get("bitacora")//obtiene todos los registro de bitacora
+    async getBitacoraAdmin(@Response() res: any): Promise<responseInterface>
+    {
+        this._Response = await this._histAdmin.getBitacora();
+
+        return res.status(this._Response.status).json(this._Response);
+    }
+    */
+
+    //to DO -> la siguiente ruta es de prueba de bitacora, tratar de implementar cuanto antes
+    private body:BitacoraInterface;
+    @Post("bitacora")
+    async setBitacora( @Response() res: any)
+    {
+        this.body = new BitacoraDto;
+        this.body.status = ActionAdmin.LICENSE;
+        this.body.admin = "5f74f168e6e4cd1f64bf0b93";
+        this.body.usuario = "5f74f168e6e4cd1f64bf0b93";
+        this.body.descripcion = ActionDescp.SET_LICENSE;
+
+        console.log("ActionAdmin", this.body, " ", this._histAdmin.setBitacora(this.body));
+        
+        return res.status(200).json(this.body);
+    }
+
+    
 }

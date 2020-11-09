@@ -13,7 +13,7 @@ import { _configPaginator, _dataPaginator, _argsPagination, _argsUpdate} from 's
 import { UserDto } from "../models/dto/dto.index";
 import { updateProfileUserDTO, updateUserDto } from "../models/dto/user.dto";
 import { sessionDTO } from "src/Modules/auth/dto";
-import { SetUserMenuService } from "src/Modules/auth/services/authServices.index";
+import {SetUserMenuService} from "src/Modules/auth/services/authServices.index";
 
 @Injectable()
 export class UsersService
@@ -23,10 +23,11 @@ export class UsersService
 
   constructor
   (
+
     @InjectModel(Users.name) private UsersModel: Model<Users>,
     private _processData: ProcessDataService,
     private _dateProcessService: DateProcessService,
-    private _setUserMenu: SetUserMenuService
+    public _setUserMenu: SetUserMenuService
 
   ){}
 
@@ -77,7 +78,6 @@ export class UsersService
       this._Response = r;
     }, err => {
       this._Response = err;
-      this._Response.data = "Usuario inexistente"
     });
 
     return this._Response;
@@ -91,7 +91,7 @@ export class UsersService
       this._Response = r;
     }, err => {
       this._Response = null;
-      this._Response.data = "Error en los parámetros"
+      this._Response.message = err;
     });
 
     return this._Response;
@@ -176,7 +176,6 @@ export class UsersService
 
     }, err => {
       this._Response = err;
-      this._Response.data = "Error en los parámetros";
     });
 
     return this._Response;

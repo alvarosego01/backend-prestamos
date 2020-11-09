@@ -32,10 +32,11 @@ export class AuthService {
     @InjectModel(Users.name) private UsersModel: Model<Users>,
     private readonly _jwtService: JwtService,
     private _processData: ProcessDataService,
-    private _setUserMenu: SetUserMenuService
+    public _setUserMenu: SetUserMenuService
   ) {}
 
-  async signup(signupDto: SignupDto): Promise<responseInterface> {
+  async signup(signupDto: SignupDto): Promise<responseInterface>
+  {
 
     const { email, pass, name  } = signupDto;
 
@@ -44,18 +45,45 @@ export class AuthService {
     const salt = await genSalt(15);
     user.pass = await hash(pass, salt);
 
-    await this._processData._saveDB(user).then((r: responseInterface) => {
+    await this._processData._saveDB(user).then((r: responseInterface) =>
+    {
       this._Response = r;
       this._Response.message = 'Usuario registrado'
     }, (err: responseInterface) => {
       this._Response = err;
+
     });
     return this._Response;
 
+  }
+
+  async signup2(signupDto: SignupDto, params:string[]): Promise<responseInterface>
+  {
+
+    const { email, pass, name } = signupDto;
+
+    const user        = new this.UsersModel(signupDto);
+    const salt        = await genSalt(15);
+    user.pass         = await hash(pass, salt);
+    user.rol          = params['rol'];
+    user.enrutator_id = params['ref'];
+
+    await this._processData._saveDB(user).then((r: responseInterface) =>
+    {
+      this._Response = r;
+
+    }, (err: responseInterface) =>
+    {
+
+      this._Response = err;
+
+    });
+    return this._Response;
 
   }
 
-  async signin(signinDto: SigninDto): Promise<responseInterface> {
+  async signin(signinDto: SigninDto): Promise<responseInterface>
+  {
     const { email, pass } = signinDto;
 
     const args: _argsFind = {
@@ -68,10 +96,12 @@ export class AuthService {
       },
       // select: "rol"
     }
-    await this._processData._findOneDB( this.UsersModel, args ).then(async (r: responseInterface) => {
+    await this._processData._findOneDB(this.UsersModel, args).then(async (r: responseInterface) =>
+    {
       this._Response = r;
 
-      if(!compareSync(pass, r.data.pass)) {
+      if (!compareSync(pass, r.data.pass))
+      {
 
         this._Response = {
           ok: false,
@@ -79,7 +109,8 @@ export class AuthService {
           message: 'Contraseña incorrecta'
         };
 
-      }else{
+      } else
+      {
 
         const payload: IJwtPayload = {
           _id: r.data._id,
@@ -114,7 +145,8 @@ export class AuthService {
 
       }
 
-    }, (err: responseInterface) => {
+    }, (err: responseInterface) =>
+    {
       this._Response = err;
       this._Response.message = (err.status != 500)?`Usuario o contraseña inválidos`: 'Algo ha salido mal, intente más tarde';
     })

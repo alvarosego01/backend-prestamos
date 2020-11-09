@@ -1,0 +1,1 @@
+export { ClientesController } from "./clientes.controller"
