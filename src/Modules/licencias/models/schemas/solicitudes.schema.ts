@@ -11,12 +11,12 @@ import { DateProcessService } from "src/Classes/classes.index";
 import { STATUS } from "../enums/licencia.status.enum";
 
 const _dateService = new DateProcessService();
-let status = Object.values(STATUS);
+/* const status = Object.values(STATUS);
 const enumStatus =
 {
     value: status,
     message: 'Estatus no permitido ${VALUE}'
-}
+} */
 
 @Schema()
 export class LicenciaSolicitud extends Document
@@ -24,18 +24,16 @@ export class LicenciaSolicitud extends Document
 
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
-        default: null,
-        required: [true, "Debe establecer el codigo del usuario quien hace la solicitud"]
+        required: [true, "Debe establecer el codigo del usuario quien hace la solicitud"],
+        ref: "Users"
     })
-    idUsuario:string
+    idUsuario:string;
 
     @Prop({
         type: String,
-        required: true,
-        default: "PENDIENTE",
-        enum: enumStatus
+        default: "PENDIENTE"
     })
-    status:string
+    status:string;
 
     @Prop({
         // required: true,

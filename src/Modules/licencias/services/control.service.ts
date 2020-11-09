@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import 
 { 
     DateProcessService, 
@@ -7,6 +9,11 @@ import
 from 'src/Classes/classes.index';
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
 import { solicitudLicenciaDto } from '../models/dto/solictud.dto';
+import 
+{ 
+    LicenciaSolicitud 
+} 
+from '../models/schemas/index.schema';
 
 @Injectable()
 export class ControlLicenciaService 
@@ -16,13 +23,9 @@ export class ControlLicenciaService
     constructor
     (
         private _processData:ProcessDataService,
-        private _dateService:DateProcessService
+        private _dateService: DateProcessService,
     ){}
 
-    //servicio para solicitar nueva licencia
-    async requireNewLicencia(solicitud:solicitudLicenciaDto):Promise<responseInterface>
-    {   
-        
-        return this._Response;
-    }
+    
+
 }

@@ -11,17 +11,15 @@ export class setLicenciaUserDto
 {
     @IsNotEmpty()
     @IsString()
-    idUsuario:string
+    usuario:string
 
     @IsNotEmpty()
     @IsString()
-    idLicencia:string
+    licencia:string
 
     @IsNotEmpty()
     @IsString()
     dias:number
 
-    @IsNotEmpty()
-    @IsString()
     status:string
 }

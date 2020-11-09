@@ -2,19 +2,24 @@ import { Module } from '@nestjs/common';
 import 
 { 
     ControlLicenciasController, 
-    LicenciasController 
+    SolicitudLicenciaController,
+    LicenciasController,
+    LicenciaUsuarioController
     
 } from './controllers/controllers.index';
 import 
 { 
     _LICENCIASCHEMA, 
-    _LICENCIASOLICITUDSCHEMA 
+    _LICENCIASOLICITUDSCHEMA, 
+    _LICENCIAUSUARIOSCHEMA
 } 
 from './models/schemas/index.schema';
 import 
 { 
     ControlLicenciaService, 
-    LicenciasService 
+    LicecniaUsuarioService, 
+    LicenciasService, 
+    SolicitudLicenciaService
 } 
 from './services/services.index';
 
@@ -23,17 +28,22 @@ from './services/services.index';
     imports:
     [
         _LICENCIASCHEMA,
-       _LICENCIASOLICITUDSCHEMA
+       _LICENCIASOLICITUDSCHEMA,
+       _LICENCIAUSUARIOSCHEMA
     ],
     controllers:
     [ 
         LicenciasController,
-        ControlLicenciasController
+        SolicitudLicenciaController,
+        ControlLicenciasController,
+        LicenciaUsuarioController
     ],
     providers:
     [
         LicenciasService,
-        ControlLicenciaService
+        ControlLicenciaService,
+        SolicitudLicenciaService,
+        LicecniaUsuarioService
     ]
 })
 export class LicenciasModule {}

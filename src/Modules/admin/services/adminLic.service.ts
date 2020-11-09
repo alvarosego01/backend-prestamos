@@ -66,7 +66,6 @@ export class AdminLicService
                 usuario:id
             },
             options: parameters
-
         }
 
         await this._processData._findDB(this._licenseModel, args).then(r =>
@@ -92,7 +91,7 @@ export class AdminLicService
         {
             this._Response = null;
             this._Response.data = null
-        });
+        }); 
 
         return this._Response;
     }
