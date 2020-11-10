@@ -10,7 +10,10 @@ import { responseInterface, _argsFind } from "src/Response/interfaces/interfaces
 import { ProcessDataService, DateProcessService } from "src/Classes/classes.index";
 
 import { _configPaginator, _dataPaginator, _argsPagination, _argsUpdate} from 'src/Response/interfaces/interfaces.index';
-import { UserDto, responseUserDTO } from "../models/dto/dto.index";
+import { UserDto } from "../models/dto/dto.index";
+import { updateProfileUserDTO, updateUserDto } from "../models/dto/user.dto";
+import { sessionDTO } from "src/Modules/auth/dto";
+import {SetUserMenuService} from "src/Modules/auth/services/authServices.index";
 
 @Injectable()
 export class UsersService
@@ -20,15 +23,16 @@ export class UsersService
 
   constructor
   (
+
     @InjectModel(Users.name) private UsersModel: Model<Users>,
     private _processData: ProcessDataService,
-    private _dateProcessService: DateProcessService
+    private _dateProcessService: DateProcessService,
+    public _setUserMenu: SetUserMenuService
 
   ){}
 
 
   async getAll(): Promise<responseInterface> {
-
 
     const parameters: _dataPaginator = { // <- paginate parameters
 
@@ -36,7 +40,12 @@ export class UsersService
       limit: 12 || _configPaginator.limit,
       customLabels: _configPaginator.customLabels,
       sort: { _id: -1 },
-
+      populate: [
+				{
+					path: 'rol',
+					select: 'alias'
+				},
+			],
     }
 
     const args: _argsPagination = {
@@ -92,18 +101,36 @@ export class UsersService
     return this._Response;
   }
 
-  async updateUsers(user:UserDto, id:string): Promise<responseInterface>
+  async updateUsers(user: updateUserDto, id:string): Promise<responseInterface>
   {
+
+    const {
+
+      name,
+      last_name,
+      id_card,
+      pais,
+      estado,
+      ciudad,
+      dir_domicilio,
+      nro_movil,
+      nro_fijo,
+      edad,
+
+    } = user;
     // se crea un objeto con los nuevos valores
-    const data: responseUserDTO = {
-      name: user.name,
-      last_name: user.last_name,
-      status: user.status,
-      id_card: user.id_card,
-      pass: user.pass,
-      email: user.email,
+    const data: updateProfileUserDTO = {
+      name: name,
+      last_name: last_name,
+      id_card: id_card,
+      pais: pais,
+      estado: estado,
+      ciudad: ciudad,
+      dir_domicilio: dir_domicilio,
+      nro_movil: nro_movil,
+      nro_fijo: nro_fijo,
+      edad: edad,
       updatedAt: this._dateProcessService.setDate(),
-      _test: null
     }
     // se crea el objeto de argumentos con el id de busqueda en especifico y la data a reemplazar en set
     const args: _argsUpdate = {
@@ -112,19 +139,50 @@ export class UsersService
       },
       set: {
         $set: data
+      },
+      populate: {
+        path: 'rol',
+        select: 'alias'
       }
     }
-    
-    await this._processData._updateDB(this.UsersModel, args).then(r => 
-    {
+
+    await this._processData._updateDB(this.UsersModel, args).then( async r => {
+
+      const l: sessionDTO = {
+        _id: r.data._id,
+        name: r.data.name,
+        last_name: r.data.last_name,
+        id_card: r.data.id_card,
+        pais: r.data.pais,
+        estado: r.data.estado,
+        ciudad: r.data.ciudad,
+        dir_domicilio: r.data.dir_domicilio,
+        nro_movil: r.data.nro_movil,
+        nro_fijo: r.data.nro_fijo,
+        edad: r.data.edad,
+        email: r.data.email,
+        enrutator_id: r.data.enrutator_id,
+        rol: r.data.rol.alias,
+        rolName: r.data.rol.rol,
+        token: null,
+        createdAt: r.data.createdAt,
+        updatedAt: r.data.updatedAt,
+        // userMenu: this._setUserMenu.setMenu(r.data.rol.rol)
+
+      }
+
       this._Response = r;
+      this._Response.data = l;
+      this._Response.message = 'Información actualizada';
 
-    }, err => 
-    {
+      // this._Response.data.rol = 'CULOOO';
+      // this._Response.data.rol = r.data.rol.alias;
 
+
+    }, err => {
       this._Response = err;
     });
-    
+
     return this._Response;
   }
 

@@ -9,25 +9,46 @@ import { DateProcessService } from "src/Classes/classes.index";
 
 // SCHMA DE EJEMPLO
 
-@Schema()
-class _test extends Document {
-  @Prop({
-    default: "otro",
-  }) 
-  otro: string;
+
+const _dateService = new DateProcessService();
+
+
+export class _files extends Document {
 
   @Prop({
-    default: "dato",
-    required: false,
+    required: true,
+    default: null,
   })
-  dato: string;
+  type: string;
+  @Prop({
+    required: true,
+    default: null,
+  })
+  file: string;
+  @Prop({
+    required: true,
+    default: null,
+  })
+  format: string;
+  @Prop({
+    required: true,
+    default: null,
+  })
+  folder: string;
+
 }
-const _testSchema = SchemaFactory.createForClass(_test);
-const _dateService = new DateProcessService();
+
+
 
 @Schema()
 export class Users extends Document {
-  
+
+  @Prop({
+    type: _files,
+    default: null,
+  })
+  photo: _files;
+
   @Prop({
     required: true,
     default: null,
@@ -88,17 +109,13 @@ export class Users extends Document {
   })
   edad: number;
 
-  @Prop({
-    required: true,
-    default: null,
-  })
-  photo: string;
+  
 
   @Prop({
     default: 'ACTIVE',
   })
   status: string;
-  
+
   @Prop({
     required: true,
     unique: true
@@ -108,6 +125,7 @@ export class Users extends Document {
   @Prop({
     type: Mongoose.Schema.Types.ObjectId,
     ref: "Roles",
+    default: '5f8593fa2675cb18ec300162',
     required: [true, "Debe establecer un rol"],
   })
   rol: string;
@@ -140,8 +158,6 @@ export class Users extends Document {
   })
   enrutator_id: string;
 
-  @Prop({ type: [_testSchema] })
-  _test: _test;
 }
 
 export const UsersSchema = SchemaFactory.createForClass(Users)
@@ -150,3 +166,5 @@ export const UsersSchema = SchemaFactory.createForClass(Users)
   })
   .plugin(mongoosePaginate)
   .plugin(mongoose_delete, { overrideMethods: 'all' });
+
+

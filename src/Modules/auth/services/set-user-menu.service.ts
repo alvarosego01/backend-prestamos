@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { rolesMenu , subRolesMenu} from 'src/Modules/role/rolesMenu/rolesMenu.index';
+import { rolesMenu } from 'src/Modules/role/rolesMenu/rolesMenu.index';
 
 
 @Injectable()
@@ -11,27 +11,24 @@ export class SetUserMenuService {
 
         console.log('el rol', role);
 
-        const menu = [];
-
-        menu.push({
-            sessionBaseUrl: rolesMenu.sessionBaseUrl
-        })
-
-        menu.push({
-            general: rolesMenu.GENERAL
-        });
-
-        menu.push({
+        const menu = {
+            sessionBaseUrl: rolesMenu.sessionBaseUrl,
+            general: rolesMenu.GENERAL,
             role: rolesMenu[role]
-        })
+        };
 
-        if(subRole != null){
+        // menu.push({
+        //     sessionBaseUrl: rolesMenu.sessionBaseUrl
+        // })
 
-            menu.push({
-                subRole: subRolesMenu[subRole]
-            })
+        // menu.push({
+        //     general: rolesMenu.GENERAL
+        // });
 
-        }
+        // menu.push({
+        //     role: rolesMenu[role]
+        // })
+
 
 
         return menu;

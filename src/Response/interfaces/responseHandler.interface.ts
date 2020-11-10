@@ -5,4 +5,7 @@ export interface responseInterface {
   message?: string;
   paginator?: any;
   err?: any;
+
+
+
 }

@@ -1,1 +1,4 @@
-export { UserDto, responseUserDTO } from "./user.dto";
+export {
+    UserDto,
+    updateUserDto,
+    updateProfileUserDTO } from "./user.dto";

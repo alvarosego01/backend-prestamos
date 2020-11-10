@@ -8,12 +8,14 @@ import { UsersService } from "./services/services.index";
 
 // esquemas
 import {  UsersModelsModule } from "./models/usersModels.module";
+import { AuthModule } from "../auth/auth.module";
 
 // modulo de  proceso de datos
 
 @Module({
   imports: [
-    UsersModelsModule
+    UsersModelsModule,
+    AuthModule
   ],
   controllers: [UsersController],
   providers: [UsersService],

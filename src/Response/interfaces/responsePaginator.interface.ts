@@ -17,6 +17,7 @@ export interface _dataPaginator {
     sort?: any;
     // select: "-pass" <- example
     select?: any;
+    populate?: any;
 
 }
 

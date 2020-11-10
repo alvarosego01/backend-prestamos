@@ -11,6 +11,9 @@ import {
   Param,
   Put,
   Delete,
+  UsePipes,
+  ValidationPipe,
+  UseGuards,
 } from "@nestjs/common";
 
 import { Users } from '../models/schemas/userSchema';
@@ -24,7 +27,10 @@ import {
 import { responseInterface } from "src/Response/interfaces/interfaces.index";
 
 import { UsersService } from "../services/services.index";
-import { UserDto } from "../models/dto/user.dto";
+import { updateUserDto, UserDto } from "../models/dto/user.dto";
+import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
+import {AuthGuard} from "@nestjs/passport";
+import {RoleGuard} from "src/Modules/role/guards/role.guard";
 
 @Controller("users")
 export class UsersController {
@@ -32,26 +38,24 @@ export class UsersController {
 
   constructor(private _userService: UsersService) {}
 
-  @Get()
-  getHello(): Promise<any> {
-    return this._userService.getAll();
-  }
+
 
 
   @Get(":id")
   async getOneUser(
     @Param("id") id: string,
     @Response() res: any
-  ): Promise<responseInterface> 
+  ): Promise<responseInterface>
   {
     this._Response = await this._userService.getOne(id);
 
     return res.status(this._Response.status).json(this._Response);
   }
 
-
+  // @RolesDecorator('ADMIN_ROLE')
+  // @UseGuards(AuthGuard(), RoleGuard)
   @Get()
-  async getUsers(@Response() res: any): Promise<responseInterface> 
+  async getUsers(@Response() res: any): Promise<responseInterface>
   {
     this._Response = await this._userService.getAll();
 
@@ -62,12 +66,13 @@ export class UsersController {
   async setUsers(@Body() body:Users, @Response() res:any ): Promise<responseInterface>
   {
     this._Response = await this._userService.saveUser(body);
-    
+
     return res.status(this._Response.status).json(this._Response);
   }
 
   @Put(':id')
-  async modifyUsers(@Body() user:UserDto, @Param('id') id:string, @Response() res:any)
+  @UsePipes(ValidationPipe)
+  async modifyUsers(@Body() user: updateUserDto, @Param('id') id:string, @Response() res:any)
   {
     this._Response = await this._userService.updateUsers(user, id);
 

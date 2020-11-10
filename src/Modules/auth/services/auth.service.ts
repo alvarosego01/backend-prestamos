@@ -20,6 +20,7 @@ import { genSalt, hash } from 'bcryptjs';
 import { responseInterface, _argsFind } from 'src/Response/interfaces/interfaces.index';
 import { ProcessDataService } from 'src/Classes/classes.index';
 import { SetUserMenuService } from './authServices.index';
+import { UserDto } from 'src/Modules/users/models/dto/user.dto';
 
 
 @Injectable()
@@ -31,26 +32,24 @@ export class AuthService {
     @InjectModel(Users.name) private UsersModel: Model<Users>,
     private readonly _jwtService: JwtService,
     private _processData: ProcessDataService,
-    private _setUserMenu: SetUserMenuService
+    public _setUserMenu: SetUserMenuService
   ) {}
 
-  async signup(signupDto: SignupDto): Promise<responseInterface> 
+  async signup(signupDto: SignupDto): Promise<responseInterface>
   {
 
-    const { email, pass, name, rol } = signupDto;
+    const { email, pass, name  } = signupDto;
 
     const user = new this.UsersModel(signupDto);
     // user.email = email;
     const salt = await genSalt(15);
     user.pass = await hash(pass, salt);
 
-    await this._processData._saveDB(user).then((r: responseInterface) => 
+    await this._processData._saveDB(user).then((r: responseInterface) =>
     {
       this._Response = r;
-
-    }, (err: responseInterface) => 
-    {
-
+      this._Response.message = 'Usuario registrado'
+    }, (err: responseInterface) => {
       this._Response = err;
 
     });
@@ -58,10 +57,10 @@ export class AuthService {
 
   }
 
-  async signup2(signupDto: SignupDto, params:string[]): Promise<responseInterface> 
+  async signup2(signupDto: SignupDto, params:string[]): Promise<responseInterface>
   {
 
-    const { email, pass, name, rol } = signupDto;
+    const { email, pass, name } = signupDto;
 
     const user        = new this.UsersModel(signupDto);
     const salt        = await genSalt(15);
@@ -69,11 +68,11 @@ export class AuthService {
     user.rol          = params['rol'];
     user.enrutator_id = params['ref'];
 
-    await this._processData._saveDB(user).then((r: responseInterface) => 
+    await this._processData._saveDB(user).then((r: responseInterface) =>
     {
       this._Response = r;
 
-    }, (err: responseInterface) => 
+    }, (err: responseInterface) =>
     {
 
       this._Response = err;
@@ -122,21 +121,38 @@ export class AuthService {
         const l: sessionDTO = {
           _id: r.data._id,
           name: r.data.name,
+          last_name: r.data.last_name,
+          id_card: r.data.id_card,
+          pais: r.data.pais,
+          estado: r.data.estado,
+          ciudad: r.data.ciudad,
+          dir_domicilio: r.data.dir_domicilio,
+          nro_movil: r.data.nro_movil,
+          nro_fijo: r.data.nro_fijo,
+          edad: r.data.edad,
           email: r.data.email,
+          enrutator_id: r.data.enrutator_id,
           rol: r.data.rol.alias,
+          rolName: r.data.rol.rol,
           token: token,
-          userMenu: this._setUserMenu.setMenu(r.data.rol.rol)
+          createdAt: r.data.createdAt,
+          updatedAt: r.data.updatedAt,
+          // userMenu: this._setUserMenu.setMenu(r.data.rol.rol)
 
         }
         this._Response.data = l;
+
+        this._Response.message = `Te damos la bienvenida, ${r.data.name}`;
 
       }
 
     }, (err: responseInterface) =>
     {
       this._Response = err;
-      this._Response.message = (err.status != 500) ? `Usuario ${err.message}` : '';
+      this._Response.message = (err.status != 500)?`Usuario o contraseña inválidos`: 'Algo ha salido mal, intente más tarde';
     })
+
+    console.log('prueba', this._Response);
 
 
     return this._Response;
