@@ -25,9 +25,9 @@ export class SolicitudLicenciaService
     private _Response: responseInterface;
     
     constructor
-        (
-            private _processData:ProcessDataService,
-            private _dateService: DateProcessService,
+    (
+        private _processData: ProcessDataService,
+        private _dateService: DateProcessService,
         @InjectModel(LicenciaSolicitud.name) private _solitudModel:Model<LicenciaSolicitud>
     ) { }
 
@@ -63,7 +63,7 @@ export class SolicitudLicenciaService
         return this._Response;
     }
 
-    //servicio para obtener uns solicitud por id
+    //servicio para obtener una solicitud por id
     async getOneRequireNewLicencia(id:string): Promise<responseInterface>
     {
         const parameters: _dataPaginator = { // <- paginate parameters

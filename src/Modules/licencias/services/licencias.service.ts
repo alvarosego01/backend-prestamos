@@ -33,8 +33,6 @@ export class LicenciasService
 
     async getAllLicencias(): Promise<responseInterface> 
     {
-
-
         const parameters: _dataPaginator = { // <- paginate parameters
     
           page: 1 || _configPaginator.page,
