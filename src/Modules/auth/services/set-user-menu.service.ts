@@ -11,19 +11,23 @@ export class SetUserMenuService {
 
         console.log('el rol', role);
 
-        const menu = [];
-
-        menu.push({
-            sessionBaseUrl: rolesMenu.sessionBaseUrl
-        })
-
-        menu.push({
-            general: rolesMenu.GENERAL
-        });
-
-        menu.push({
+        const menu = {
+            sessionBaseUrl: rolesMenu.sessionBaseUrl,
+            general: rolesMenu.GENERAL,
             role: rolesMenu[role]
-        })
+        };
+
+        // menu.push({
+        //     sessionBaseUrl: rolesMenu.sessionBaseUrl
+        // })
+
+        // menu.push({
+        //     general: rolesMenu.GENERAL
+        // });
+
+        // menu.push({
+        //     role: rolesMenu[role]
+        // })
 
 
 

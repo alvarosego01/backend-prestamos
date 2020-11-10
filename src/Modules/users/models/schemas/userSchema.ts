@@ -12,8 +12,42 @@ import { DateProcessService } from "src/Classes/classes.index";
 
 const _dateService = new DateProcessService();
 
+
+export class _files extends Document {
+
+  @Prop({
+    required: true,
+    default: null,
+  })
+  type: string;
+  @Prop({
+    required: true,
+    default: null,
+  })
+  file: string;
+  @Prop({
+    required: true,
+    default: null,
+  })
+  format: string;
+  @Prop({
+    required: true,
+    default: null,
+  })
+  folder: string;
+
+}
+
+
+
 @Schema()
 export class Users extends Document {
+
+  @Prop({
+    type: _files,
+    default: null,
+  })
+  photo: _files;
 
   @Prop({
     required: true,
@@ -75,11 +109,7 @@ export class Users extends Document {
   })
   edad: number;
 
-  @Prop({
-    required: false,
-    default: null,
-  })
-  photo: string;
+  
 
   @Prop({
     default: 'ACTIVE',

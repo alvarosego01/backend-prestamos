@@ -133,10 +133,11 @@ export class AuthService {
           email: r.data.email,
           enrutator_id: r.data.enrutator_id,
           rol: r.data.rol.alias,
+          rolName: r.data.rol.rol,
           token: token,
           createdAt: r.data.createdAt,
           updatedAt: r.data.updatedAt,
-          userMenu: this._setUserMenu.setMenu(r.data.rol.rol)
+          // userMenu: this._setUserMenu.setMenu(r.data.rol.rol)
 
         }
         this._Response.data = l;

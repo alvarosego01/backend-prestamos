@@ -13,6 +13,7 @@ import {
   Delete,
   UsePipes,
   ValidationPipe,
+  UseGuards,
 } from "@nestjs/common";
 
 import { Users } from '../models/schemas/userSchema';
@@ -27,6 +28,9 @@ import { responseInterface } from "src/Response/interfaces/interfaces.index";
 
 import { UsersService } from "../services/services.index";
 import { updateUserDto, UserDto } from "../models/dto/user.dto";
+import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
+import {AuthGuard} from "@nestjs/passport";
+import {RoleGuard} from "src/Modules/role/guards/role.guard";
 
 @Controller("users")
 export class UsersController {
@@ -34,10 +38,7 @@ export class UsersController {
 
   constructor(private _userService: UsersService) {}
 
-  @Get()
-  getHello(): Promise<any> {
-    return this._userService.getAll();
-  }
+
 
 
   @Get(":id")
@@ -51,7 +52,8 @@ export class UsersController {
     return res.status(this._Response.status).json(this._Response);
   }
 
-
+  // @RolesDecorator('ADMIN_ROLE')
+  // @UseGuards(AuthGuard(), RoleGuard)
   @Get()
   async getUsers(@Response() res: any): Promise<responseInterface>
   {

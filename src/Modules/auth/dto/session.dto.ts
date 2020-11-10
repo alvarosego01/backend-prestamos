@@ -51,6 +51,11 @@ export class sessionDTO {
       // message: "$property debe ser un string"
     })
     rol: string;
+    @IsNotEmpty()
+    @IsString({
+      // message: "$property debe ser un string"
+    })
+    rolName: string;
 
 
     @IsNotEmpty()
@@ -59,14 +64,14 @@ export class sessionDTO {
     })
     token: string;
 
-    @IsNotEmpty()
-    @IsObject()
-    userMenu: any;
+    // @IsNotEmpty()
+    // @IsObject()
+    // userMenu: any;
 
     @IsNotEmpty()
     @IsArray()
     updatedAt: string[];
-    
+
     @IsNotEmpty()
     @IsArray()
     createdAt: string[];

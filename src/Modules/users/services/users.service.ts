@@ -34,14 +34,18 @@ export class UsersService
 
   async getAll(): Promise<responseInterface> {
 
-
     const parameters: _dataPaginator = { // <- paginate parameters
 
       page: 1 || _configPaginator.page,
       limit: 12 || _configPaginator.limit,
       customLabels: _configPaginator.customLabels,
       sort: { _id: -1 },
-
+      populate: [
+				{
+					path: 'rol',
+					select: 'alias'
+				},
+			],
     }
 
     const args: _argsPagination = {
@@ -159,10 +163,11 @@ export class UsersService
         email: r.data.email,
         enrutator_id: r.data.enrutator_id,
         rol: r.data.rol.alias,
+        rolName: r.data.rol.rol,
         token: null,
         createdAt: r.data.createdAt,
         updatedAt: r.data.updatedAt,
-        userMenu: this._setUserMenu.setMenu(r.data.rol.rol)
+        // userMenu: this._setUserMenu.setMenu(r.data.rol.rol)
 
       }
 
