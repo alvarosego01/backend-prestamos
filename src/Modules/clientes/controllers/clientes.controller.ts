@@ -1,6 +1,6 @@
 import { Controller, Response, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
-import { ClienteDto } from '../models/dto/dto.index';
+import { ClienteDto } from '../models/dto/index.dto';
 import { ClienteService, RutaClienteService } from '../services/services.index';
 
 @Controller('clientes')

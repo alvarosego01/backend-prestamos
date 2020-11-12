@@ -17,7 +17,7 @@ export class Cliente extends Document
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Users',
-        required: [true, 'Debe instanciar al enrutador quien creó la nueva ruta']
+        required: [true, 'Debe instanciar el cobrador encargado']
     })
     cobrador_id: string;
 
