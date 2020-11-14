@@ -2,11 +2,13 @@ import { Module } from '@nestjs/common';
 import 
 { 
     ClientesController,
-    CobrosClienteController 
+    CobrosClienteController, 
+    PeticionCobrosController
 } 
 from './controllers/controllers.index';
 import 
 { 
+    _CAMBIOCOBROSCHEMA,
     _CLIENTESCHEMA, 
     _COBROSCHEMA 
 } 
@@ -16,14 +18,15 @@ import
 
     ClienteService, 
     CobrosClienteService, 
+    PeticionesCobrosService, 
     RutaClienteService 
 } 
 from "./services/services.index";
 
 @Module({
-    imports:[_CLIENTESCHEMA, _COBROSCHEMA],
-    controllers:[ClientesController, CobrosClienteController],
-    providers:[ClienteService, RutaClienteService, CobrosClienteService],
+    imports:[_CLIENTESCHEMA, _COBROSCHEMA, _CAMBIOCOBROSCHEMA],
+    controllers:[ClientesController, CobrosClienteController, PeticionCobrosController],
+    providers:[ClienteService, RutaClienteService, CobrosClienteService, PeticionesCobrosService],
     exports:[ClienteService, RutaClienteService, CobrosClienteService]
 })
 export class ClientesModule {}

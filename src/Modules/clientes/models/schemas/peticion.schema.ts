@@ -10,23 +10,42 @@ import { DateProcessService } from "src/Classes/classes.index";
 import {statusCobro} from "../enum/status.cobro.enum";
 
 const _dateService = new DateProcessService();
+const status = Object.values(statusCobro)
+const statusC ={
+    values: status,
+    message: "El status {VALUE} no esta permitido"
+};
 
 @Schema()
-export class Cobros extends Document 
+export class CambioCobro extends Document 
 { 
-    /* @Prop({
+    @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Users',
-        required: [true, 'Debe instanciar el cobrador encargado de']
+        required: [true, 'Debe instanciar el cobrador encargado']
     })
     cobrador_id: string;
+
+    @Prop({
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'Users',
+        required: [true, 'Debe instanciar el enrutador encargado']
+    })
+    enrutador_id: string;
+
+    @Prop({
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'Cobros',
+        required: [true, 'Debe instanciar el codigo del cobro']
+    })
+    cobro_id: string;
     
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Cliente',
-        required: [true, 'Debe instanciar el cliente para el cobro']
+        required: [true, 'Debe instanciar el cliente del cobro a cambiar']
     })
-    cliente_id: string; */
+    cliente_id: string;
 
     @Prop({
         type: String,
@@ -42,8 +61,8 @@ export class Cobros extends Document
 
     @Prop({
         type: String,
-        required: [true, 'Debe establecer un estatus del cobro'],
-        default: statusCobro.CREADO
+        default: statusCobro.PENDIENTE,
+        enum: statusC
     })
     status: string;
 
@@ -59,7 +78,7 @@ export class Cobros extends Document
     })
     updatedAt: string;
 }
-export const CobrosSchema = SchemaFactory.createForClass(Cobros)
+export const CambioCobroSchema = SchemaFactory.createForClass(CambioCobro)
 .plugin(uniqueValidator, {
   message: "El {PATH} {VALUE} ya está registrado en sistema",
 })

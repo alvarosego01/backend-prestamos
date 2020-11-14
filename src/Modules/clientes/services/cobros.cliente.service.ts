@@ -9,7 +9,7 @@ import
 from 'src/Classes/classes.index';
 import 
 { 
-    responseInterface, 
+    responseInterface,
     _argsFind, 
     _argsPagination, 
     _argsUpdate, 
@@ -21,6 +21,7 @@ import {createCobroClienteDto, modifyCobroClienteDto} from '../models/dto/index.
 import {statusCobro} from '../models/enum/status.cobro.enum';
 import {modifyCobrosCliente} from '../models/interfaces/interfaces.index';
 import {Cobros} from '../models/schemas/cobros.schema';
+import {CambioCobro} from '../models/schemas/peticion.schema';
 
 
 @Injectable()
@@ -31,6 +32,7 @@ export class CobrosClienteService
     constructor
     (
         @InjectModel(Cobros.name) private _cobrosModel:Model<Cobros>,
+        @InjectModel(CambioCobro.name) private _cambioModel:Model<CambioCobro>,
         private _processData:ProcessDataService,
         private _dateProcessService:DateProcessService
     ){}
@@ -51,12 +53,21 @@ export class CobrosClienteService
 
     async getAllPaymentDo(cliente:string):Promise<responseInterface>
     {
-        const args: _argsFind = 
-        {
-            findObject: { cliene_id:cliente },
-            populate: null
+        const parameters: _dataPaginator = 
+        { 
+            page: 1 || _configPaginator.page,
+            limit: 12 || _configPaginator.limit,
+            customLabels: _configPaginator.customLabels,
+            sort: { _id: -1 },
         }
-        await this._processData._findOneDB(this._cobrosModel, args).then(r => 
+
+        const args: _argsPagination = 
+        {
+            findObject: { cliente_id: cliente },
+            options: parameters
+        }
+
+        await this._processData._findDB(this._cobrosModel, args).then(r => 
         {
            this._Response = r;
         }, err => 
@@ -80,31 +91,15 @@ export class CobrosClienteService
         {
             this._Response = err;
         });
-        return this._Response;
+        return this._Response; 
     }
 
     async modifyOldPayment(@Body() body:modifyCobroClienteDto):Promise<responseInterface>
     {
         // se crea un objeto con los nuevos valores
-        const data: modifyCobrosCliente = 
-        {
-            monto: body.monto,
-            status: statusCobro.MODIFICADO,
-            observacion: body.observacion,
-            updatedAt: this._dateProcessService.setDate()
-        }
-        // se crea el objeto de argumentos con el id de busqueda en especifico y la data a reemplazar en set
-        const args: _argsUpdate = 
-        {
-            findObject: {
-                _id: body._id,
-            },
-            set: {
-                $set: data
-            }
-        }
+        const data = new this._cambioModel(body);
 
-        await this._processData._updateDB(this._cobrosModel, args).then(r =>
+        await this._processData._saveDB(data).then(r =>
         {
             this._Response = r;
 
@@ -112,7 +107,7 @@ export class CobrosClienteService
         {
             this._Response = err;
             this._Response.data = null;
-        });
+        }); 
         return this._Response;
     }
 

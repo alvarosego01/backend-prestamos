@@ -22,11 +22,18 @@ export class createCobroClienteDto
 export class modifyCobroClienteDto
 {
 
-    @IsNotEmpty()
     @IsString()
-    _id;
+    cobrador_id:string;
 
-    @IsNotEmpty()
+    @IsString()
+    cliente_id:string;
+
+    @IsString()
+    enrutador_id:string;
+
+    @IsString()
+    cobro_id:string;
+
     @IsString()
     observacion:string;
 
