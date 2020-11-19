@@ -76,6 +76,10 @@ export class sessionDTO {
     @IsArray()
     createdAt: string[];
 
+    @IsNotEmpty()
+    @IsArray()
+    last_session: string[];
+
 
 
 }

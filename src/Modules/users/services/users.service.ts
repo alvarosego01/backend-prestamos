@@ -32,18 +32,18 @@ export class UsersService
   ){}
 
 
-  async getAll(): Promise<responseInterface> {
+  async getAll(page): Promise<responseInterface> {
 
     const parameters: _dataPaginator = { // <- paginate parameters
 
-      page: 1 || _configPaginator.page,
+      page: page || _configPaginator.page,
       limit: 12 || _configPaginator.limit,
       customLabels: _configPaginator.customLabels,
       sort: { _id: -1 },
       populate: [
 				{
 					path: 'rol',
-					select: 'alias'
+					select: 'rol alias'
 				},
 			],
     }
@@ -66,6 +66,81 @@ export class UsersService
 
   }
 
+  async getUsersMyEnrouters(page, id: string): Promise<responseInterface> {
+
+    const parameters: _dataPaginator = { // <- paginate parameters
+
+      page: page || _configPaginator.page,
+      limit: 12 || _configPaginator.limit,
+      customLabels: _configPaginator.customLabels,
+      sort: { _id: -1 },
+      populate: [
+				{
+					path: 'rol',
+					select: 'rol alias'
+				},
+			],
+    }
+
+    const args: _argsPagination = {
+
+      findObject: {
+        enrutator_id: id
+      },
+      options: parameters
+
+    }
+
+    await this._processData._findDB(this.UsersModel, args).then(r => {
+      this._Response = r;
+    }, err => {
+      this._Response = err;
+      // this._Response.message =
+    });
+
+    return this._Response;
+
+  }
+
+  async getUsersEnrouters(): Promise<responseInterface> {
+
+    const parameters: _dataPaginator = { // <- paginate parameters
+
+      page: 1 || _configPaginator.page,
+      limit: 12 || _configPaginator.limit,
+      customLabels: _configPaginator.customLabels,
+      sort: { _id: -1 },
+      populate: [
+				{
+					path: 'rol',
+					select: 'alias rol'
+				},
+			],
+    }
+
+    const args: _argsPagination = {
+
+      findObject: {
+        "rol": '5f85943b2675cb18ec300164'
+      },
+      options: parameters
+
+    }
+
+
+    // console.log('llega aqui', args);
+
+    await this._processData._findDB(this.UsersModel, args).then(r => {
+      this._Response = r;
+    }, err => {
+      this._Response = err;
+      // this._Response.message =
+    });
+
+    return this._Response;
+
+  }
+
 
 
   async getOne(id: string): Promise<responseInterface> {
@@ -74,7 +149,12 @@ export class UsersService
       findObject: {
         _id: id,
       },
-      populate: null
+      populate: [
+				{
+					path: 'rol',
+					select: 'alias rol'
+				},
+			],
       // select: "rol"
     }
 
@@ -146,7 +226,7 @@ export class UsersService
       }
     }
 
-    await this._processData._updateDB(this.UsersModel, args).then( async r => {
+    await this._processData._updateDB(this.UsersModel, args).then( async (r: responseInterface) => {
 
       const l: sessionDTO = {
         _id: r.data._id,
@@ -167,6 +247,7 @@ export class UsersService
         token: null,
         createdAt: r.data.createdAt,
         updatedAt: r.data.updatedAt,
+        last_session: r.data.last_session
         // userMenu: this._setUserMenu.setMenu(r.data.rol.rol)
 
       }
@@ -175,12 +256,10 @@ export class UsersService
       this._Response.data = l;
       this._Response.message = 'Información actualizada';
 
-      // this._Response.data.rol = 'CULOOO';
-      // this._Response.data.rol = r.data.rol.alias;
 
-
-    }, err => {
+    }, (err: responseInterface) => {
       this._Response = err;
+      this._Response.message = err.message || 'No se pudo actualizar la información';
     });
 
     return this._Response;
@@ -188,17 +267,21 @@ export class UsersService
 
   async deleteUsers(id:string):Promise<responseInterface>
   {
-    await this._processData._deleteSoftDB(this.UsersModel, id ).then(r  => {
+    await this._processData._deleteSoftDB(this.UsersModel, id ).then((r: responseInterface)  => {
 
       this._Response = r;
       this._Response.message = 'Usuario eliminado';
 
-    }, err => {
+    }, (err:responseInterface) => {
       this._Response = err;
+      this._Response.message = err.message || 'No se pudo eliminar al usuario';
     });
 
     return this._Response;
   }
+
+
+
 
 }
 

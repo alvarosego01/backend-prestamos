@@ -5,9 +5,6 @@ export class ProcessPaginateMiddleware implements NestMiddleware {
 
   use(req: any, res: any, next: () => void) {
 
-
-    console.log('llama middleware');
-
     if (req.query.paginate != null && req.query.paginate != '') {
       req.page = req.query.paginate;
     } else {

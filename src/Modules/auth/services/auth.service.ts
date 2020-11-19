@@ -17,8 +17,8 @@ import { Users } from 'src/Modules/users/models/schemas/userSchema';
 import { Model } from "mongoose";
 
 import { genSalt, hash } from 'bcryptjs';
-import { responseInterface, _argsFind } from 'src/Response/interfaces/interfaces.index';
-import { ProcessDataService } from 'src/Classes/classes.index';
+import { responseInterface, _argsFind, _argsUpdate } from 'src/Response/interfaces/interfaces.index';
+import { DateProcessService, ProcessDataService } from 'src/Classes/classes.index';
 import { SetUserMenuService } from './authServices.index';
 import { UserDto } from 'src/Modules/users/models/dto/user.dto';
 
@@ -32,7 +32,8 @@ export class AuthService {
     @InjectModel(Users.name) private UsersModel: Model<Users>,
     private readonly _jwtService: JwtService,
     private _processData: ProcessDataService,
-    public _setUserMenu: SetUserMenuService
+    public _setUserMenu: SetUserMenuService,
+    private _dateProcessService: DateProcessService,
   ) {}
 
   async signup(signupDto: SignupDto): Promise<responseInterface>
@@ -50,7 +51,15 @@ export class AuthService {
       this._Response = r;
       this._Response.message = 'Usuario registrado'
     }, (err: responseInterface) => {
+
       this._Response = err;
+
+      if( (err.err.errors) && err.err.errors.email.kind == 'unique'){
+
+        this._Response.message = err.err.errors.email.properties.message;
+
+      }
+
 
     });
     return this._Response;
@@ -65,17 +74,25 @@ export class AuthService {
     const user        = new this.UsersModel(signupDto);
     const salt        = await genSalt(15);
     user.pass         = await hash(pass, salt);
-    user.rol          = params['rol'];
+    user.rol          = "5f85944c2675cb18ec300165"; // <- Cobrador id
     user.enrutator_id = params['ref'];
 
     await this._processData._saveDB(user).then((r: responseInterface) =>
     {
       this._Response = r;
-
+      this._Response.message = 'Usuario registrado'
     }, (err: responseInterface) =>
     {
 
       this._Response = err;
+
+      if( (err.err.errors) && err.err.errors.email.kind == 'unique'){
+
+        this._Response.message = err.err.errors.email.properties.message;
+
+      }
+
+
 
     });
     return this._Response;
@@ -137,12 +154,15 @@ export class AuthService {
           token: token,
           createdAt: r.data.createdAt,
           updatedAt: r.data.updatedAt,
+          last_session: r.data.last_session
           // userMenu: this._setUserMenu.setMenu(r.data.rol.rol)
 
         }
         this._Response.data = l;
 
         this._Response.message = `Te damos la bienvenida, ${r.data.name}`;
+
+        await this.updateLastSession(r.data._id).then();
 
       }
 
@@ -156,6 +176,45 @@ export class AuthService {
 
 
     return this._Response;
+
+  }
+
+
+
+  updateLastSession(id: string){
+
+    return new Promise( async (resolve, reject) =>{
+
+
+      const data = {
+        last_session: this._dateProcessService.setDate()
+      }
+
+      const args: _argsUpdate = {
+        findObject: {
+          _id: id,
+        },
+        set: {
+          $set: data
+        },
+        populate: {
+          path: 'rol',
+          select: 'alias'
+        }
+      }
+
+      await this._processData._updateDB(this.UsersModel, args).then( async r => {
+
+
+        console.log('sesion actualizada en fecha', data);
+        resolve(true);
+
+      }, err => {
+        console.log( 'hay error', err );
+        reject(false);
+      });
+
+    });
 
   }
 

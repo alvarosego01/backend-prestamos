@@ -42,7 +42,7 @@ export class SignupDto {
   pass: string;
   @IsEmpty()
   // @IsString()
-  enrutator_id: string;
+  enrutator_id?: string;
 
 
 }

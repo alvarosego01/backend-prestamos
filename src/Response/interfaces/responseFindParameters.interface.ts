@@ -8,3 +8,10 @@ export interface _argsFind {
     select?: any;
 }
 
+export interface _argsFindByText {
+    arg: string,
+    findObject?: any;
+    populate?: any;
+    select?: any;
+}
+

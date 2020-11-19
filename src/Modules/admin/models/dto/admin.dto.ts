@@ -1,14 +1,25 @@
 import { IsNotEmpty, IsString, IsArray } from "class-validator";
 
-export class RoleUserDto 
+export class RoleUserDto
 {
+
   @IsNotEmpty()
   @IsString()
-  rol: string
+  rol: string;
+
+  @IsNotEmpty()
+  @IsString()
+  enrouter?: string;
+
+  @IsNotEmpty()
+  @IsString()
+  type?: string;
+
 }
 
 export class responseChangeRoleDTO
 {
+
   @IsNotEmpty()
   @IsString()
   rol: string;
@@ -17,6 +28,8 @@ export class responseChangeRoleDTO
   @IsArray()
   updatedAt: string[];
 
+  @IsNotEmpty()
   @IsString()
-  _test: any[];
+  enrutator_id?: string;
+
 }

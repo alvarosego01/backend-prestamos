@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 
 import { responseInterface, _argsFind, _argsPagination, _argsUpdate } from "src/Response/interfaces/interfaces.index";
+import {_argsFindByText} from "src/Response/interfaces/responseFindParameters.interface";
 import { DateProcessService } from "../classes.index";
 
 @Injectable()
@@ -28,16 +29,20 @@ export class ProcessDataService {
             message: 'Algo ha salido mal, intente más tarde',
             err: error,
           };
+          console.log('el error este', error);
           reject(resp);
 
         }
 
-        if(!response || response.paginator.itemCount == 0){
+        console.log('el retorno aca', response);
+
+        if(!response){
 
           const resp: responseInterface = {
             ok: false,
             status: 404,
-            message: 'No hay resultados en este momento'
+            message: 'No hay resultados en este momento',
+            data: []
 
           };
           reject(resp);
@@ -120,14 +125,16 @@ export class ProcessDataService {
           reject(resp);
 
         }
+        if(response){
 
-        const resp: responseInterface = {
-          ok: true,
-          status: 201,
-          data: response,
-        };
-        resolve(resp);
+          const resp: responseInterface = {
+            ok: true,
+            status: 201,
+            data: response,
+          };
+          resolve(resp);
 
+        }
 
       });
 
@@ -218,6 +225,136 @@ export class ProcessDataService {
     });
   }
 
+
+
+   async objectContains(obj, term: string) {
+
+
+    // console.log('el ter', term);
+    let o: string = JSON.stringify(obj);
+    let r: any = null;
+    await this.diacriticSensitiveRegex(term).then(resp => {
+
+      r = resp;
+    });
+    let regex = new RegExp(r, "i");
+    // console.log('resp', r);
+
+        // console.log('regex', regex);
+    if( regex.test(o) ){
+      return true;
+    }else{
+      return false;
+    }
+
+
+  }
+
+
+  async findAllText(registros: any, arg: string){
+
+    return new Promise(async (resolve,reject) =>{
+
+      // let busqueda = { $regex: this.diacriticSensitiveRegex(arg), $options: 'i' }
+
+      // console.log('this.diacriticSensitiveRegex(arg)', this.diacriticSensitiveRegex(arg));
+
+      let regs = [];
+      let x = new Promise(async (resolve, reject) => {
+
+        await registros.forEach(async (element, idx) => {
+
+
+          // console.log('el elemento la cosa', element);
+
+          if(  await this.objectContains( element, arg ) == true ){
+
+            regs.push(element);
+
+          }
+
+        });
+
+
+        resolve(true);
+
+
+      });
+
+      await x.then();
+
+
+      if(regs.length > 0){
+        resolve(regs);
+      }else{
+        reject(regs);
+      }
+
+    });
+
+  }
+
+  async _searchByText(dataBody: any, parameters: _argsFindByText): Promise<responseInterface> {
+
+    return new Promise(async (resolve, reject) => {
+
+      await dataBody.find(parameters.findObject)
+      .populate(parameters.populate)
+      .select(parameters.select)
+      .exec(async (error, response) => {
+
+        if(error){
+          console.log('hubo error', error);
+          const resp: responseInterface = {
+            ok: false,
+            status: 500,
+            message: 'Algo ha salido mal, intente más tarde',
+            err: error,
+          };
+          reject(resp);
+        }
+
+        if(!response){
+          console.log('inexistente');
+          const resp: responseInterface = {
+            ok: false,
+            status: 404
+          };
+          reject(resp);
+        }
+
+        await this.findAllText( response, parameters.arg ).then( r => {
+
+          const resp: responseInterface = {
+            ok: true,
+            status: 200,
+            data: r,
+          };
+          resolve(resp);
+
+        }, err => {
+
+          const resp: responseInterface = {
+            ok: false,
+            status: 404,
+            data: []
+          };
+          reject(resp);
+
+        })
+
+
+
+
+      });
+
+
+
+    })
+
+  }
+
+
   async _deleteSoftDB(dataBody: any, id: string): Promise<responseInterface> {
     return new Promise(async (resolve, reject) => {
 
@@ -293,6 +430,17 @@ export class ProcessDataService {
     });
   }
 
+
+
+
+
+  async diacriticSensitiveRegex(string = '') {
+    return string.replace(/a/g, '[a,á,à,ä]')
+      .replace(/e/g, '[e,é,ë]')
+      .replace(/i/g, '[i,í,ï]')
+      .replace(/o/g, '[o,ó,ö,ò]')
+      .replace(/u/g, '[u,ü,ú,ù]');
+  }
 
 
 }

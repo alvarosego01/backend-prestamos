@@ -23,6 +23,7 @@ export class AuthController {
 
   constructor(private readonly _authService: AuthService) {}
 
+
   @Post('signup')
   @UsePipes(ValidationPipe)
   async signup(@Body() body: SignupDto, @Response() res: any): Promise<responseInterface> {
@@ -33,16 +34,22 @@ export class AuthController {
 
   }
 
-  @Post('signup/:ref/:rol')
+  @Post('signup/reference/:ref')
   @UseGuards(ReferenceGuard)
-  @UsePipes(ValidationPipe)
+  // @UsePipes(ValidationPipe)
   async signupReference(@Param() param:string[], @Body() body: SignupDto, @Response() res: any): Promise<responseInterface> {
+
+
+    // console.log('parametros', param);
+
+    // return res.end();
 
     this._Response = await this._authService.signup2(body, param);
 
     return res.status(this._Response.status).json(this._Response);
 
   }
+
 
   @Post('signin')
   @UsePipes(ValidationPipe)

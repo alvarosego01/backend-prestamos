@@ -1,14 +1,17 @@
-import { Controller, Get, Post, Body, Response, Param, Put, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Response, Param, Put, Delete, UseGuards } from "@nestjs/common";
 import { responseInterface } from "src/Response/interfaces/interfaces.index";
 import { AdminService,AdminLicService, AdminHistService } from "../services/services.index";
 import { RoleUserDto } from "../models/dto/admin.dto";
 import { LicenseDto, LicenseChangeStatusDto, BitacoraDto} from "../models/dto/dto.index";
 import { BitacoraInterface } from "../models/interfaces/bitacora.interface";
 import { ActionAdmin, ActionDescp } from "../models/actionTypes.enum";
+import {AuthGuard} from "@nestjs/passport";
+import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
+import {RoleGuard} from "src/Modules/role/guards/role.guard";
 
 
 @Controller("admin")
-export class AdminController 
+export class AdminController
 {
     private _Response:responseInterface;
 
@@ -18,12 +21,12 @@ export class AdminController
         private _licAdmin:AdminLicService,
         private _histAdmin:AdminHistService
     ){}
-        
+
     @Get("users")
     async getUser(@Response() res:any):Promise<responseInterface>
     {
         this._Response = await this._admin.getUsers();
-        
+
         return res.status(this._Response.status).json(this._Response);
     }
 
@@ -35,15 +38,18 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
+
+    @RolesDecorator('ADMIN_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Post("users/roles/:id")
-    async setRoleUser(@Body() body:RoleUserDto, @Response() res:any, @Param('id') id:string):Promise<responseInterface>
+    async setRoleUser(@Body() body: any, @Response() res:any, @Param('id') id:string):Promise<responseInterface>
     {
         this._Response = await this._admin.setRoleUser(body,id);
 
         return res.status(this._Response.status).json(this._Response);
     }
 
-    
+
     @Get("users/licencias")
     async getSavedLicenses(@Response() res:any):Promise<responseInterface>
     {
@@ -66,7 +72,7 @@ export class AdminController
         this._Response = await this._licAdmin.deleteUserLicense(id);
 
         return res.status(this._Response.status).json(this._Response);
-    }                                   
+    }
 
     @Get("users/licencias/:id") //ver la licencia de un usuario en particular
     async getUserLicense(@Response() res:any, @Param('id') id:string):Promise<responseInterface>
@@ -106,9 +112,9 @@ export class AdminController
         this.body.descripcion = ActionDescp.SET_LICENSE;
 
         console.log("ActionAdmin", this.body, " ", this._histAdmin.setBitacora(this.body));
-        
+
         return res.status(200).json(this.body);
     }
 
-    
+
 }

@@ -31,6 +31,7 @@ import { updateUserDto, UserDto } from "../models/dto/user.dto";
 import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
 import {AuthGuard} from "@nestjs/passport";
 import {RoleGuard} from "src/Modules/role/guards/role.guard";
+import {SameUserAuthGuard} from "src/Modules/auth/guards/same-user-auth.guard";
 
 @Controller("users")
 export class UsersController {
@@ -38,10 +39,22 @@ export class UsersController {
 
   constructor(private _userService: UsersService) {}
 
+  @RolesDecorator('ADMIN_ROLE')
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  @Get("enrouters")
+  async getUsersEnrouters(@Response() res: any): Promise<responseInterface>
+  {
+
+    console.log('entra a la maldita ruta');
+
+    this._Response = await this._userService.getUsersEnrouters();
+
+    return res.status(this._Response.status).json(this._Response);
+  }
 
 
 
-  @Get(":id")
+  @Get("getOne/:id")
   async getOneUser(
     @Param("id") id: string,
     @Response() res: any
@@ -52,15 +65,30 @@ export class UsersController {
     return res.status(this._Response.status).json(this._Response);
   }
 
-  // @RolesDecorator('ADMIN_ROLE')
-  // @UseGuards(AuthGuard(), RoleGuard)
+  @RolesDecorator('ADMIN_ROLE')
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Get()
-  async getUsers(@Response() res: any): Promise<responseInterface>
+  async getUsers(@Response() res: any, @Request() req: any ): Promise<responseInterface>
   {
-    this._Response = await this._userService.getAll();
+
+  // console.log('req', req);
+
+    this._Response = await this._userService.getAll(req.page);
 
     return res.status(this._Response.status).json(this._Response);
   }
+
+  @RolesDecorator('ENRUTATOR_ROLE')
+  @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
+  @Get("myCollectors/:id")
+  async getUsersMyEnrouters(@Response() res: any, @Request() req: any, @Param("id") id: string, ): Promise<responseInterface>
+  {
+
+    this._Response = await this._userService.getUsersMyEnrouters(req.page, id);
+
+    return res.status(this._Response.status).json(this._Response);
+  }
+
 
   @Post()
   async setUsers(@Body() body:Users, @Response() res:any ): Promise<responseInterface>
@@ -70,6 +98,7 @@ export class UsersController {
     return res.status(this._Response.status).json(this._Response);
   }
 
+  @UseGuards(AuthGuard('jwt'), SameUserAuthGuard)
   @Put(':id')
   @UsePipes(ValidationPipe)
   async modifyUsers(@Body() user: updateUserDto, @Param('id') id:string, @Response() res:any)
@@ -79,6 +108,9 @@ export class UsersController {
     return res.status(this._Response.status).json(this._Response);
   }
 
+
+  @RolesDecorator('ADMIN_ROLE')
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Delete(':id')
   async deleteUsers(@Param('id') id:string, @Response() res:any)
   {

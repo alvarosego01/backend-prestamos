@@ -4,7 +4,7 @@ import { UsersService } from 'src/Modules/users/services/users.service';
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
 
 @Injectable()
-export class ReferenceGuard implements CanActivate 
+export class ReferenceGuard implements CanActivate
 {
 
   private _ResponseRol:responseInterface;
@@ -20,25 +20,31 @@ export class ReferenceGuard implements CanActivate
 
   async canActivate(
     context: ExecutionContext
-  ): Promise<boolean> 
+  ): Promise<boolean>
   {
-    let reference:string[] = context.switchToHttp().getRequest();
+    let reference: any = context.switchToHttp().getRequest();
 
-    this._ResponseRol = await this._rolService.get(reference['params'].rol);
-    this._ResponseUsr = await this._userService.getOne(reference['params'].ref);
-   
-    if(reference['params'])
+
+    // console.log('entra acá esto', reference);
+
+    // this._ResponseRol = await this._rolService.get(reference['params'].rol);
+    this._ResponseUsr = await this._userService.getOne(reference.params.ref);
+
+
+
+    if(reference.params)
     {
 
-      if(!this._ResponseRol.ok || !this._ResponseUsr.ok)
+      if(!this._ResponseUsr.ok)
       {
 
         this._Result = false;
 
-      }else if(this._ResponseRol.data.rol === 'COLLECTOR_ROLE')
-      {
+      }else if(this._ResponseUsr.data.rol.rol === 'ENRUTATOR_ROLE'){
 
+        console.log('aprobado');
         this._Result = true;
+
       }
 
       return this._Result;

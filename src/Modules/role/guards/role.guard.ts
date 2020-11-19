@@ -15,9 +15,10 @@ export class RoleGuard implements CanActivate {
       return true;
     }
 
+    console.log('roles', roles);
+
     const request = context.switchToHttp().getRequest();
     const { user } = request;
-
 
     // const hasRole = () => {
     //   // user.rol.some((role: string) => roles.includes(role));
@@ -28,19 +29,13 @@ export class RoleGuard implements CanActivate {
     //     console.log('false');
     //     return false;
     //   }
-
     // }
 
-    if((user) && (user.rol) && ( String(user.rol) === String(roles[0] ))){
+    if( roles.includes(user.rol) ){
       return true;
     }else{
       return false;
     }
-
-    // const hasRole = () =>
-    // user.rol.some((role: string) => roles.includes(role));
-    // return user && user.rol && hasRole();
-
 
   }
 
