@@ -36,6 +36,7 @@ export class ProcessDataService {
 
         console.log('el retorno aca', response);
 
+        // console.log('response', response);
         if(!response){
 
           const resp: responseInterface = {
@@ -48,6 +49,7 @@ export class ProcessDataService {
           reject(resp);
 
         }
+
 
         const resp: responseInterface = {
           ok: true,
@@ -83,7 +85,7 @@ export class ProcessDataService {
           reject(resp);
         }
 
-        if(!response || response.length == 0){
+        if(!response){
           console.log('inexistente');
           const resp: responseInterface = {
             ok: false,
@@ -91,7 +93,51 @@ export class ProcessDataService {
           };
           reject(resp);
         }
-        console.log('todo exitoso');
+        console.log('todo exitoso', response);
+          const resp: responseInterface = {
+            ok: true,
+            status: 200,
+            data: response,
+          };
+          resolve(resp);
+
+
+    });
+
+    });
+  }
+
+  async _findAllDB( dataBody: any, parameters: _argsFind ): Promise<responseInterface> {
+
+    // console.log('llega al findone', parameters);
+    return new Promise(async (resolve, reject) => {
+
+      await dataBody.find(parameters.findObject)
+      .populate(parameters.populate)
+      .select(parameters.select)
+      .exec((error, response) => {
+
+        if(error){
+          console.log('hubo error', error);
+          const resp: responseInterface = {
+            ok: false,
+            status: 500,
+            message: 'Algo ha salido mal, intente más tarde',
+            err: error,
+          };
+          reject(resp);
+        }
+
+        if(!response){
+          console.log('inexistente');
+          const resp: responseInterface = {
+            ok: false,
+            status: 404,
+            data: []
+          };
+          reject(resp);
+        }
+        console.log('todo exitoso', response);
           const resp: responseInterface = {
             ok: true,
             status: 200,
@@ -118,6 +164,7 @@ export class ProcessDataService {
             ok: false,
             status: 400,
             err: err,
+            message: 'Algo ha salido mal, intente más tarde'
 
           };
           console.log('ERRORR', err);
@@ -429,6 +476,8 @@ export class ProcessDataService {
 
     });
   }
+
+
 
 
 

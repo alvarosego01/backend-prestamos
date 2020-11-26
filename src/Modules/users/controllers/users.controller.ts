@@ -53,7 +53,8 @@ export class UsersController {
   }
 
 
-
+  @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Get("getOne/:id")
   async getOneUser(
     @Param("id") id: string,
@@ -77,18 +78,6 @@ export class UsersController {
 
     return res.status(this._Response.status).json(this._Response);
   }
-
-  @RolesDecorator('ENRUTATOR_ROLE')
-  @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
-  @Get("myCollectors/:id")
-  async getUsersMyEnrouters(@Response() res: any, @Request() req: any, @Param("id") id: string, ): Promise<responseInterface>
-  {
-
-    this._Response = await this._userService.getUsersMyEnrouters(req.page, id);
-
-    return res.status(this._Response.status).json(this._Response);
-  }
-
 
   @Post()
   async setUsers(@Body() body:Users, @Response() res:any ): Promise<responseInterface>

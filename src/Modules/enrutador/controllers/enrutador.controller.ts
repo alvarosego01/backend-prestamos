@@ -4,7 +4,7 @@ import { GenerarReferidoDto } from '../models/dto/dto.index';
 import { EnrutadorService } from '../services/services.index';
 
 @Controller('enrutador')
-export class EnrutadorController 
+export class EnrutadorController
 {
     private _Response:responseInterface;
 
@@ -24,9 +24,9 @@ export class EnrutadorController
     {
         this._Response = await this._enrutadorService.generarReferido(body);
         return res.status(this._Response.status).json(this._Response);
-    } 
+    }
 
-    
+
 
     //@Post("referir")
     //async registrarReferido()

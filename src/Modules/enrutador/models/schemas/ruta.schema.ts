@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
-import * as Mongoose from "mongoose"; 
+import * as Mongoose from "mongoose";
 import * as uniqueValidator from "mongoose-unique-validator";
 import * as mongoosePaginate from "mongoose-paginate-v2";
 import * as mongoose_delete from "mongoose-delete";
@@ -11,9 +11,43 @@ import { DateProcessService } from "src/Classes/classes.index";
 
 const _dateService = new DateProcessService();
 
+
+// @Schema()
+export class _files extends Document {
+
+    @Prop({
+      required: true,
+      default: null,
+    })
+    type: string;
+    @Prop({
+      required: true,
+      default: null,
+    })
+    file: string;
+    @Prop({
+      required: true,
+      default: null,
+    })
+    format: string;
+    @Prop({
+      required: true,
+      default: null,
+    })
+    folder: string;
+
+  }
+
+
 @Schema()
-export class Ruta extends Document 
+export class Ruta extends Document
 {
+
+    @Prop({
+        type: _files,
+        default: null,
+      })
+    photo: _files;
 
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
@@ -21,13 +55,13 @@ export class Ruta extends Document
         required: [true, 'Debe instanciar al enrutador quien creó la nueva ruta']
     })
     enrutador_id: string;
-    
+
     @Prop({
         type: [Mongoose.Schema.Types.ObjectId],
-        ref: 'Clientes',
-        required: false
+        ref: 'Cliente',
     })
-    clientes_id: Array<string>;
+
+    clientes_id: Array<any>;
 
     @Prop({
         type: Number,
@@ -41,7 +75,14 @@ export class Ruta extends Document
     })
     lastRecaudado:number;
 
-    @Prop({ 
+    @Prop({
+        type: String,
+        required: [true, "Falta establecer un titulo de la ruta"],
+        default: null
+    })
+    titleRoute:string;
+
+    @Prop({
         type: String,
         required: [true, "Falta establecer la ciudad"],
         default: null

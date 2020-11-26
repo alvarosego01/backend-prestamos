@@ -1,9 +1,10 @@
 import { Global, Module } from '@nestjs/common';
+import {_CLIENTESCHEMA} from './schemas/schemas.index';
 
 @Global()
 @Module({
-    imports:[],
+    imports:[_CLIENTESCHEMA],
     providers:[],
-    exports:[]
+    exports:[_CLIENTESCHEMA]
 })
 export class ClienteModelsModule {}

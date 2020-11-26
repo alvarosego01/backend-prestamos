@@ -66,41 +66,7 @@ export class UsersService
 
   }
 
-  async getUsersMyEnrouters(page, id: string): Promise<responseInterface> {
 
-    const parameters: _dataPaginator = { // <- paginate parameters
-
-      page: page || _configPaginator.page,
-      limit: 12 || _configPaginator.limit,
-      customLabels: _configPaginator.customLabels,
-      sort: { _id: -1 },
-      populate: [
-				{
-					path: 'rol',
-					select: 'rol alias'
-				},
-			],
-    }
-
-    const args: _argsPagination = {
-
-      findObject: {
-        enrutator_id: id
-      },
-      options: parameters
-
-    }
-
-    await this._processData._findDB(this.UsersModel, args).then(r => {
-      this._Response = r;
-    }, err => {
-      this._Response = err;
-      // this._Response.message =
-    });
-
-    return this._Response;
-
-  }
 
   async getUsersEnrouters(): Promise<responseInterface> {
 
@@ -158,10 +124,11 @@ export class UsersService
       // select: "rol"
     }
 
-    await this._processData._findOneDB(this.UsersModel, args).then(r => {
+    await this._processData._findOneDB(this.UsersModel, args).then((r: responseInterface) => {
       this._Response = r;
-    }, err => {
+    }, (err: responseInterface) => {
       this._Response = err;
+      this._Response.message = err.message || 'Usuario inexistente'
     });
 
     return this._Response;

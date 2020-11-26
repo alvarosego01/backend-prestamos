@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
-import * as Mongoose from "mongoose"; 
+import * as Mongoose from "mongoose";
 import * as uniqueValidator from "mongoose-unique-validator";
 import * as mongoosePaginate from "mongoose-paginate-v2";
 import * as mongoose_delete from "mongoose-delete";
@@ -10,14 +10,33 @@ import { DateProcessService } from "src/Classes/classes.index";
 
 const _dateService = new DateProcessService();
 
+
+export class concurrencia extends Document
+{
+
+    @Prop({
+        type: String,
+        required: [true]
+    })
+    tipo: string;
+
+    @Prop({
+        type: Number,
+        required: [true, 'Debe instanciar el nro de pagos del cliente']
+    })
+    concurrencia: number;
+
+}
+
+
 @Schema()
-export class Cliente extends Document 
-{   
-    
+export class Cliente extends Document
+{
+
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Users',
-        required: [true, 'Debe instanciar al enrutador quien creó la nueva ruta']
+        required: [true, 'Debe instanciar al cobrador asignado a este cliente']
     })
     cobrador_id: string;
 
@@ -64,13 +83,13 @@ export class Cliente extends Document
         required: [true, 'Debe instanciar el monto prestado del cliente']
     })
     prestado: number;
-    
+
 
     @Prop({
-        type: Number,
-        required: [true, 'Debe instanciar el nro de pagos del cliente']
+        type: concurrencia,
+        required: [true]
     })
-    concurrencia: number;
+    concurrencia: concurrencia;
 
     @Prop({
         type: Array,

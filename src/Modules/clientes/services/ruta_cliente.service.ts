@@ -3,20 +3,20 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DateProcessService, ProcessDataService } from 'src/Classes/classes.index';
 import { Ruta } from 'src/Modules/enrutador/models/schemas/ruta.schema';
-import 
-{   
-    responseInterface, 
-    _argsFind, 
-    _argsPagination, 
-    _argsUpdate, 
-    _configPaginator, 
-    _dataPaginator 
+import
+{
+    responseInterface,
+    _argsFind,
+    _argsPagination,
+    _argsUpdate,
+    _configPaginator,
+    _dataPaginator
 } from 'src/Response/interfaces/interfaces.index';
 
 import { Cliente, ClienteSchema } from '../models/schemas/cliente.schema';
 
 @Injectable()
-export class RutaClienteService 
+export class RutaClienteService
 {
     private _Response:responseInterface;
 
@@ -28,47 +28,47 @@ export class RutaClienteService
         private _dateProcessService:DateProcessService
     ){}
 
-    async linkToRouteOneCliente(ruta:string, cliente:string):Promise<responseInterface>
-    {
-        const args: _argsFind = 
-        {
-            findObject: { _id:ruta },
-            populate: null
-            // select: "rol"
-        }
+    // async linkToRouteOneCliente(ruta:string, cliente:string):Promise<responseInterface>
+    // {
+    //     const args: _argsFind =
+    //     {
+    //         findObject: { _id:ruta },
+    //         populate: null
+    //         // select: "rol"
+    //     }
 
-        await this._processData._findOneDB(this.rutaModel, args).then(r => 
-        {
-           return this.assignOneCliente(r.data, cliente);
+    //     await this._processData._findOneDB(this.rutaModel, args).then(r =>
+    //     {
+    //        return this.assignOneCliente(r.data, cliente);
 
-        }, err => 
-        {
-            this._Response = err;
-        });
+    //     }, err =>
+    //     {
+    //         this._Response = err;
+    //     });
 
-        return this._Response;
-    }
+    //     return this._Response;
+    // }
 
-    private async assignOneCliente(ruta:Ruta, cliente:string):Promise<responseInterface>
-    {
-        ruta.clientes_id.push(cliente);
+    // private async assignOneCliente(ruta:Ruta, cliente:string):Promise<responseInterface>
+    // {
+    //     ruta.clientes_id.push(cliente);
 
-        const _args:_argsUpdate =
-        {
-            findObject: { _id:ruta },
-            set: { $set:ruta }
-        }
+    //     const _args:_argsUpdate =
+    //     {
+    //         findObject: { _id:ruta },
+    //         set: { $set:ruta }
+    //     }
 
-        await this._processData._updateDB(this.rutaModel, _args).then(r => 
-        {
-            this._Response = r;
+    //     await this._processData._updateDB(this.rutaModel, _args).then(r =>
+    //     {
+    //         this._Response = r;
 
-        }, err => 
-        {
+    //     }, err =>
+    //     {
 
-            this._Response = err;
-        });
+    //         this._Response = err;
+    //     });
 
-        return this._Response;
-    }
+    //     return this._Response;
+    // }
 }

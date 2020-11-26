@@ -8,6 +8,10 @@ export class ClienteDto
 
     @IsNotEmpty()
     @IsString()
+    ruta_id: string
+
+    @IsNotEmpty()
+    @IsString()
     name: string
 
     @IsNotEmpty()
@@ -29,7 +33,7 @@ export class ClienteDto
     @IsNotEmpty()
     @IsNumber()
     concurrencia:number
-    
+
     @IsNotEmpty()
     @IsNumber()
     last_pago:number

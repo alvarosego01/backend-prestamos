@@ -18,7 +18,8 @@ import {
   RoleModule,
   EnrutadorModule,
   ClientesModule,
-  LicenciasModule
+  LicenciasModule,
+  CobradorModule
 } from "./Modules/Routes.module.index";
 
 // MODULOS DE LOADING Y OTROS
@@ -40,6 +41,7 @@ import { _MONGOOSEMODULE } from "./Database/mongo-config";
     ChatModule,
     AdminModule,
     RoleModule,
+    CobradorModule,
     EnrutadorModule,
     ClientesModule,
     LicenciasModule

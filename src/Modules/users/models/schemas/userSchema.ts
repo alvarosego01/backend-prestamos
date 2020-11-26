@@ -13,6 +13,7 @@ import { DateProcessService } from "src/Classes/classes.index";
 const _dateService = new DateProcessService();
 
 
+// @Schema()
 export class _files extends Document {
 
   @Prop({
@@ -109,7 +110,7 @@ export class Users extends Document {
   })
   edad: number;
 
-  
+
 
   @Prop({
     default: 'ACTIVE',
