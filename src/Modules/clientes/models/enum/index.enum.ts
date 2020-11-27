@@ -1,0 +1,1 @@
+export {statusCobro } from "./status.cobro.enum"

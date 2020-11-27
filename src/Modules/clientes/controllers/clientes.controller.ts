@@ -4,7 +4,7 @@ import {SameUserAuthGuard} from 'src/Modules/auth/guards/same-user-auth.guard';
 import {RolesDecorator} from 'src/Modules/role/decorators/role.decorator';
 import {RoleGuard} from 'src/Modules/role/guards/role.guard';
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
-import { ClienteDto } from '../models/dto/dto.index';
+import { ClienteDto } from '../models/dto/index.dto';
 import { ClienteService, RutaClienteService } from '../services/services.index';
 
 @Controller('clientes')

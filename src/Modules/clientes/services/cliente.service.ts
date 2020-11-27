@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { DateProcessService, ProcessDataService } from 'src/Classes/classes.index';
 import {Ruta} from 'src/Modules/enrutador/models/schemas/ruta.schema';
 import { responseInterface, _argsFind, _argsPagination, _argsUpdate, _configPaginator, _dataPaginator } from 'src/Response/interfaces/interfaces.index';
-import { ClienteDto } from '../models/dto/dto.index';
+import { ClienteDto } from '../models/dto/index.dto';
 import { Cliente, ClienteSchema } from '../models/schemas/cliente.schema';
 
 @Injectable()

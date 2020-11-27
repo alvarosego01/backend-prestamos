@@ -3,6 +3,7 @@ import {InjectModel} from '@nestjs/mongoose';
 import {Model} from 'mongoose';
 import {DateProcessService, ProcessDataService} from 'src/Classes/classes.index';
 import {Cliente} from 'src/Modules/clientes/models/schemas/cliente.schema';
+// import {Cliente} from 'src/Modules/clientes/models/schemas/cliente.schema';
 import {Ruta} from 'src/Modules/enrutador/models/schemas/ruta.schema';
 import {Users} from 'src/Modules/users/models/schemas/userSchema';
 import {responseInterface, _argsFind, _argsPagination, _argsUpdate, _configPaginator, _dataPaginator} from 'src/Response/interfaces/interfaces.index';
@@ -13,9 +14,9 @@ export class CobradorService {
 
     constructor
         (
+            // @InjectModel(Cliente.name) private ClientesModel: Model<Cliente>,
             @InjectModel(Ruta.name) private RutaModel: Model<Ruta>,
             @InjectModel(Users.name) private UsersModel: Model<Users>,
-            @InjectModel(Cliente.name) private ClientesModel: Model<Users>,
             private _processData: ProcessDataService,
             private _dateProcessService: DateProcessService
         ) { }
@@ -72,45 +73,45 @@ export class CobradorService {
     }
 
 
-    async setCollectorsAreas(data: any[]) {
+    // async setCollectorsAreas(data: any[]) {
 
 
-        return new Promise(async (resolve, reject) => {
+    //     return new Promise(async (resolve, reject) => {
 
-            let x: any= data;
-            await data.forEach(async (element, idx) => {
-
-
-                const args: _argsFind={
-                    findObject: {
-                        cobrador_id: element._id,
-                    },
-                    populate: null
-                    // select: "rol"
-                }
-                x[idx]["clientesAsignados"]= [ 'AAA' ];
-
-                console.log('la puta madre xxx', x[idx]["clientesAsignados"] );
-
-                console.log('la puta madre 2', idx);
-                await this._processData._findAllDB(this.ClientesModel, args).then((r: responseInterface) => {
-
-                    if (r.data!=null && r.data.length>0) {
-                        x[idx]["clientesAsignados"].push({aaa: 'sss'});
-                    }
-
-                }, (err: responseInterface) => {
-
-                });
-
-            });
-
-            resolve(x);
-
-        });
+    //         let x: any= data;
+    //         await data.forEach(async (element, idx) => {
 
 
+    //             const args: _argsFind={
+    //                 findObject: {
+    //                     cobrador_id: element._id,
+    //                 },
+    //                 populate: null
+    //                 // select: "rol"
+    //             }
+    //             x[idx]["clientesAsignados"]= [ 'AAA' ];
 
-        }
+    //             console.log('la puta madre xxx', x[idx]["clientesAsignados"] );
+
+    //             console.log('la puta madre 2', idx);
+    //             await this._processData._findAllDB(this.ClientesModel, args).then((r: responseInterface) => {
+
+    //                 if (r.data!=null && r.data.length>0) {
+    //                     x[idx]["clientesAsignados"].push({aaa: 'sss'});
+    //                 }
+
+    //             }, (err: responseInterface) => {
+
+    //             });
+
+    //         });
+
+    //         resolve(x);
+
+    //     });
+
+
+
+    //     }
 
 }
