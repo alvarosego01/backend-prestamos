@@ -44,7 +44,6 @@ export class RutaService
             this._Response = err;
         });
 
-        console.log(enrutador);
         return this._Response;
     }
 

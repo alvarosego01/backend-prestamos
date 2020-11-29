@@ -10,11 +10,17 @@ import { DateProcessService } from "src/Classes/classes.index";
 import {statusCobro} from "../enum/status.cobro.enum";
 
 const _dateService = new DateProcessService();
+const status = Object.values(statusCobro);
+const st =
+{
+    values: status,
+    message: "El estatus {VALUE} no esta permitido"
+};
 
 @Schema()
 export class Cobros extends Document 
 { 
-    /* @Prop({
+    @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Users',
         required: [true, 'Debe instanciar el cobrador encargado de']
@@ -26,7 +32,7 @@ export class Cobros extends Document
         ref: 'Cliente',
         required: [true, 'Debe instanciar el cliente para el cobro']
     })
-    cliente_id: string; */
+    cliente_id: string;
 
     @Prop({
         type: String,
@@ -43,7 +49,8 @@ export class Cobros extends Document
     @Prop({
         type: String,
         required: [true, 'Debe establecer un estatus del cobro'],
-        default: statusCobro.CREADO
+        default: statusCobro.CREADO,
+        enum: st
     })
     status: string;
 

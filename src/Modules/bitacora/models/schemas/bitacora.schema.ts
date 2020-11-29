@@ -7,53 +7,47 @@ import * as mongoosePaginate from "mongoose-paginate-v2";
 import * as mongoose_delete from "mongoose-delete";
 
 import { DateProcessService } from "src/Classes/classes.index";
+import {Action} from "../enum/index.enum";
 
 
 const _dateService = new DateProcessService();
 
-@Schema()
-export class Ruta extends Document 
-{
+const action = {
+    values: Object.values(Action),
+    message: "La acción {VALUE} no esta permitida"
+}
 
+@Schema()
+export class Bitacora extends Document 
+{
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
-        ref: 'Users',
-        required: [true, 'Debe instanciar al enrutador quien creó la nueva ruta']
+        required: [true, "Falta quien hizo la acción"],
+        ref: 'Users'
     })
-    enrutador_id: string;
-    
-    @Prop({
-        type: [Mongoose.Schema.Types.ObjectId],
-        ref: 'Clientes',
-        required: false
-    })
-    clientes_id: Array<string>;
-
-    @Prop({
-        type: Number,
-        default: 0.00
-    })
-    maxRecaudado:number;
-
-    @Prop({
-        type: Number,
-        default: 0.00
-    })
-    lastRecaudado:number;
-
-    @Prop({ 
-        type: String,
-        required: [true, "Falta establecer la ciudad"],
-        default: null
-    })
-    city:string;
+    actor:string;
 
     @Prop({
         type: String,
-        required: [true, "Falta establecer el departamento"],
-        default: null
+        required: [true, "Falta acciòn del evento"],
+        enum: action
     })
-    department:string;
+    action:string;
+
+    @Prop({
+        type: String,
+        required: [true, "Falta evento"],
+        default: "Falta descripción de la acción!!"
+    })
+    event:string;
+
+    @Prop({
+        type: String,
+        required: [true, "Falta area donde se originó el reporte"],
+        default: "Falta área donde se originó el reporte!!"
+    })
+    type:string;
+
 
     @Prop({
         type: Array,
@@ -61,20 +55,10 @@ export class Ruta extends Document
     })
     createdAt: string;
 
-    @Prop({
-        type: Array,
-        default: null
-    })
-    updatedAt: string[];
-
 }
-
-export const RutaSchema = SchemaFactory.createForClass(Ruta)
+export const BitacoraSchema = SchemaFactory.createForClass(Bitacora)
 .plugin(uniqueValidator, {
   message: "El {PATH} {VALUE} ya está registrado en sistema",
 })
 .plugin(mongoosePaginate)
 .plugin(mongoose_delete, { overrideMethods: 'all' });
-
-
-

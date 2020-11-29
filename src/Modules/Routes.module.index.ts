@@ -12,6 +12,8 @@ export { AdminModule } from "./admin/admin.module"
 export { EnrutadorModule} from "./enrutador/enrutador.module"
 export { ClientesModule } from "./clientes/clientes.module"
 export { LicenciasModule } from "./licencias/licencias.module"
+export { BitacoraModule } from "./bitacora/bitacora.module"
+
 
 
 

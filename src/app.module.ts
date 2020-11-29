@@ -18,7 +18,8 @@ import {
   RoleModule,
   EnrutadorModule,
   ClientesModule,
-  LicenciasModule
+  LicenciasModule,
+  BitacoraModule
 } from "./Modules/Routes.module.index";
 
 // MODULOS DE LOADING Y OTROS
@@ -42,7 +43,8 @@ import { _MONGOOSEMODULE } from "./Database/mongo-config";
     RoleModule,
     EnrutadorModule,
     ClientesModule,
-    LicenciasModule
+    LicenciasModule,
+    BitacoraModule
   ],
   controllers: [AppController],
   providers: [ AppService],
