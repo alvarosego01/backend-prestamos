@@ -51,7 +51,6 @@ export class CobradorService {
         await this._processData._findDB(this.UsersModel, args).then( async (r: responseInterface) => {
             this._Response=r;
 
-
             // console.log('la puta madre', r.data);
 
             // await this.setCollectorsAreas(r).then(rr => {
@@ -60,8 +59,6 @@ export class CobradorService {
 
             // //    console.log('la mierda que se retorna', rr);
             // });
-
-
 
         }, (err: responseInterface) => {
             this._Response=err;

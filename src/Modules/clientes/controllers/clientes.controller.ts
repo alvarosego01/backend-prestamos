@@ -1,4 +1,4 @@
-import { Controller, Response, Get, Post, Body, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Response, Get, Post, Body, Param, Delete, UseGuards, Put } from '@nestjs/common';
 import {AuthGuard} from '@nestjs/passport';
 import {SameUserAuthGuard} from 'src/Modules/auth/guards/same-user-auth.guard';
 import {RolesDecorator} from 'src/Modules/role/decorators/role.decorator';
@@ -35,11 +35,17 @@ export class ClientesController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    // @Post('crear')
-    // async sayHel(@Response() res:any):Promise<responseInterface>
-    // {
-    //     return res.status(200).json("Ruta de manejo de clientes activa");
-    // }
+    @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    @Put('modificar/:id/:idCliente')//tomo formulario y creo un cliente
+    async updateOneCliente(@Param('idCliente') idCliente:string, @Param('id') id:string , @Body() body:any, @Response() res:any):Promise<responseInterface>
+    {
+
+        this._Response = await this._clienteService.updateOneCliente(body, idCliente);
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+
 
     @Get('all/:cobrador')//obtengo los cliente pertenecientes al cobrdor
     async getAllClientes(@Param('cobrador') cobrador:string, @Response() res:any):Promise<responseInterface>
@@ -58,7 +64,9 @@ export class ClientesController
 
 
 
-    @Delete('borrar/:cliente')//tomo el id del cliente y lo borro, pero bajo confirmacion del admin
+    @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
+    @Delete('borrar/:id/:cliente')//tomo el id del cliente y lo borro, pero bajo confirmacion del admin
     async delOneCliente(@Param('cliente') cliente:string, @Response() res:any):Promise<responseInterface>
     {
         this._Response = await this._clienteService.delOneCliente(cliente);

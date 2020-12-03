@@ -134,10 +134,57 @@ export class ClienteService
 
     }
 
+    async updateOneCliente(cliente: any, idCliente: string):Promise<responseInterface>
+    {
+        // const data = new this.clienteModel(cliente);
+
+        const data = {
+
+            cobrador_id: cliente.cobrador_id,
+            card_id: cliente.card_id,
+            name: cliente.name,
+            last_name: cliente.last_name,
+            dir_domicilio: cliente.dir_domicilio,
+            edad: cliente.edad,
+
+        }
+
+
+      const args: _argsUpdate = {
+        findObject: {
+          _id: idCliente,
+        },
+        set: {
+          $set: data
+        },
+        populate: null
+      }
+
+      await this._processData._updateDB(this.clienteModel, args).then( async (r: responseInterface) => {
+
+        this._Response = r;
+        this._Response.message = 'Información de cliente actualizada';
+
+
+      }, (err: responseInterface) => {
+        this._Response = err;
+        this._Response.message = err.message || 'No se pudo actualizar la información';
+      });
+
+      return this._Response;
+
+
+    }
+
+
+
     async createNewCliente(cliente:ClienteDto, idRuta: string):Promise<responseInterface>
     {
         const data = new this.clienteModel(cliente);
         //data.cobrador_id = cobrador;
+
+        console.log('la cosa que llega acá', cliente);
+
 
         await this._processData._saveDB(data).then( async (r) =>
         {
