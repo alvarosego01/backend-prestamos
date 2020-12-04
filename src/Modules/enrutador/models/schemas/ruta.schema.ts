@@ -106,7 +106,7 @@ export class Ruta extends Document
         type: Array,
         default: null
     })
-    updatedAt: Array<string>;
+    updatedAt: string[];
 
 }
 

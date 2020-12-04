@@ -19,7 +19,8 @@ import {
   EnrutadorModule,
   ClientesModule,
   LicenciasModule,
-  CobradorModule
+  CobradorModule,
+  BitacoraModule
 } from "./Modules/Routes.module.index";
 
 // MODULOS DE LOADING Y OTROS
@@ -44,7 +45,8 @@ import { _MONGOOSEMODULE } from "./Database/mongo-config";
     CobradorModule,
     EnrutadorModule,
     ClientesModule,
-    LicenciasModule
+    LicenciasModule,
+    BitacoraModule
   ],
   controllers: [AppController],
   providers: [ AppService],

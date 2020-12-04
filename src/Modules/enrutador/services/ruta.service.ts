@@ -52,7 +52,6 @@ export class RutaService
 
         });
 
-        console.log(enrutador);
         return this._Response;
     }
 

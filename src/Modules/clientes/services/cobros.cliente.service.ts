@@ -77,6 +77,7 @@ export class CobrosClienteService
         return this._Response;
     }
 
+
     async getOnePaymentDo(pago:string):Promise<responseInterface>
     {
         const args: _argsFind = 
@@ -102,7 +103,7 @@ export class CobrosClienteService
         await this._processData._saveDB(data).then(r =>
         {
             this._Response = r;
-
+            
         }, err =>
         {
             this._Response = err;
