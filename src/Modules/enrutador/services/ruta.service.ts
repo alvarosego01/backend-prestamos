@@ -85,13 +85,7 @@ export class RutaService
                 }
 
             }
-            // populate: {
 
-            //     path: '[clientes_id]',
-            //     options: { retainNullValues: true }
-
-            //   }
-            // select: "rol"
         }
 
         await this._processData._findOneDB(this.RutaModel, args).then(r =>
