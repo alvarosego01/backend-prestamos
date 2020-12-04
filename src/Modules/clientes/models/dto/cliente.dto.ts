@@ -4,7 +4,7 @@ export class ClienteDto
 {
     @IsNotEmpty()
     @IsString()
-    cobrador_id: string
+    card_id:string
 
     @IsNotEmpty()
     @IsString()
@@ -15,38 +15,26 @@ export class ClienteDto
     last_name:string
 
     @IsNotEmpty()
-    @IsString()
-    dir_domicilio:string
-
-    @IsNotEmpty()
-    @IsNumber()
-    percentaje_pago:number
-
-    @IsNotEmpty()
-    @IsNumber()
-    monto_prestado:number
-
-    @IsNotEmpty()
-    @IsNumber()
-    concurrencia:number
-    
-    @IsNotEmpty()
-    @IsNumber()
-    last_pago:number
-
-    @IsNotEmpty()
     @IsNumber()
     edad:number
 
     @IsNotEmpty()
     @IsNumber()
-    tlf_fijo:number
-
-    @IsNotEmpty()
-    @IsNumber()
-    celular:number
+    phone:string[]
 
     @IsNotEmpty()
     @IsString()
     mail:string
+
+    @IsNotEmpty()
+    @IsString()
+    photo:string
+    
+    @IsNotEmpty()
+    @IsString()
+    geo:string
+
+    @IsNotEmpty()
+    @IsString()
+    semaforo:string
 }
