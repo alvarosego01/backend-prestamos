@@ -10,7 +10,8 @@ import
 { 
     _CAMBIOCOBROSCHEMA,
     _CLIENTESCHEMA, 
-    _COBROSCHEMA 
+    _COBROSCHEMA, 
+    _NEGOCIOSCHEMA
 } 
 from './models/schemas/schemas.index';
 import 
@@ -24,7 +25,7 @@ import
 from "./services/services.index";
 
 @Module({
-    imports:[_CLIENTESCHEMA, _COBROSCHEMA, _CAMBIOCOBROSCHEMA],
+    imports:[_CLIENTESCHEMA, _COBROSCHEMA, _CAMBIOCOBROSCHEMA, _NEGOCIOSCHEMA],
     controllers:[ClientesController, CobrosClienteController, PeticionCobrosController],
     providers:[ClienteService, RutaClienteService, CobrosClienteService, PeticionesCobrosService],
     exports:[ClienteService, RutaClienteService, CobrosClienteService]

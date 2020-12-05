@@ -48,7 +48,7 @@ export class CobrosClienteService
         {
             this._Response = err;
         }); 
-        return this._Response;
+        return this._Response; 
     }
 
     async getAllPaymentDo(cliente:string):Promise<responseInterface>
