@@ -1,0 +1,120 @@
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import 
+{ 
+    DateProcessService, 
+    ProcessDataService 
+} 
+from 'src/Classes/classes.index';
+import 
+{ 
+    responseInterface,
+    _argsFind, 
+    _argsPagination, 
+    _argsUpdate, 
+    _configPaginator, 
+    _dataPaginator 
+} 
+from 'src/Response/interfaces/interfaces.index';
+import 
+{
+    NegocioCreacionDto,
+    NegocioModificacionDto,
+    NegocioPeticionDto, NegocioUnicoPeticionDto,
+
+} 
+from '../models/dto/index.dto';
+import {Negocio} from '../models/schemas/negocio.schema';
+
+@Injectable()
+export class NegocioService 
+{
+    private _Response:responseInterface;
+
+    constructor
+    (
+        @InjectModel(Negocio.name) private _negocioModel:Model<Negocio>,
+        private _processData:ProcessDataService,
+        private _dateProcessService:DateProcessService 
+    ){}
+
+    async getAllNegocio(negocio:NegocioPeticionDto):Promise<responseInterface>
+    {
+        const parameters: _dataPaginator = 
+        { 
+            page: 1 || _configPaginator.page,
+            limit: 12 || _configPaginator.limit,
+            customLabels: _configPaginator.customLabels,
+            sort: { _id: -1 },
+        }
+
+        const args: _argsPagination = 
+        {
+            findObject: { cliente_id: negocio.cliente_id },
+            options: parameters
+        }
+
+        await this._processData._findDB(this._negocioModel, args).then(r => 
+        {
+           this._Response = r;
+        }, err => 
+        {
+            this._Response = err;
+        });
+
+        return this._Response;
+    }
+
+    async getOneNegocio(negocio:NegocioUnicoPeticionDto):Promise<responseInterface>
+    {
+        const args: _argsFind = 
+        {
+            findObject: { _id:negocio._id, cliente_id: negocio.cliente_id },
+            populate: null
+        }
+        await this._processData._findOneDB(this._negocioModel, args).then(r => 
+        {
+           this._Response = r;
+        }, err => 
+        {
+            this._Response = err;
+        });
+        return this._Response;
+    }
+
+    async makeOneNegocio(negocio:NegocioCreacionDto):Promise<responseInterface>
+    {
+        const data = new this._negocioModel(negocio);
+
+        data.total = negocio.venta + (negocio.venta * (negocio.interes/100));
+        data.vcuotas = data.total/negocio.ncuotas;
+
+        await this._processData._saveDB(data).then(r => 
+        {
+            this._Response = r;
+        }, 
+        err => 
+        {
+            this._Response = err;
+        }); 
+        return this._Response; 
+    } 
+
+    async modifyOneNegocio(negocio:NegocioModificacionDto):Promise<responseInterface>
+    {
+        // se crea un objeto con los nuevos valores
+        const data = new this._negocioModel(negocio);
+
+        await this._processData._saveDB(data).then(r =>
+        {
+            this._Response = r;
+            
+        }, err =>
+        {
+            this._Response = err;
+            this._Response.data = null;
+        }); 
+        return this._Response;
+    }
+}

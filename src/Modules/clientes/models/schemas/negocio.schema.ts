@@ -11,8 +11,38 @@ import { DateProcessService } from "src/Classes/classes.index";
 const _dateService = new DateProcessService();
 
 @Schema()
+export class Cuota extends Document 
+{
+    @Prop({
+        type: Number,
+        required: [true, 'Debe proporcionar el monto pagado']
+    })
+    pagado:Number;
+
+    @Prop({
+        type: Number,
+        required: [true, 'Debe proporcionar el monto pagado']
+    })
+    restante:Number;
+
+    @Prop({
+        type: Number,
+        default: 0
+    })
+    penalizacion:Number;
+
+    @Prop({
+        type: Number,
+        required: [true, 'Debe proporcionar el monto pagado']
+    })
+    cuotas_restante:Number;
+}
+export const CuotaSchema = SchemaFactory.createForClass(Cuota);
+
+@Schema()
 export class Negocio extends Document 
 {
+    /*
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         refer: "Clinte",
@@ -26,6 +56,7 @@ export class Negocio extends Document
         required: [true, 'Debe incluir el cobrador encargado']
     })
     cobrador_id:string;
+    */
 
     @Prop({
         type: Number,
@@ -47,15 +78,28 @@ export class Negocio extends Document
 
     @Prop({
         type: Number,
-        required: [true, "Debe indicar el valor total de la cuota"]
+        default: 0    
     })
     vcuotas:number;
+
+    @Prop({
+        type: Number,
+        default: 0
+    })
+    total:number;
 
     @Prop({
         type: Boolean,
         default: true
     })
     pendiente:boolean;
+
+    @Prop({
+        type: [Mongoose.Schema.Types.ObjectId],
+        default: null,
+        ref: "Cuota"
+    })
+    cuotas:Array<Cuota>;
 
     @Prop({
         type: Array,
@@ -67,9 +111,8 @@ export class Negocio extends Document
         type: Array,
         default: null
     })
-    updatedAt: string;
+    updatedAt: string[];
     
-
 }
 export const NegocioSchema = SchemaFactory.createForClass(Negocio)
 .plugin(uniqueValidator, {

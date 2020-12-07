@@ -20,26 +20,28 @@ const st =
 @Schema()
 export class Cobros extends Document 
 { 
+    /*
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Users',
-        required: [true, 'Debe instanciar el cobrador encargado de']
+        required: [true, 'Debe instanciar el cobrador encargado']
     })
     cobrador_id: string;
     
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
-        ref: 'Cliente',
-        required: [true, 'Debe instanciar el cliente para el cobro']
+        ref: 'Negocio',
+        required: [true, 'Debe instanciar el negocio con el cliente para el cobro']
     })
-    cliente_id: string;
+    negocio_id: string;
 
     @Prop({
         type: String,
         default: "Sin Observaciones"
     })
     observacion: string;
-
+    */
+    
     @Prop({
         type: Number,
         required: [true, 'Debe indicar el monto del pago']

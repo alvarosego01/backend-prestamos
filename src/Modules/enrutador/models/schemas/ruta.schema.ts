@@ -24,10 +24,10 @@ export class Ruta extends Document
     
     @Prop({
         type: [Mongoose.Schema.Types.ObjectId],
-        ref: 'Clientes',
+        ref: 'Negocio',
         required: false
     })
-    clientes_id: Array<string>;
+    negocios_id: Array<string>;
 
     @Prop({
         type: Number,
