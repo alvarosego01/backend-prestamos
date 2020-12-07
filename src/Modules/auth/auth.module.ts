@@ -18,6 +18,7 @@ import {ConfigService} from 'src/Config';
 import {Configuration} from 'src/Config/config.keys';
 
 // import { ModelsModule } from '../users/models/models.module';
+import { AuthsocketModule } from './socket/authsocket.module';
 
 
 @Module({
@@ -39,10 +40,12 @@ import {Configuration} from 'src/Config/config.keys';
         };
       },
     }),
+
+    AuthsocketModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, SetUserMenuService, RoleService, UsersService],
-  exports: [JwtStrategy, PassportModule, SetUserMenuService],
+  exports: [JwtStrategy, PassportModule, SetUserMenuService, AuthsocketModule],
 })
 
 export class AuthModule {}

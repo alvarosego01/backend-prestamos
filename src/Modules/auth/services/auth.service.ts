@@ -23,6 +23,9 @@ import { SetUserMenuService } from './authServices.index';
 import { UserDto } from 'src/Modules/users/models/dto/user.dto';
 
 
+import {VisitGateway} from '../socket/gateways/gateways.index';
+
+
 @Injectable()
 export class AuthService {
 
@@ -34,6 +37,7 @@ export class AuthService {
     private _processData: ProcessDataService,
     public _setUserMenu: SetUserMenuService,
     private _dateProcessService: DateProcessService,
+    private _visitGateway: VisitGateway
   ) {}
 
   async signup(signupDto: SignupDto): Promise<responseInterface>
@@ -164,6 +168,14 @@ export class AuthService {
 
         await this.updateLastSession(r.data._id).then();
 
+        let x = {
+          _idUser: l._id,
+          name: l.name,
+          last_name: l.last_name,
+          rol: l.rol
+        }
+        await this._visitGateway.anunciarLogin(x);
+
       }
 
     }, (err: responseInterface) =>
@@ -172,7 +184,7 @@ export class AuthService {
       this._Response.message = (err.status != 500)?`Usuario o contraseña inválidos`: 'Algo ha salido mal, intente más tarde';
     })
 
-    console.log('prueba', this._Response);
+    // console.log('prueba', this._Response);
 
 
     return this._Response;
@@ -206,7 +218,7 @@ export class AuthService {
       await this._processData._updateDB(this.UsersModel, args).then( async r => {
 
 
-        console.log('sesion actualizada en fecha', data);
+        // console.log('sesion actualizada en fecha', data);
         resolve(true);
 
       }, err => {
