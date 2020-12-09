@@ -54,7 +54,7 @@ export const CuotaSchema = SchemaFactory.createForClass(Cuota);
 @Schema()
 export class Negocio extends Document 
 {
-    /*
+    
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         refer: "Clinte",
@@ -68,7 +68,6 @@ export class Negocio extends Document
         required: [true, 'Debe incluir el cobrador encargado']
     })
     cobrador_id:string;
-    */
 
     @Prop({
         type: Number,
