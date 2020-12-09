@@ -50,7 +50,7 @@ export class CobrosClienteController
     async getOnePaymentDo(@Param('pago') id:string, @Response() res:any):Promise<responseInterface>
     {
         this._Response = await this._cobroService.getOnePaymentDo(id);
-        return res.status(this._Response.status).json(this._Response);
+        return res.status(this._Response.status).json(this._Response); 
     }
 
     @Post('generar')

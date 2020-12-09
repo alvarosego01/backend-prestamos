@@ -3,6 +3,7 @@ import
 {
     ClientesController,
     CobrosClienteController,
+    NegocioController,
     PeticionCobrosController
 }
 from './controllers/controllers.index';
@@ -10,7 +11,9 @@ import
 {
     _CAMBIOCOBROSCHEMA,
     _CLIENTESCHEMA,
-    _COBROSCHEMA
+    _COBROSCHEMA,
+    _NEGOCIOSCHEMA,
+    _CUOTASCHEMA
 }
 from './models/schemas/schemas.index';
 import
@@ -19,14 +22,15 @@ import
     ClienteService,
     CobrosClienteService,
     PeticionesCobrosService,
-    RutaClienteService
+    RutaClienteService,
+    NegocioService
 }
 from "./services/services.index";
 
 @Module({
-    imports:[_CLIENTESCHEMA, _COBROSCHEMA, _CAMBIOCOBROSCHEMA],
-    controllers:[ClientesController, CobrosClienteController, PeticionCobrosController],
-    providers:[ClienteService, RutaClienteService, CobrosClienteService, PeticionesCobrosService],
+    imports:[_CLIENTESCHEMA, _COBROSCHEMA, _CAMBIOCOBROSCHEMA, _NEGOCIOSCHEMA, _CUOTASCHEMA],
+    controllers:[ClientesController, CobrosClienteController, PeticionCobrosController, NegocioController],
+    providers:[ClienteService, RutaClienteService, CobrosClienteService, PeticionesCobrosService, NegocioService],
     exports:[ClienteService, RutaClienteService, CobrosClienteService]
 })
 export class ClientesModule {}

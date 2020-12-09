@@ -9,6 +9,10 @@ export class createCobroClienteDto
     @IsNotEmpty()
     @IsString()
     cliente_id:string;
+    
+    @IsNotEmpty()
+    @IsString()
+    negocio_id:string;
 
     @IsNotEmpty()
     @IsString()

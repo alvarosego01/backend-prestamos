@@ -32,14 +32,6 @@ export class concurrencia extends Document
 @Schema()
 export class Cliente extends Document
 {
-
-    @Prop({
-        type: Mongoose.Schema.Types.ObjectId,
-        ref: 'Users',
-        required: [true, 'Debe instanciar el cobrador encargado']
-    })
-    cobrador_id: string;
-
     @Prop({
         type: String,
         required: [true, 'Debe instanciar la identificación del cliente']
@@ -58,12 +50,11 @@ export class Cliente extends Document
     })
     last_name: string;
 
-
-    @Prop({
+    /* @Prop({
         type: String,
         required: [true, 'Debe instanciar la dirección del cliente']
     })
-    dir_domicilio: string;
+    dir_domicilio: string; */
 
     @Prop({
         type: Number,
@@ -72,24 +63,34 @@ export class Cliente extends Document
     edad: number;
 
     @Prop({
-        type: Number,
-        required: [true, 'Debe instanciar porcentaje de las cuotas de pago del cliente']
+        type: Array,
+        required: [true, "Debe incluir al menos un numero telefónico"]
     })
-    perce_pagos: number;
-
+    phone:string;
 
     @Prop({
-        type: Number,
-        required: [true, 'Debe instanciar el monto prestado del cliente']
+        type: String,
+        required: [false]
     })
-    prestado: number;
-
+    photo:string;
 
     @Prop({
-        type: concurrencia,
-        required: [true]
+        type: String,
+        required: [true, "Debe indicar el nivel de usuario"]
     })
-    concurrencia: concurrencia;
+    mail:string;
+
+    @Prop({
+        type: Array,
+        required: [true, "Debe indicar el nivel de usuario"]
+    })
+    semáforo:string;
+
+    @Prop({
+        type: Array,
+        required: false
+    })
+    geo:string;
 
     @Prop({
         type: Array,
