@@ -13,30 +13,35 @@ const _dateService = new DateProcessService();
 @Schema()
 export class Cuota extends Document   
 {
+    //monto obtenido del cobro
     @Prop({
         type: Number,
         required: [true, 'Debe proporcionar el monto pagado']
     })
-    pagado:Number;
+    pagado:number;
 
+    //variable del monto restante por pagar
     @Prop({
         type: Number,
-        required: [true, 'Debe proporcionar el monto pagado']
+        required: true
     })
-    restante:Number;
+    restante:number;
 
+    //monto de abono o debe por cuota + cuota anterior
     @Prop({
         type: Number,
         default: 0
     })
-    penalizacion:Number;
+    penalizacion:number;
 
+    //la cantidad de cuotas pagadas
     @Prop({
         type: Number,
-        required: [true, 'Debe proporcionar el monto pagado']
+        required: true
     })
-    cuotas_restante:Number;
+    cuotas_pagas:number;
 
+    //resumen de la actividad por cuota
     @Prop({
         type: String,
         required: false,
@@ -49,7 +54,7 @@ export const CuotaSchema = SchemaFactory.createForClass(Cuota);
 @Schema()
 export class Negocio extends Document 
 {
-    /*
+    
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         refer: "Clinte",
@@ -63,7 +68,6 @@ export class Negocio extends Document
         required: [true, 'Debe incluir el cobrador encargado']
     })
     cobrador_id:string;
-    */
 
     @Prop({
         type: Number,
@@ -102,9 +106,8 @@ export class Negocio extends Document
     pendiente:boolean;
 
     @Prop({
-        type: [Mongoose.Schema.Types.ObjectId],
-        default: null,
-        ref: "Cuota"
+        type: Array(),
+        default: null
     })
     cuotas:Array<Cuota>;
 

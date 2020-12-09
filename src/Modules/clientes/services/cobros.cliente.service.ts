@@ -32,11 +32,11 @@ import {CambioCobro} from '../models/schemas/peticion.schema';
 export class CobrosClienteService 
 {
     private _Response:responseInterface;
-    private _Cuota = {
+    private _Cuota:any = {
         pagado: null,
         restante: null,
         penalizacion: null,
-        cuotas_restante: null,
+        cuotas_pagas: null,
         resumen: null
     };
     private _Negocio:Negocio;
@@ -146,24 +146,24 @@ export class CobrosClienteService
         //manejo del negocio
         _Negocio = value.data;
 
-        //manipulación de la cuota con cobro
-        data = await new this._cuotaModel(this.addNewCuota(_Negocio, cobro));
 
-        if (_Negocio.cuotas.length === 0) 
+        if (_Negocio.cuotas.length == 0) 
         {
-            //sino tiene un carajo, se lo empujamos...
-           _Negocio.cuotas.push(data);
-
-           _Negocio = await this.refreshNegocioCliente(_Negocio);
-           _Cobro = await this.saveNewCobro(cobro);
+            //manipulación de la cuota con cobro
+            data = await new this._cuotaModel(this.addNewCuota(_Negocio, cobro));     
 
         }else
         {
-            //si tiene mas de uno se lo sobreescribimos...
-           _Negocio.cuotas = this.addCompoundCuota(_Negocio, data);
-           _Cobro = await this.saveNewCobro(cobro);
-           _Negocio = await this.refreshNegocioCliente(_Negocio);
+            //manipulación de la cuota con cobro anterior
+            data = await new this._cuotaModel(this.addCompoundCuota(_Negocio, cobro));   
         }
+
+            //sino tiene un carajo, se lo empujamos...
+           _Negocio.cuotas.push(data);
+
+           //actualizamos las tablas de cobro y negocio
+           _Negocio = await this.refreshNegocioCliente(_Negocio);
+           _Cobro = await this.saveNewCobro(cobro);
 
         value.data = { negocio: _Negocio, cobro: _Cobro, cuota: data};
 
@@ -217,8 +217,34 @@ export class CobrosClienteService
         this._Cuota.pagado             = cobro.monto;
         this._Cuota.restante           = negocio.total - cobro.monto;
         this._Cuota.penalizacion       = negocio.vcuotas - cobro.monto;
-        this._Cuota.cuotas_restante    = negocio.ncuotas - 1;
+        this._Cuota.cuotas_pagas       = 1;
 
+        //genero el resumen de la actividad
+        this.paymentResume(negocio);
+        return this._Cuota;
+    }
+
+    //calculo pago de cuotas compuestas
+    private addCompoundCuota(negocio:Negocio, cobro:createCobroClienteDto)
+    {
+        let aux:Cuota  = null;
+        //genero la cuota normal
+        this.addNewCuota(negocio, cobro);
+        //me jalo la ultima cuota realizada
+        aux = negocio.cuotas[negocio.cuotas.length -1];
+        console.log(aux);
+        //opero la penalizacion, el restante y el nro de cuotas pagadas
+        this._Cuota.restante      = aux.restante - cobro.monto ;
+        this._Cuota.cuotas_pagas  = aux.cuotas_pagas +1;
+        this._Cuota.penalizacion  = aux.penalizacion + this._Cuota.penalizacion;
+
+        //genero el resumen de la actividad
+        this.paymentResume(negocio);
+        return this._Cuota;
+    }
+
+    private paymentResume(negocio:Negocio)
+    {
         if (this._Cuota.penalizacion > 0) 
         {
             this._Cuota.resumen = 
@@ -231,23 +257,8 @@ export class CobrosClienteService
         }if (this._Cuota.penalizacion < 0) 
         {
             this._Cuota.resumen = 
-            `El cliente debe pagar ${ (-1) * this._Cuota.penalizacion},para el siguiente pago`;
+            `El cliente, pago la cuota y abonó ${ (-1) * this._Cuota.penalizacion}`;
         }
-
-        return this._Cuota;
-    }
-
-    //calculo pago de cuotas compuestas
-    private addCompoundCuota(negocio:Negocio, cuota:Cuota):Array<Cuota>
-    {
-        //empujo la nueva cuota en el array
-        negocio.cuotas.push(cuota);
-        //obtengo las cuotas antiguas
-        let tCuotas:Array<Cuota> = negocio.cuotas;
-
-        tCuotas = tCuotas
-
-        return tCuotas;
     }
 
 }

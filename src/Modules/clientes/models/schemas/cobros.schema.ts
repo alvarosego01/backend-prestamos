@@ -20,7 +20,7 @@ const st =
 @Schema()
 export class Cobros extends Document 
 { 
-    /*
+    
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Users',
@@ -40,7 +40,6 @@ export class Cobros extends Document
         default: "Sin Observaciones"
     })
     observacion: string;
-    */
     
     @Prop({
         type: Number,
