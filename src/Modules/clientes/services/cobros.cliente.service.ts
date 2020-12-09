@@ -51,6 +51,7 @@ export class CobrosClienteService
         private _dateProcessService:DateProcessService
     ){}
 
+    //aqui creo un nuevo pago
     async createNewPayment(cobro:createCobroClienteDto):Promise<responseInterface>
     {
         const args: _argsFind = 
@@ -145,11 +146,11 @@ export class CobrosClienteService
         //manejo del negocio
         _Negocio = value.data;
 
-        //manipulación de la cuota con cobro
-        data = await new this._cuotaModel(this.addNewCuota(_Negocio, cobro));
-
         if (_Negocio.cuotas.length === 0) 
         {
+
+            //manipulación de la cuota con cobro
+            data = await new this._cuotaModel(this.addNewCuota(_Negocio, cobro));
             //sino tiene un carajo, se lo empujamos...
            _Negocio.cuotas.push(data);
 
@@ -158,8 +159,8 @@ export class CobrosClienteService
 
         }else
         {
-            //si tiene se lo sobreescribimos...
-           //_Negocio.cuotas.push(data);
+            //si tiene mas de uno se lo sobreescribimos...
+           _Negocio.cuotas = this.addCompoundCuota(_Negocio, cobro);
            _Cobro = await this.saveNewCobro(cobro);
            _Negocio = await this.refreshNegocioCliente(_Negocio);
         }
@@ -210,7 +211,7 @@ export class CobrosClienteService
         return Response;
     }
 
-    //calculo de cuota simple
+    //calculo pago de cuota simple
     private addNewCuota(negocio:Negocio, cobro:createCobroClienteDto)
     {
         this._Cuota.pagado             = cobro.monto;
@@ -221,12 +222,11 @@ export class CobrosClienteService
         return this._Cuota;
     }
 
-    //calculo de cuotas compuestas
-    private addCompoundCuota(negocio:Negocio, cobro:createCobroCliente):Array<Cuota>
+    //calculo pago de cuotas compuestas
+    private addCompoundCuota(negocio:Negocio, cobro:createCobroClienteDto):Array<Cuota>
     {
-        negocio.cuotas.forEach
 
-        return 
+        return;
     }
 
 }

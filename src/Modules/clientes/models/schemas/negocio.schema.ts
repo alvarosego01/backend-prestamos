@@ -11,7 +11,7 @@ import { DateProcessService } from "src/Classes/classes.index";
 const _dateService = new DateProcessService();
 
 @Schema()
-export class Cuota extends Document 
+export class Cuota extends Document   
 {
     @Prop({
         type: Number,
