@@ -33,7 +33,7 @@ export class NegocioController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @Get()//ruta para obtener un negocio hecho por el cliente
+    @Get('detalles')//ruta para obtener un negocio hecho por el cliente
     async getOneNegocio(@Response() res:any, @Body() value:NegocioUnicoPeticionDto):Promise<responseInterface>
     {
         this._Response = await this._negocioService.getOneNegocio(value);

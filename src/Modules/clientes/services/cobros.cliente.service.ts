@@ -225,7 +225,7 @@ export class CobrosClienteService
     //calculo pago de cuotas compuestas
     private addCompoundCuota(negocio:Negocio, cobro:createCobroClienteDto):Array<Cuota>
     {
-
+        
         return;
     }
 
