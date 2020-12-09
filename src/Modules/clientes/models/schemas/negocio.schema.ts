@@ -36,6 +36,13 @@ export class Cuota extends Document
         required: [true, 'Debe proporcionar el monto pagado']
     })
     cuotas_restante:Number;
+
+    @Prop({
+        type: String,
+        required: false,
+        default: null
+    })
+    resumen:string;
 }
 export const CuotaSchema = SchemaFactory.createForClass(Cuota);
 

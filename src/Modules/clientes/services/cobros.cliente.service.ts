@@ -146,11 +146,11 @@ export class CobrosClienteService
         //manejo del negocio
         _Negocio = value.data;
 
+        //manipulación de la cuota con cobro
+        data = await new this._cuotaModel(this.addNewCuota(_Negocio, cobro));
+
         if (_Negocio.cuotas.length === 0) 
         {
-
-            //manipulación de la cuota con cobro
-            data = await new this._cuotaModel(this.addNewCuota(_Negocio, cobro));
             //sino tiene un carajo, se lo empujamos...
            _Negocio.cuotas.push(data);
 
@@ -160,7 +160,7 @@ export class CobrosClienteService
         }else
         {
             //si tiene mas de uno se lo sobreescribimos...
-           _Negocio.cuotas = this.addCompoundCuota(_Negocio, cobro);
+           _Negocio.cuotas = this.addCompoundCuota(_Negocio, data);
            _Cobro = await this.saveNewCobro(cobro);
            _Negocio = await this.refreshNegocioCliente(_Negocio);
         }
@@ -219,14 +219,35 @@ export class CobrosClienteService
         this._Cuota.penalizacion       = negocio.vcuotas - cobro.monto;
         this._Cuota.cuotas_restante    = negocio.ncuotas - 1;
 
+        if (this._Cuota.penalizacion > 0) 
+        {
+            this._Cuota.resumen = 
+            `El cliente debe pagar ${this._Cuota.penalizacion + negocio.vcuotas}, para el siguiente cobro`;
+        
+        }else if( this._Cuota.penalizacion == 0)
+        {
+            this._Cuota.resumen = "El cliente pago completo esta cuota";
+
+        }if (this._Cuota.penalizacion < 0) 
+        {
+            this._Cuota.resumen = 
+            `El cliente debe pagar ${ (-1) * this._Cuota.penalizacion},para el siguiente pago`;
+        }
+
         return this._Cuota;
     }
 
     //calculo pago de cuotas compuestas
-    private addCompoundCuota(negocio:Negocio, cobro:createCobroClienteDto):Array<Cuota>
+    private addCompoundCuota(negocio:Negocio, cuota:Cuota):Array<Cuota>
     {
-        
-        return;
+        //empujo la nueva cuota en el array
+        negocio.cuotas.push(cuota);
+        //obtengo las cuotas antiguas
+        let tCuotas:Array<Cuota> = negocio.cuotas;
+
+        tCuotas = tCuotas
+
+        return tCuotas;
     }
 
 }
