@@ -12,7 +12,7 @@ const _dateService = new DateProcessService();
 
 @Schema()
 export class Cuota extends Document   
-{
+{ 
     //monto obtenido del cobro
     @Prop({
         type: Number,

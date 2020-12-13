@@ -12,7 +12,7 @@ import {statusCobro} from "../enum/status.cobro.enum";
 const _dateService = new DateProcessService();
 const status = Object.values(statusCobro);
 const st =
-{
+{ 
     values: status,
     message: "El estatus {VALUE} no esta permitido"
 };
@@ -34,6 +34,12 @@ export class Cobros extends Document
         required: [true, 'Debe instanciar el negocio con el cliente para el cobro']
     })
     negocio_id: string;
+
+    @Prop({
+        type: Number,
+        default: null
+    })
+    cuota_nro: number;
 
     @Prop({
         type: String,

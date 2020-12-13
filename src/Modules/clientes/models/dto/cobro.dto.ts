@@ -14,6 +14,9 @@ export class createCobroClienteDto
     @IsString()
     negocio_id:string;
 
+    @IsString()
+    cuota_nro:number;// -> variable para uso del sistema, exclusivamente
+
     @IsNotEmpty()
     @IsString()
     observacion:string;

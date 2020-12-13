@@ -162,6 +162,7 @@ export class CobrosClienteService
            _Negocio.cuotas.push(data);
 
            //actualizamos las tablas de cobro y negocio
+           cobro.cuota_nro = data.cuotas_pagas;
            _Negocio = await this.refreshNegocioCliente(_Negocio);
            _Cobro = await this.saveNewCobro(cobro);
 
