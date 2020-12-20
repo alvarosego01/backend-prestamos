@@ -84,31 +84,5 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    /*
-    @Get("bitacora")//obtiene todos los registro de bitacora
-    async getBitacoraAdmin(@Response() res: any): Promise<responseInterface>
-    {
-        this._Response = await this._histAdmin.getBitacora();
-
-        return res.status(this._Response.status).json(this._Response);
-    }
-    */
-
-    //to DO -> la siguiente ruta es de prueba de bitacora, tratar de implementar cuanto antes
-    private body:BitacoraInterface;
-    @Post("bitacora")
-    async setBitacora( @Response() res: any)
-    {
-        this.body = new BitacoraDto;
-        this.body.status = ActionAdmin.LICENSE;
-        this.body.admin = "5f74f168e6e4cd1f64bf0b93";
-        this.body.usuario = "5f74f168e6e4cd1f64bf0b93";
-        this.body.descripcion = ActionDescp.SET_LICENSE;
-
-        console.log("ActionAdmin", this.body, " ", this._histAdmin.setBitacora(this.body));
-        
-        return res.status(200).json(this.body);
-    }
-
     
 }

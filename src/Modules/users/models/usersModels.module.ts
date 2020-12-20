@@ -3,7 +3,7 @@ import { _USERSCHEMA } from './schemas.index';
 
 
 
-@Global()
+@Global() 
 @Module({
   imports: [_USERSCHEMA],
   controllers: [],

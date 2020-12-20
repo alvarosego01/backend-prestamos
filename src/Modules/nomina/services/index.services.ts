@@ -1,0 +1,1 @@
+export { NominaService } from './nomina.service'

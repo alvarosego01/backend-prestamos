@@ -5,10 +5,6 @@ export class createCobroClienteDto
     @IsNotEmpty()
     @IsString()
     cobrador_id:string;
-
-    @IsNotEmpty()
-    @IsString()
-    cliente_id:string;
     
     @IsNotEmpty()
     @IsString()

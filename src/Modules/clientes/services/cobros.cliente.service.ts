@@ -233,7 +233,7 @@ export class CobrosClienteService
         this.addNewCuota(negocio, cobro);
         //me jalo la ultima cuota realizada
         aux = negocio.cuotas[negocio.cuotas.length -1];
-        console.log(aux);
+        //console.log(aux);
         //opero la penalizacion, el restante y el nro de cuotas pagadas
         this._Cuota.restante      = aux.restante - cobro.monto ;
         this._Cuota.cuotas_pagas  = aux.cuotas_pagas +1;

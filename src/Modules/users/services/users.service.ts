@@ -1,7 +1,7 @@
 import { Model } from "mongoose";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Users } from "../models/schemas/userSchema";
+import { Users } from "../models/schemas/userSchema"; 
 // import { model } from "../models/schemas/userSchema";
 
 // servicios de response handler y process data
@@ -91,11 +91,12 @@ export class UsersService
   {
     const data = new this.UsersModel(user);
 
-    await this._processData._saveDB(data).then(r => {
+    await this._processData._saveDB(data).then(r => 
+    {
       this._Response = r;
-    }, err => {
-      this._Response = null;
-      this._Response.message = err;
+    }, err => 
+    {
+      this._Response = err;
     });
 
     return this._Response;
@@ -169,7 +170,7 @@ export class UsersService
         updatedAt: r.data.updatedAt,
         // userMenu: this._setUserMenu.setMenu(r.data.rol.rol)
 
-      }
+      } 
 
       this._Response = r;
       this._Response.data = l;
