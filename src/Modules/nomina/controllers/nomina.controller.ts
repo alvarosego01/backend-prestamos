@@ -51,7 +51,7 @@ export class NominaController
 		this._Response = await this._nominaService.getAllNominas(nomina);
 		return res.status(this._Response.status).json(this._Response);
 	}
-
+ 
 	@Get('detalles/:id')//servicio que me entrega detalladamente una nomina en particular, a traves del codigo de nominas
 	async getOneNominas(@Param('id') nomina:string, @Response() res:any):Promise<responseInterface>
 	{
@@ -78,5 +78,7 @@ export class NominaController
 	{
 		this._Response = await this._nominaService.deleteOneNomina(nomina);
 		return res.status(this._Response.status).json(this._Response);
-	}
+	} 
+
+
 }

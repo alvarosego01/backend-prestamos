@@ -26,9 +26,9 @@ export class CreateNominaDTO
 	@IsNotEmpty()
 	observacion:string
 
-	@IsString()
+	@IsNumber()
 	@IsNotEmpty()
-	concurrencia:string
+	concurrencia:number
 }
 
 export class ModifyNominaDTO
@@ -57,7 +57,7 @@ export class ModifyNominaDTO
 	@IsNotEmpty()
 	activo:boolean
 
-	@IsString()
+	@IsNumber()
 	@IsNotEmpty()
-	concurrencia:string
+	concurrencia:number
 }

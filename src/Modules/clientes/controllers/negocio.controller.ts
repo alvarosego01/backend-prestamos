@@ -1,4 +1,4 @@
-import { Response, Controller, Get, Body, Post, Put, Delete } from '@nestjs/common';
+import { Param, Response, Controller, Get, Body, Post, Put, Delete } from '@nestjs/common';
 import {responseInterface} from 'src/Response/interfaces/interfaces.index';
 import 
 {
@@ -30,6 +30,13 @@ export class NegocioController
     async getAllNegocio(@Response() res:any, @Body() value:NegocioPeticionDto):Promise<responseInterface>
     {
         this._Response = await this._negocioService.getAllNegocio(value);
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+    @Get('calcular/:id')
+    async getCalculoSalario(@Response() res:any, @Param('id') id:string)
+    {
+        console.log("calculo de salario");
         return res.status(this._Response.status).json(this._Response);
     }
 

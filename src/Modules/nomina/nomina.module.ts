@@ -3,34 +3,42 @@ import { Module } from '@nestjs/common';
 import 
 {
 	NominaController,
-	PagoController
+	PagoController,
+	CajachicaController,
+	GastosoperacionesController
 } from './controllers/index.controller';
 
 import
 {
-	NominaService
+	NominaService,
+	CajachicaService,
+	GastosoperacionesService
 
 } from './services/index.services';
 
 import 
 {
-	ModelsModule
+	SchemasModule
 
-} from './models/schemas/models.module';
+} from './models/schemas/schemas.module';
 
 @Module({
 	imports:
 	[
-		ModelsModule
+		SchemasModule
 	],
 	controllers:
 	[
 		NominaController,
-		PagoController
+		PagoController,
+		CajachicaController,
+		GastosoperacionesController
 	],
 	providers:
 	[
-		NominaService
+		NominaService,
+		CajachicaService,
+		GastosoperacionesService
 	]
 })
 export class NominaModule {}

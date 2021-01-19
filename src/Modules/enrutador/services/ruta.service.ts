@@ -69,8 +69,7 @@ export class RutaService
         {
             this._Response = err;
         });
-
-        console.log(enrutador, ruta);
+        
         return this._Response;
     }
 

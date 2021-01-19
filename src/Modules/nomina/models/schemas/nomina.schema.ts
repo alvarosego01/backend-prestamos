@@ -73,11 +73,11 @@ export class Nomina extends Document
   activo:boolean;
 
   @Prop({ //determina la el tiempo de pago
-    type:String,
-    required: [true, 'Debe establecer el tiempo de pago de nómina, este tiempo tambien determina el rango para calcular deducciones'],
-    default: 'MENSUAL' //puede ser QUINCENAL tambien
+    type:Number,
+    required: [true, 'Debe establecer el tiempo de pago de nómina en dias, este tiempo tambien determina el rango para calcular deducciones'],
+    default: 15 //puede ser QUINCENAL tambien
   })
-  concurrencia:string;
+  concurrencia:number;
 
   @Prop({
     // required: true,
