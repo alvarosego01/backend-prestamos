@@ -67,7 +67,7 @@ export class CajaChica extends Document
         required: [true, 'Debe instanciar al dueño de la caja chicha'],
         unique: true
     })
-    cobrador: string;
+    cobrador: string; 
 
     @Prop({//asigno el monto a la caja
         type: Number,

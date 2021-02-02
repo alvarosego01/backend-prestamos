@@ -3,7 +3,9 @@ import
 {
 	Banco,
 	Nomina, 
-	NominaSchema
+	NominaSchema,
+	Salario,
+	SalarioSchema
 } from './nomina.schema'
 
 import 
@@ -25,7 +27,9 @@ export
 {
 	Banco,
 	Nomina, 
-	NominaSchema
+	NominaSchema,
+	Salario,
+	SalarioSchema
 } from './nomina.schema'
 
 
@@ -48,5 +52,12 @@ export const _GASTOSOPSCHEMA = MongooseModule.forFeature([
 	{
 		name: GastosOperacion.name,
 		schema: GastosOperacionSchema
+	}
+]);
+
+export const _SALARIOSCHEMA = MongooseModule.forFeature([
+	{
+		name: Salario.name,
+		schema: SalarioSchema
 	}
 ]);

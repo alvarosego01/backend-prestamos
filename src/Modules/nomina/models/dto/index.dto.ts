@@ -1,7 +1,8 @@
 export 
 { 
 	CreateNominaDTO,
-	ModifyNominaDTO 
+	ModifyNominaDTO,
+	GetSalarioNominaDTO
 } from './nomina.dto'
 
 export

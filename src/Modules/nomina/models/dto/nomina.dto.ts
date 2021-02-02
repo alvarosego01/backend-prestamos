@@ -61,3 +61,20 @@ export class ModifyNominaDTO
 	@IsNotEmpty()
 	concurrencia:number
 }
+
+export class GetSalarioNominaDTO
+{
+	@IsString()
+	@IsNotEmpty()
+	cajachica_id:string
+
+	@IsString()
+	@IsNotEmpty()
+	nomina_id:string
+
+	@IsString()
+	cobrador_id:string
+
+	@IsString()
+	enrutador_id:string
+}

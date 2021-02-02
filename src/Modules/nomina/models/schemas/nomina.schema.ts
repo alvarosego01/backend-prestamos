@@ -25,7 +25,31 @@ export class Banco
     required: [true, 'Debe establecer la cuenta de banco del empleado'],
   })
   cuenta:string;
+}  
+
+@Schema()
+export class Salario extends Document
+{
+  @Prop({ //monto de salario siendo calculado con los gastos en la caja chica
+    type:Number,
+    required: [true, 'Debe establecer el monto'],
+  })
+  monto:number;
+
+  @Prop({ //monto de los gastos en la caja chica
+    type:Number,
+    required: [true, 'Debe establecer el monto de gasto de operación'],
+  })
+  gasto:number;
+
+  @Prop({
+    // required: true,
+    type: Array,
+    default: _dateService.setDate()
+  })
+  createdAt:string;
 }
+export const SalarioSchema = SchemaFactory.createForClass(Salario)
  
 
 @Schema()
@@ -36,13 +60,13 @@ export class Nomina extends Document
     required: [true, 'Debe indicar el codigo del usuario'],
     ref: "Users"
   })
-  enrutador: string; 
+  enrutador: string;  
 
   @Prop({
     type: Mongoose.Schema.Types.ObjectId,
     required: [true, 'Debe indicar el codigo del usuario'],
     ref: "Users",
-    unique: [true, 'Ya existe este cobrador anexado en la nómina']
+    unique: true
   })
   cobrador:string;
 
@@ -79,6 +103,25 @@ export class Nomina extends Document
   })
   concurrencia:number;
 
+  @Prop({ //historial de pago
+    type: Array,
+    required: false,
+    default: null
+  })
+  pago:Salario[];
+
+  @Prop({ //guarda la ultima fecha donde se realizo el calculo de salario
+    type: Array,
+    default: null
+  })
+  last_pago:string[];
+
+  @Prop({ //guarda la fecha donde se deberealizar el siguiente calculo de salario
+    type: Array,
+    default: null
+  })
+  next_pago:string[];
+
   @Prop({
     // required: true,
     type: Array,
@@ -96,6 +139,6 @@ export class Nomina extends Document
 }
 
 export const NominaSchema = SchemaFactory.createForClass(Nomina)
-.plugin(uniqueValidator, {message: "Acción de ${PATH} inválida, ${VALUE}"})
+.plugin(uniqueValidator, {message:  'Ya existe este cobrador anexado en la nómina'})
 .plugin(mongoosePaginate)
 .plugin(mongoose_delete, {overrideMethods: 'all'});

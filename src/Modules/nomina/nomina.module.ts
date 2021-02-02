@@ -12,7 +12,8 @@ import
 {
 	NominaService,
 	CajachicaService,
-	GastosoperacionesService
+	GastosoperacionesService,
+	PagoService
 
 } from './services/index.services';
 
@@ -38,7 +39,8 @@ import
 	[
 		NominaService,
 		CajachicaService,
-		GastosoperacionesService
+		GastosoperacionesService,
+		PagoService
 	]
 })
 export class NominaModule {}
