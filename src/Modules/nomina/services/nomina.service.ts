@@ -176,6 +176,38 @@ export class NominaService
 		return this._Response;
 	}
 
+	async modifyOneNominaByNomina(nomina:Nomina): Promise<responseInterface>
+	{
+
+		// se crea un objeto con los nuevos valores
+		const data = nomina
+		// se crea el objeto de argumentos con el id de busqueda en especifico y la data a reemplazar en set
+		const args: _argsUpdate = {
+		  findObject: {
+		    _id: nomina._id,
+		  },
+		  set: {
+		    $set: data
+		  },
+		  populate: {
+		    path: 'cobrador',
+		    select: '-pass'
+		  }
+		}
+
+		await this._processData._updateDB(this.NominaModel, args).then( async r => {
+
+		  this._Response = r;
+		  this._Response.message = 'Nomina actualizada';
+
+		}, err => 
+		{
+		  this._Response = err;
+		});
+
+		return this._Response;
+	}
+
   	async deleteOneNomina(nomina_id:string):Promise<responseInterface>
 	{
 	    await this._processData._deleteSoftDB(this.NominaModel, nomina_id ).then(r  => 

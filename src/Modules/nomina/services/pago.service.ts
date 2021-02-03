@@ -71,6 +71,9 @@ export class PagoService
 		let lastPayment:any;
 		let totalDays:number = 0;
 
+		//si no hay gastos sencillamente retorna 0
+		if(!gastos) return totalGastos;
+
 		//sino tiene fwecha de pago anterior se calcula en base a fecha actual
 		if (!nomina.last_pago) 
 		{
@@ -105,6 +108,9 @@ export class PagoService
 	//funcion que setea el pago del cobrador
 	private async setLastSalaryPayment(saldo:number, gasto:number)
 	{
+		//evito que la variable gasto llegue nula de no existir gastos
+		(!gasto)? gasto = 0.0 : true;
+
 		let  newPaytment:Salario = new this.SalarioModel({'monto': saldo, 'gasto': gasto});
 
 		//si el array es nulo, lo inicializo con este operador ternario
@@ -140,10 +146,10 @@ export class PagoService
 	}
 
 	//obtengo todas las nominas
-	private async getAllNominas(ids:GetSalarioNominaDTO)
+	private async getAllNominas(id:string)
 	{
 		const args: _argsPagination = {
-    	  findObject: {enrutador:ids.enrutador_id},
+    	  findObject: {enrutador:id},
     	  options: null
     	}
 
@@ -155,13 +161,13 @@ export class PagoService
     	  this._Response = err;
     	});
 
-    	return this._Response;
+    	return this._Response.data;
 	} 
 
-	private async getAllCajaChica(ids:GetSalarioNominaDTO)
+	private async getAllCajaChica(id:string)
 	{
 		const args: _argsPagination = {
-    	  findObject: {enrutador:ids.enrutador_id}, 
+    	  findObject: {enrutador:id}, 
     	  options: null
     	}
 
@@ -173,7 +179,7 @@ export class PagoService
     	  this._Response = err;
     	});
 
-    	return this._Response;
+    	return this._Response.data;
 	} 
 
 	async getCalculoSalarioByCobrador(ids:GetSalarioNominaDTO):Promise<responseInterface>
@@ -192,27 +198,38 @@ export class PagoService
 
 	async getCalculoSalarioByEnrutador(ids:GetSalarioNominaDTO):Promise<responseInterface>
 	{
-    	let _nominaAux:Nomina[] = Array();
-    	let _cajaChica:CajaChica[] = Array();
+    	let _nominaAux:Nomina[] 		= Array(); //auxiliar de nomina
+    	let _cajaChicaAux:CajaChica[] 	= Array(); //auxiliar de caja chica
+    	let _VGA:number 				= 0.0;     //Valor de Gastos Adiquiridos
 
-		await this.getAllCajaChica(ids); _cajaChica = this._Response.data;
-		await this.getAllNominas(ids); _nominaAux = this._Response.data;
+    	//obtengo todas las nomina y cajas chicas segun el enrutador
+		_nominaAux 		= await this.getAllNominas(ids.enrutador_id); //_nominaAux = this._Response.data;
+		_cajaChicaAux	= await this.getAllCajaChica(ids.enrutador_id); //_cajaChicaAuxAux = this._Response.data;
 
+		//si no hay nominas no se procede al calculo de salario
 		if(_nominaAux.length == 0)
 		{
 			this._Response.message 	= "No hay datos para validar pagos";
 			this._Response.status 	= 404;
-			this._Response.data 	= null
+			this._Response.data 	= null;
+
+			return this._Response;
 		}
 
-		await _nominaAux.forEach((nomina, index)=>
+		for (let i =0; i < _nominaAux.length; ++i) 
 		{
-			console.log('Numero de nomina:', index);
+			//verifico si existe una caja chica con respecto a la nomina si no existe el valor de gastos es 0
+			(!_cajaChicaAux[i])? _VGA = 0 : _VGA = await this.getTotalGastosOperByCobrador(_cajaChicaAux[i].gasto,_nominaAux[i]);
 
-		});
+			//seteo el monto de pago y retorno los resultados
+			this._Nomina = _nominaAux[i];
+			await this.setLastSalaryPayment((this._Nomina.salario - _VGA), _VGA);
 
-		console.clear();
-		console.log(_cajaChica, _nominaAux);
+			//se procede a actualizar la nomina
+			_nominaAux[i] = (await this._nominaService.modifyOneNominaByNomina(this._Nomina)).data; 
+		}
+
+		this._Response.data = _nominaAux;
 		return this._Response;
 	}
 
