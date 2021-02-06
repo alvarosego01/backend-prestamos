@@ -18,6 +18,18 @@ export class CobradorController
 
 
 
+    // @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
+    // @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
+    @Get('/infoRuta/:id/:idRuta')
+    async getOneRoute(@Param() params:string[], @Response() res:any):Promise<responseInterface>
+    {
+        this._Response = await this._cobradorService.getOneRoute(params['id'], params['idRuta']);
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+
+
+
   @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
   @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
   @Get("byEnrouter/:id")
@@ -30,6 +42,17 @@ export class CobradorController
   }
 
 
+  // obtener rutas correspondientes del cobrador
+  // @RolesDecorator('ADMIN_ROLE', 'COLLECTOR_ROLE')
+  // @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
+  @Get('/rutas/:id')
+  async getAllRoutes(@Param() params:string[], @Response() res:any, @Request() req: any):Promise<responseInterface>
+  {
+
+      this._Response = await this._cobradorService.getAllRoutes(req.page, params['id']);
+      return res.status(this._Response.status).json(this._Response);
+
+    }
 
 
 

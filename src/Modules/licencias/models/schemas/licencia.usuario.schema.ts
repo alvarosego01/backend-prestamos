@@ -4,7 +4,9 @@ import { Document } from "mongoose";
 
 import * as Mongoose from "mongoose"
 import * as uniqueValidator from "mongoose-unique-validator";
+import * as castAggregation  from "mongoose-cast-aggregation";
 import * as mongoosePaginate from "mongoose-paginate-v2";
+import * as aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import * as mongoose_delete from "mongoose-delete";
 
 import { DateProcessService } from "src/Classes/classes.index";
@@ -22,7 +24,7 @@ const enumStatus = {
 export class LicenciaUsuario extends Document
 {
 
-        
+
     @Prop({
         type: String,
         required: true,
@@ -30,7 +32,7 @@ export class LicenciaUsuario extends Document
         enum: enumStatus
     })
     status: string
-        
+
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         required: [true, 'Debe indicar el codigo dde la licencia'],
@@ -38,7 +40,7 @@ export class LicenciaUsuario extends Document
         ref: "Licencia"
     })
     licencia: string
-        
+
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         required: [true, 'Debe indicar el codigo del usuario'],
@@ -46,10 +48,10 @@ export class LicenciaUsuario extends Document
         ref: "Users"
     })
     usuario: string
-        
+
     @Prop({
         type: Number,
-        required: true, 
+        required: true,
         default: 0,
     })
     dias: number
@@ -73,4 +75,6 @@ export class LicenciaUsuario extends Document
 export const LicenciaUsuarioSchema = SchemaFactory.createForClass(LicenciaUsuario)
 .plugin(uniqueValidator, {message: "Acción de ${PATH} inválida, ${VALUE}"})
 .plugin(mongoosePaginate)
+.plugin(aggregatePaginate)
+.plugin(castAggregation)
 .plugin(mongoose_delete, {overrideMethods: 'all'});

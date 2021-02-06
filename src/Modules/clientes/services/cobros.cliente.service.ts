@@ -1,27 +1,27 @@
 import { Body, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import 
-{ 
-    DateProcessService, 
-    ProcessDataService 
-} 
-from 'src/Classes/classes.index';
-import 
-{ 
-    responseInterface,
-    _argsFind, 
-    _argsPagination, 
-    _argsUpdate, 
-    _configPaginator, 
-    _dataPaginator 
-} 
-from 'src/Response/interfaces/interfaces.index';
-import 
+import
 {
-    createCobroClienteDto, 
+    DateProcessService,
+    ProcessDataService
+}
+from 'src/Classes/classes.index';
+import
+{
+    responseInterface,
+    _argsFind,
+    _argsPagination,
+    _argsUpdate,
+    _configPaginator,
+    _dataPaginator
+}
+from 'src/Response/interfaces/interfaces.index';
+import
+{
+    createCobroClienteDto,
     modifyCobroClienteDto,
-} 
+}
 from '../models/dto/index.dto';
 import {createCobroCliente, createCuotaCliente} from '../models/interfaces/interfaces.index';
 import {Cobros} from '../models/schemas/cobros.schema';
@@ -29,7 +29,7 @@ import {Negocio, Cuota} from '../models/schemas/negocio.schema';
 import {CambioCobro} from '../models/schemas/peticion.schema';
 
 @Injectable()
-export class CobrosClienteService 
+export class CobrosClienteService
 {
     private _Response:responseInterface;
     private _Cuota:any = {
@@ -54,43 +54,45 @@ export class CobrosClienteService
     //aqui creo un nuevo pago
     async createNewPayment(cobro:createCobroClienteDto):Promise<responseInterface>
     {
-        const args: _argsFind = 
+        const args: _argsFind =
         {
             findObject: { _id:cobro.negocio_id },
             populate: null
         }
-        await this._processData._findOneDB(this._negocioModel, args).then(r => 
+        await this._processData._findOneDB(this._negocioModel, args).then(r =>
         {
             this._Response = r;
 
-        }, err => 
+            this._Response.message = 'El cobro ha sido realizado';
+
+        }, err =>
         {
             this._Response = err;
         });
 
-        return await this.treatmentCuotas(this._Response, cobro); 
+        return await this.treatmentCuotas(this._Response, cobro);
     }
 
     async getAllPaymentDo(cliente:string):Promise<responseInterface>
     {
-        const parameters: _dataPaginator = 
-        { 
+        const parameters: _dataPaginator =
+        {
             page: 1 || _configPaginator.page,
             limit: 12 || _configPaginator.limit,
             customLabels: _configPaginator.customLabels,
             sort: { _id: -1 },
         }
 
-        const args: _argsPagination = 
+        const args: _argsPagination =
         {
             findObject: { cliente_id: cliente },
             options: parameters
         }
 
-        await this._processData._findDB(this._cobrosModel, args).then(r => 
+        await this._processData._findDB(this._cobrosModel, args).then(r =>
         {
            this._Response = r;
-        }, err => 
+        }, err =>
         {
             this._Response = err;
         });
@@ -100,19 +102,19 @@ export class CobrosClienteService
 
     async getOnePaymentDo(pago:string):Promise<responseInterface>
     {
-        const args: _argsFind = 
+        const args: _argsFind =
         {
             findObject: { _id:pago },
             populate: null
         }
-        await this._processData._findOneDB(this._cobrosModel, args).then(r => 
+        await this._processData._findOneDB(this._cobrosModel, args).then(r =>
         {
            this._Response = r;
-        }, err => 
+        }, err =>
         {
             this._Response = err;
         });
-        return this._Response; 
+        return this._Response;
     }
 
     async modifyOldPayment(body:modifyCobroClienteDto):Promise<responseInterface>
@@ -123,12 +125,12 @@ export class CobrosClienteService
         await this._processData._saveDB(data).then(r =>
         {
             this._Response = r;
-            
+
         }, err =>
         {
             this._Response = err;
             this._Response.data = null;
-        }); 
+        });
         return this._Response;
     }
 
@@ -147,15 +149,15 @@ export class CobrosClienteService
         _Negocio = value.data;
 
 
-        if (_Negocio.cuotas.length == 0) 
+        if (_Negocio.cuotas.length == 0)
         {
             //manipulación de la cuota con cobro
-            data = await new this._cuotaModel(this.addNewCuota(_Negocio, cobro));     
+            data = await new this._cuotaModel(this.addNewCuota(_Negocio, cobro));
 
         }else
         {
             //manipulación de la cuota con cobro anterior
-            data = await new this._cuotaModel(this.addCompoundCuota(_Negocio, cobro));   
+            data = await new this._cuotaModel(this.addCompoundCuota(_Negocio, cobro));
         }
 
             //sino tiene un carajo, se lo empujamos...
@@ -176,15 +178,15 @@ export class CobrosClienteService
 
         const data = new this._cobrosModel(cobro);
 
-        await this._processData._saveDB(data).then(r => 
+        await this._processData._saveDB(data).then(r =>
         {
             Response = r.data;
-        }, 
-        err => 
+        },
+        err =>
         {
             return err;
-        }); 
-        return Response; 
+        });
+        return Response;
     }
 
     private async refreshNegocioCliente(negocio:Negocio):Promise<Negocio>
@@ -200,10 +202,10 @@ export class CobrosClienteService
             }
         }
 
-        await this._processData._updateDB(this._negocioModel, args).then(r => 
+        await this._processData._updateDB(this._negocioModel, args).then(r =>
         {
             Response = r.data;
-        }, err => 
+        }, err =>
         {
             return err;
         });
@@ -245,18 +247,18 @@ export class CobrosClienteService
 
     private paymentResume(negocio:Negocio)
     {
-        if (this._Cuota.penalizacion > 0) 
+        if (this._Cuota.penalizacion > 0)
         {
-            this._Cuota.resumen = 
+            this._Cuota.resumen =
             `El cliente debe pagar ${this._Cuota.penalizacion + negocio.vcuotas}, para el siguiente cobro`;
-        
+
         }else if( this._Cuota.penalizacion == 0)
         {
             this._Cuota.resumen = "El cliente pago completo esta cuota";
 
-        }if (this._Cuota.penalizacion < 0) 
+        }if (this._Cuota.penalizacion < 0)
         {
-            this._Cuota.resumen = 
+            this._Cuota.resumen =
             `El cliente, pago la cuota y abonó ${ (-1) * this._Cuota.penalizacion}`;
         }
     }

@@ -1,9 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
-import * as Mongoose from "mongoose"; 
+import * as Mongoose from "mongoose";
 import * as uniqueValidator from "mongoose-unique-validator";
+import * as castAggregation  from "mongoose-cast-aggregation";
 import * as mongoosePaginate from "mongoose-paginate-v2";
+import * as aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import * as mongoose_delete from "mongoose-delete";
 
 import { DateProcessService } from "src/Classes/classes.index";
@@ -18,16 +20,16 @@ const st =
 };
 
 @Schema()
-export class Cobros extends Document 
-{ 
-    
+export class Cobros extends Document
+{
+
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Users',
         required: [true, 'Debe instanciar el cobrador encargado']
     })
     cobrador_id: string;
-    
+
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Negocio',
@@ -40,7 +42,7 @@ export class Cobros extends Document
         default: "Sin Observaciones"
     })
     observacion: string;
-    
+
     @Prop({
         type: Number,
         required: [true, 'Debe indicar el monto del pago']
@@ -72,4 +74,6 @@ export const CobrosSchema = SchemaFactory.createForClass(Cobros)
   message: "El {PATH} {VALUE} ya está registrado en sistema",
 })
 .plugin(mongoosePaginate)
+.plugin(aggregatePaginate)
+.plugin(castAggregation)
 .plugin(mongoose_delete, { overrideMethods: 'all' });

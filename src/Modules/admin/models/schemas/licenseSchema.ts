@@ -4,7 +4,9 @@ import * as Mongoose from "mongoose";
 
 
 import * as uniqueValidator from "mongoose-unique-validator";
+import * as castAggregation  from "mongoose-cast-aggregation";
 import * as mongoosePaginate from "mongoose-paginate-v2";
+import * as aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import * as mongoose_delete from "mongoose-delete";
 
 import { DateProcessService } from "src/Classes/classes.index";
@@ -37,14 +39,14 @@ export class License extends Document
     @Prop({
         type        :Mongoose.Schema.Types.ObjectId,
         ref         :"Users",
-        required    : [true, "Debe indicar el usuario dueño de la licencia"] 
+        required    : [true, "Debe indicar el usuario dueño de la licencia"]
     })
     usuario: string;
 
     @Prop({
         type        :Mongoose.Schema.Types.ObjectId,
         ref         :"Users",
-        required    : [true, "Debe indicar el administrador que cedió la licencia"] 
+        required    : [true, "Debe indicar el administrador que cedió la licencia"]
     })
     admin: string;
 
@@ -86,4 +88,6 @@ export class License extends Document
 export const LicenseSchema = SchemaFactory.createForClass(License)
 .plugin(uniqueValidator, {message: "Acción inválida"})
 .plugin(mongoosePaginate)
+.plugin(aggregatePaginate)
+.plugin(castAggregation)
 .plugin(mongoose_delete, {overrideMethods: 'all'});

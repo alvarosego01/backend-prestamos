@@ -48,6 +48,34 @@ export class ClienteService
         return this._Response;
     }
 
+    async getAllClientsAdmin():Promise<responseInterface>
+    {
+        const parameters: _dataPaginator =
+        {
+            page: 1 || _configPaginator.page,
+            limit: 12 || _configPaginator.limit,
+            customLabels: _configPaginator.customLabels,
+            sort: { _id: -1 },
+        }
+
+        const args: _argsPagination =
+        {
+            findObject: {  },
+            options: parameters
+        }
+
+        await this._processData._findDB(this.clienteModel, args).then(r =>
+        {
+            this._Response = r;
+
+        }, err =>
+        {
+            this._Response = err;
+        });
+
+        return this._Response;
+    }
+
     async getOneCliente(cliente:string, cobrador:string):Promise<responseInterface>
     {
 
@@ -57,6 +85,66 @@ export class ClienteService
             {
                 _id:cliente,
                 cobrador_id:cobrador,
+            },
+            populate: null
+            // select: "rol"
+        }
+
+        await this._processData._findOneDB(this.clienteModel, args).then(r =>
+        {
+            this._Response = r;
+        }, err =>
+        {
+            this._Response = err;
+        });
+
+        return this._Response;
+    }
+
+    async getClientsByEnrouter( enrouterId: string ):Promise<responseInterface>
+    {
+
+        const parameters: _dataPaginator =
+        {
+            page: 1 || _configPaginator.page,
+            limit: 12 || _configPaginator.limit,
+            customLabels: _configPaginator.customLabels,
+            sort: { _id: -1 },
+            populate: {
+                path: 'enrutador_id',
+                select: '-pass'
+            }
+        }
+
+        const args: _argsPagination =
+        {
+            findObject: { enrutador_id: enrouterId },
+            options: parameters
+        }
+
+        await this._processData._findDB(this.clienteModel, args).then(r =>
+        {
+            this._Response = r;
+
+        }, err =>
+        {
+            this._Response = err;
+        });
+
+        return this._Response;
+
+    }
+
+
+    async getOneClienteById(cliente:string):Promise<responseInterface>
+    {
+
+        const args: _argsFind =
+        {
+            findObject:
+            {
+                _id:cliente,
+                // cobrador_id:cobrador,
             },
             populate: null
             // select: "rol"
@@ -177,6 +265,29 @@ export class ClienteService
     }
 
 
+
+    async createClientSingle(cliente: any, idEnrutador: string):Promise<responseInterface>
+    {
+        const data = new this.clienteModel(cliente);
+        //data.cobrador_id = cobrador;
+
+        // console.log('la cosa que llega acá', cliente);
+
+
+        await this._processData._saveDB(data).then( async (r) =>
+        {
+            this._Response = r;
+
+
+            this._Response.message = 'Nuevo cliente añadido';
+        },
+        err =>
+        {
+            this._Response = err;
+        });
+
+        return this._Response;
+    }
 
     async createNewCliente(cliente:ClienteDto, idRuta: string):Promise<responseInterface>
     {

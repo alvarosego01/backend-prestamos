@@ -4,7 +4,9 @@ import { Document } from "mongoose";
 
 import * as Mongoose from "mongoose"
 import * as uniqueValidator from "mongoose-unique-validator";
+import * as castAggregation  from "mongoose-cast-aggregation";
 import * as mongoosePaginate from "mongoose-paginate-v2";
+import * as aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import * as mongoose_delete from "mongoose-delete";
 
 import { DateProcessService } from "src/Classes/classes.index";
@@ -20,7 +22,7 @@ export class Licencia extends Document
     unique: true
   })
   alias: string
-  
+
   @Prop({
     type: Mongoose.Schema.Types.ObjectId,
     required: [true, 'Debe indicar el codigo del administrdor'],
@@ -28,7 +30,7 @@ export class Licencia extends Document
     ref: "Users"
   })
   admin: string
-  
+
   @Prop({
     type: Number,
     required: [true, 'Debe establecer la cantidad de dias de duración'],
@@ -40,7 +42,7 @@ export class Licencia extends Document
     required: [true, "Debe establecer el precio de la licencia"]
   })
   precio: number
- 
+
   @Prop({
     type: String,
     required: false,
@@ -67,4 +69,6 @@ export class Licencia extends Document
 export const LicenciaSchema = SchemaFactory.createForClass(Licencia)
 .plugin(uniqueValidator, {message: "Acción de ${PATH} inválida, ${VALUE}"})
 .plugin(mongoosePaginate)
+.plugin(aggregatePaginate)
+.plugin(castAggregation)
 .plugin(mongoose_delete, {overrideMethods: 'all'});

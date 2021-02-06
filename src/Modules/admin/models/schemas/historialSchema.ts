@@ -5,7 +5,9 @@ import { Document } from "mongoose";
 
 import * as Mongoose from "mongoose";
 import * as uniqueValidator from "mongoose-unique-validator";
+import * as castAggregation  from "mongoose-cast-aggregation";
 import * as mongoosePaginate from "mongoose-paginate-v2";
+import * as aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import * as mongoose_delete from "mongoose-delete";
 
 import { DateProcessService } from "src/Classes/classes.index";
@@ -41,14 +43,14 @@ export class History extends Document
     @Prop({
         type        :Mongoose.Schema.Types.ObjectId,
         ref         :"Users",
-        required    :[true, "Hace falta dato"] 
+        required    :[true, "Hace falta dato"]
     })
     usuario: string;
 
-    @Prop({ 
+    @Prop({
         type        :Mongoose.Schema.Types.ObjectId,
         ref         :"Users",
-        required    :[true, "Hace falta dato"]  
+        required    :[true, "Hace falta dato"]
     })
     admin: string;
 
@@ -70,4 +72,6 @@ export class History extends Document
 export const HistSchema = SchemaFactory.createForClass(History)
 .plugin(uniqueValidator, {message: "Acción inválida"})
 .plugin(mongoosePaginate)
+.plugin(aggregatePaginate)
+.plugin(castAggregation)
 .plugin(mongoose_delete, {overrideMethods: 'all'});

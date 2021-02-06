@@ -3,7 +3,9 @@ import { Document } from "mongoose";
 
 import * as Mongoose from "mongoose";
 import * as uniqueValidator from "mongoose-unique-validator";
+import * as castAggregation  from "mongoose-cast-aggregation";
 import * as mongoosePaginate from "mongoose-paginate-v2";
+import * as aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import * as mongoose_delete from "mongoose-delete";
 
 import { DateProcessService } from "src/Classes/classes.index";
@@ -37,6 +39,13 @@ export class Cliente extends Document
         required: [true, 'Debe instanciar la identificación del cliente']
     })
     card_id: string;
+
+    @Prop({
+        type: Mongoose.Schema.Types.ObjectId,
+        refer: "Users",
+        required: [false, "Debe pertenecer a un socio"]
+    })
+    enrutador_id:string;
 
     @Prop({
         type: String,
@@ -76,13 +85,13 @@ export class Cliente extends Document
 
     @Prop({
         type: String,
-        required: [true, "Debe indicar el nivel de usuario"]
+        required: [true, "Debe indicar el email del cliente"]
     })
     mail:string;
 
     @Prop({
         type: Array,
-        required: [true, "Debe indicar el nivel de usuario"]
+        required: [false, "Debe indicar el nivel de cliente"]
     })
     semáforo:string;
 
@@ -103,6 +112,30 @@ export class Cliente extends Document
         default: null
     })
     updatedAt: string;
+
+
+    @Prop({
+        type: String,
+        required: [true, "Falta establecer la ciudad"],
+        default: null
+    })
+    city:string;
+
+    @Prop({
+        type: String,
+        required: [true, "Falta establecer el departamento"],
+        default: null
+    })
+    department:string;
+
+    @Prop({
+      required: true,
+      default: null,
+    })
+    pais: string;
+
+
+
 }
 
 export const ClienteSchema = SchemaFactory.createForClass(Cliente)
@@ -110,4 +143,6 @@ export const ClienteSchema = SchemaFactory.createForClass(Cliente)
   message: "El {PATH} {VALUE} ya está registrado en sistema",
 })
 .plugin(mongoosePaginate)
+.plugin(aggregatePaginate)
+.plugin(castAggregation)
 .plugin(mongoose_delete, { overrideMethods: 'all' });

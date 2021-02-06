@@ -1,22 +1,22 @@
-import { Response, Controller, Get, Body, Post, Put, Delete } from '@nestjs/common';
+import { Response, Controller, Get, Body, Post, Put, Delete, Param } from '@nestjs/common';
 import {responseInterface} from 'src/Response/interfaces/interfaces.index';
-import 
+import
 {
-    NegocioCreacionDto, 
-    NegocioModificacionDto, 
+    NegocioCreacionDto,
+    NegocioModificacionDto,
     NegocioPeticionDto,
     NegocioUnicoPeticionDto
-} 
+}
 from '../models/dto/index.dto';
 import {NegocioService} from '../services/services.index';
 
 @Controller('negocio')
-export class NegocioController 
+export class NegocioController
 {
     private _Response:responseInterface;
 
     constructor
-    ( 
+    (
         private _negocioService:NegocioService
     ){}
 
@@ -26,7 +26,7 @@ export class NegocioController
         return res.status(200).json("ruta para asigancion e negocios de clientes");
     }
 
-    @Get()//ruta para obtener todos los negocios de un cliente 
+    @Get()//ruta para obtener todos los negocios de un cliente
     async getAllNegocio(@Response() res:any, @Body() value:NegocioPeticionDto):Promise<responseInterface>
     {
         this._Response = await this._negocioService.getAllNegocio(value);
@@ -40,10 +40,12 @@ export class NegocioController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @Post('crear')
-    async makeOneNegocio(@Response() res:any, @Body() value:NegocioCreacionDto):Promise<responseInterface>
+    @Post('/crear/:id/:idRuta')
+    async makeOneNegocio( @Param('id') idUser:string, @Param('idRuta') idRuta:string , @Response() res:any, @Body() value: any):Promise<responseInterface>
     {
-        this._Response = await this._negocioService.makeOneNegocio(value);
+
+        // console.log('entra');
+        this._Response = await this._negocioService.makeOneNegocio(value, idRuta);
         return res.status(this._Response.status).json(this._Response);
     }
 

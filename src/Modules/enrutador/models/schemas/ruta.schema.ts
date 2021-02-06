@@ -3,7 +3,9 @@ import { Document } from "mongoose";
 
 import * as Mongoose from "mongoose";
 import * as uniqueValidator from "mongoose-unique-validator";
+import * as castAggregation  from "mongoose-cast-aggregation";
 import * as mongoosePaginate from "mongoose-paginate-v2";
+import * as aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import * as mongoose_delete from "mongoose-delete";
 
 import { DateProcessService } from "src/Classes/classes.index";
@@ -37,6 +39,27 @@ export class _files extends Document {
     folder: string;
 
   }
+
+
+  export class concurrencia extends Document
+  {
+
+      @Prop({
+          type: String,
+          required: [true]
+      })
+      tipo: string;
+
+      @Prop({
+          type: Number,
+          required: [true, 'Debe instanciar la concurrencia de cobro']
+      })
+      concurrencia: number;
+
+  }
+
+
+
 
 
 @Schema()
@@ -97,6 +120,13 @@ export class Ruta extends Document
     department:string;
 
     @Prop({
+      required: true,
+      default: null,
+    })
+    pais: string;
+
+
+    @Prop({
         type: Array,
         default: _dateService.setDate()
     })
@@ -115,6 +145,8 @@ export const RutaSchema = SchemaFactory.createForClass(Ruta)
   message: "El {PATH} {VALUE} ya está registrado en sistema",
 })
 .plugin(mongoosePaginate)
+.plugin(aggregatePaginate)
+.plugin(castAggregation)
 .plugin(mongoose_delete, { overrideMethods: 'all' });
 
 

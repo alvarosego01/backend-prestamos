@@ -6,9 +6,26 @@ export interface _argsPagination {
     options: _dataPaginator
 }
 
+export interface _argsPaginationAggregate {
+    aggregate: any;
+    options: _dataPaginatorAggregate
+}
+
 
 export interface _dataPaginator {
 
+
+    page: number;
+    limit: number;
+    customLabels: any;
+    // sort: { '_id': -1 }, <- example
+    sort?: any;
+    // select: "-pass" <- example
+    select?: any;
+    populate?: any;
+
+}
+export interface _dataPaginatorAggregate {
 
     page: number;
     limit: number;

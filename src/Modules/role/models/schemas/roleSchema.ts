@@ -4,7 +4,9 @@ import { Document, Mongoose } from "mongoose";
 
 
 import * as uniqueValidator from "mongoose-unique-validator";
+import * as castAggregation  from "mongoose-cast-aggregation";
 import * as mongoosePaginate from "mongoose-paginate-v2";
+import * as aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import * as mongoose_delete from "mongoose-delete";
 
 import { DateProcessService } from "src/Classes/classes.index";
@@ -17,7 +19,7 @@ const rolesEnum = Object.values(RoleType);
 const roles = {
     values: rolesEnum,
     message: 'El rol {VALUE} no esta permitido'
-}; //array de rolesEnum 
+}; //array de rolesEnum
 
 const _dateService = new DateProcessService();
 
@@ -34,7 +36,7 @@ export class Roles extends Document {
 
   })
   rol: string;
-  
+
   @Prop({
     type: String,
     required: false,
@@ -63,7 +65,7 @@ export class Roles extends Document {
     default: _dateService.setDate()
   })
   createdAt: string;
-  
+
   @Prop({
     // required: true,
     type: Array,
@@ -78,6 +80,8 @@ export const RolesSchema = SchemaFactory.createForClass(Roles)
   message: "El {PATH} {VALUE} ya está registrado en sistema",
 })
 .plugin(mongoosePaginate)
+.plugin(aggregatePaginate)
+.plugin(castAggregation)
 .plugin(mongoose_delete, { overrideMethods: 'all' });
 
 

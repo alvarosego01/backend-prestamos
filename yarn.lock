@@ -5357,6 +5357,16 @@ mongodb@3.6.1:
   optionalDependencies:
     saslprep "^1.0.0"
 
+mongoose-aggregate-paginate-v2@^1.0.42:
+  version "1.0.42"
+  resolved "https://registry.yarnpkg.com/mongoose-aggregate-paginate-v2/-/mongoose-aggregate-paginate-v2-1.0.42.tgz#27dd39030d6e0777df44e2253d6d838d76d54a6b"
+  integrity sha512-SOXrztB5DRjwimmxUtg0mVS/IzJEZlWOZ6veU5U1ia0BH7VfCIw+KCvdaiCXXlVAPL75PXroXh0lDcpuxfUVWw==
+
+mongoose-cast-aggregation@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/mongoose-cast-aggregation/-/mongoose-cast-aggregation-0.1.0.tgz#697c814537983b757fe5d893a53d9294f5017296"
+  integrity sha512-K4c8QcVcqHgMse0PvBuB2CChOWcYfstBSaAUtcYg1zu4DonlkZ9F97L6z1M/w/UUxgat0qGBzUekV2XrfgDnXQ==
+
 mongoose-delete@^0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/mongoose-delete/-/mongoose-delete-0.5.2.tgz#670fef26b2be4beef0844becd4fb6beffa348729"

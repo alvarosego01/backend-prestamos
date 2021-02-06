@@ -6,9 +6,6 @@ export class ClienteDto
     @IsString()
     card_id:string
 
-    @IsNotEmpty()
-    @IsString()
-    ruta_id: string
 
     @IsNotEmpty()
     @IsString()
@@ -41,4 +38,14 @@ export class ClienteDto
     @IsNotEmpty()
     @IsString()
     semaforo:string
+
+
+    @IsNotEmpty()
+    @IsString()
+    enrutador_id: string
+
+    // @IsNotEmpty()
+    @IsString()
+    ruta_id?: string
+
 }

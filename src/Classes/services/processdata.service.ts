@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 
 import { responseInterface, _argsFind, _argsPagination, _argsUpdate } from "src/Response/interfaces/interfaces.index";
 import {_argsFindByText} from "src/Response/interfaces/responseFindParameters.interface";
+import {_argsPaginationAggregate} from "src/Response/interfaces/responsePaginator.interface";
 import { DateProcessService } from "../classes.index";
 
 @Injectable()
@@ -18,6 +19,62 @@ export class ProcessDataService {
 
     await dataBody.paginate(
       parameters.findObject,
+			parameters.options,
+			(error, response) => {
+
+				if (error) {
+
+          const resp: responseInterface = {
+            ok: false,
+            status: 500,
+            message: 'Algo ha salido mal, intente más tarde',
+            err: error,
+          };
+          console.log('el error este', error);
+          reject(resp);
+
+        }
+
+        console.log('el retorno aca', response);
+
+        // console.log('response', response);
+        if(!response){
+
+          const resp: responseInterface = {
+            ok: false,
+            status: 404,
+            message: 'No hay resultados en este momento',
+            data: []
+
+          };
+          reject(resp);
+
+        }
+
+
+        const resp: responseInterface = {
+          ok: true,
+          status: 200,
+          data: response.itemsList,
+          paginator: response.paginator
+        };
+        resolve(resp);
+
+    	});
+
+    });
+  }
+  async _findDBAggregate(dataBody: any, parameters: _argsPaginationAggregate = null): Promise<responseInterface> {
+
+    return new Promise(async (resolve, reject) => {
+
+
+    const myAggregate = dataBody.aggregate(
+      parameters.aggregate
+    );
+
+    await dataBody.aggregatePaginate(
+      myAggregate,
 			parameters.options,
 			(error, response) => {
 

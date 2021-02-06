@@ -1,17 +1,40 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
-import * as Mongoose from "mongoose"; 
+import * as Mongoose from "mongoose";
 import * as uniqueValidator from "mongoose-unique-validator";
+import * as castAggregation  from "mongoose-cast-aggregation";
 import * as mongoosePaginate from "mongoose-paginate-v2";
+import * as aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import * as mongoose_delete from "mongoose-delete";
 
 import { DateProcessService } from "src/Classes/classes.index";
 
 const _dateService = new DateProcessService();
 
+
+export class concurrencia extends Document
+{
+
+    @Prop({
+        type: String,
+        required: [true]
+    })
+    tipo: string;
+
+    @Prop({
+        type: Number,
+        required: [true, 'Debe instanciar la concurrencia de cobro']
+    })
+    concurrencia: number;
+
+}
+
+
+
+
 @Schema()
-export class Cuota extends Document   
+export class Cuota extends Document
 {
     //monto obtenido del cobro
     @Prop({
@@ -52,16 +75,31 @@ export class Cuota extends Document
 export const CuotaSchema = SchemaFactory.createForClass(Cuota);
 
 @Schema()
-export class Negocio extends Document 
+export class Negocio extends Document
 {
-    
+
+
+    @Prop({
+        type: concurrencia,
+        default: null,
+      })
+    concurrencia: concurrencia;
+
+
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
-        refer: "Clinte",
+        refer: "Cliente",
         required: [true, "Debe incluir el cliente"]
     })
     cliente_id:string;
-   
+
+    // @Prop({
+    //     type: Mongoose.Schema.Types.ObjectId,
+    //     ref: 'Users',
+    //     required: [true, 'Debe incluir el cobrador encargado']
+    // })
+    // cobrador_id:string;
+
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Users',
@@ -89,7 +127,7 @@ export class Negocio extends Document
 
     @Prop({
         type: Number,
-        default: 0    
+        default: 0
     })
     vcuotas:number;
 
@@ -122,11 +160,20 @@ export class Negocio extends Document
         default: null
     })
     updatedAt: string[];
-    
+
+    @Prop({
+        required: true,
+        default: null,
+      })
+      domicilio: string;
+
+
 }
 export const NegocioSchema = SchemaFactory.createForClass(Negocio)
 .plugin(uniqueValidator, {
   message: "El {PATH} {VALUE} ya está registrado en sistema",
 })
 .plugin(mongoosePaginate)
+.plugin(aggregatePaginate)
+.plugin(castAggregation)
 .plugin(mongoose_delete, { overrideMethods: 'all' });

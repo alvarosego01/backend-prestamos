@@ -31,6 +31,6 @@ from "./services/services.index";
     imports:[_CLIENTESCHEMA, _COBROSCHEMA, _CAMBIOCOBROSCHEMA, _NEGOCIOSCHEMA, _CUOTASCHEMA],
     controllers:[ClientesController, CobrosClienteController, PeticionCobrosController, NegocioController],
     providers:[ClienteService, RutaClienteService, CobrosClienteService, PeticionesCobrosService, NegocioService],
-    exports:[ClienteService, RutaClienteService, CobrosClienteService]
+    exports:[ClienteService, RutaClienteService, CobrosClienteService, _COBROSCHEMA]
 })
 export class ClientesModule {}

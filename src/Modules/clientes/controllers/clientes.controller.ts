@@ -26,6 +26,17 @@ export class ClientesController
 
     @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
+    @Post('crearSingle/:id')//tomo formulario y creo un cliente
+    async createClientSingle( @Param('id') id:string , @Body() body: any, @Response() res:any):Promise<responseInterface>
+    {
+        // console.log('la puta madre');
+        // return res.status(200).json("aaaaa");
+        this._Response = await this._clienteService.createClientSingle(body, id);
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+    @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
     @Post('crear/:id/:idRuta')//tomo formulario y creo un cliente
     async createNewCliente(@Param('idRuta') idRuta:string, @Param('id') id:string , @Body() body:ClienteDto, @Response() res:any):Promise<responseInterface>
     {
@@ -46,11 +57,31 @@ export class ClientesController
     }
 
 
+    @Get('allClients')//obtengo el cliente perteneciente al cobrador
+    async getAllClientsAdmin( @Response() res:any):Promise<responseInterface>
+    {
+        this._Response = await this._clienteService.getAllClientsAdmin(  );
+        return res.status(this._Response.status).json(this._Response);
+    }
 
     @Get('all/:cobrador')//obtengo los cliente pertenecientes al cobrdor
     async getAllClientes(@Param('cobrador') cobrador:string, @Response() res:any):Promise<responseInterface>
     {
         this._Response = await this._clienteService.getAllClientes(cobrador);
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+    @Get('allByEnrouter/:id')//obtengo el cliente perteneciente al cobrador
+    async getClientsByEnrouter(@Param() params:string[], @Response() res:any):Promise<responseInterface>
+    {
+        this._Response = await this._clienteService.getClientsByEnrouter( params['id'] );
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+    @Get('getCliente/:id')//obtengo el cliente perteneciente al cobrador
+    async getOneClienteById(@Param() params:string[], @Response() res:any):Promise<responseInterface>
+    {
+        this._Response = await this._clienteService.getOneClienteById( params['id'] );
         return res.status(this._Response.status).json(this._Response);
     }
 
@@ -60,6 +91,7 @@ export class ClientesController
         this._Response = await this._clienteService.getOneCliente(params['cliente'], params['cobrador']);
         return res.status(this._Response.status).json(this._Response);
     }
+
 
 
 

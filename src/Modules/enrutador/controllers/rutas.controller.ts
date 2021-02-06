@@ -35,12 +35,12 @@ export class RutasController
     }
 
     //necesito el id del enrutador y de la ruta para obtener la ruta deseada
-    // @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
-    // @UseGuards(AuthGuard('jwt'))
-    @Get('/:ruta/:enrutador')
+    @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
+    @Get('/:ruta/:id')
     async getOneRoute(@Param() params:string[], @Response() res:any):Promise<responseInterface>
     {
-        this._Response = await this._rutaService.getOneRoute(params['enrutador'], params['ruta']);
+        this._Response = await this._rutaService.getOneRoute(params['id'], params['ruta']);
         return res.status(this._Response.status).json(this._Response);
     }
 

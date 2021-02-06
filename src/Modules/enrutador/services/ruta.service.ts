@@ -69,20 +69,23 @@ export class RutaService
             // populate: "clientes_id"
             populate: {
 
-                path: 'clientes_id',
-                model: 'Cliente', // <- si es un array de ids se debe especificar el model
-                populate: {
-
-                    path: 'cobrador_id',
-                    select: '-pass',
-                    populate: {
-                        path: 'rol',
-                        select: 'rol alias',
-
+                path: 'negocios_id',
+                model: 'Negocio', // <- si es un array de ids se debe especificar el model
+                populate: [
+                    {
+                        path: 'cliente_id',
+                        model: 'Cliente',
+                        select: "",
+                    },
+                    {
+                        path: 'cobrador_id',
+                        select: '-pass',
+                        populate: {
+                            path: 'rol',
+                            select: 'rol alias',
+                        }
                     }
-
-
-                }
+                ]
 
             }
 
@@ -91,6 +94,7 @@ export class RutaService
         await this._processData._findOneDB(this.RutaModel, args).then(r =>
         {
             this._Response = r;
+            console.log('r.data respuesta', r.data);
         }, err =>
         {
             this._Response = err;
