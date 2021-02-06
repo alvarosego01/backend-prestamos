@@ -98,6 +98,7 @@ export class PagoService
 				if( gastoOP.createdAt[1] == back_Point[i]) 
 				{
 					totalGastos = totalGastos + gastoOP.monto;
+					console.log(totalGastos);
 				}
 			}
 		});
@@ -218,15 +219,21 @@ export class PagoService
 
 		for (let i =0; i < _nominaAux.length; ++i) 
 		{
-			//verifico si existe una caja chica con respecto a la nomina si no existe el valor de gastos es 0
-			(!_cajaChicaAux[i])? _VGA = 0 : _VGA = await this.getTotalGastosOperByCobrador(_cajaChicaAux[i].gasto,_nominaAux[i]);
-
-			//seteo el monto de pago y retorno los resultados
 			this._Nomina = _nominaAux[i];
+
+			for(let j =0; j <_cajaChicaAux.length; ++j)
+			{
+				//verifico si existe una caja chica con respecto a la nomina si no existe el valor de gastos es 0
+				if (_cajaChicaAux[j].cobrador === this._Nomina.cobrador) 
+				{
+					_VGA = await this.getTotalGastosOperByCobrador(_cajaChicaAux[i].gasto, this._Nomina); break;
+				}
+			}
+			//seteo el monto de pago y retorno los resultados
 			await this.setLastSalaryPayment((this._Nomina.salario - _VGA), _VGA);
 
 			//se procede a actualizar la nomina
-			_nominaAux[i] = (await this._nominaService.modifyOneNominaByNomina(this._Nomina)).data; 
+			_nominaAux[i] = this._Nomina; //(await this._nominaService.modifyOneNominaByNomina(this._Nomina)).data; 
 		}
 
 		this._Response.data = _nominaAux;
