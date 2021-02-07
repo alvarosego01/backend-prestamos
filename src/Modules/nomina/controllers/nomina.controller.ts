@@ -7,7 +7,8 @@ import
 	Get,
 	Post,
 	Put,
-	Delete 
+	Delete,
+	UseGuards 
 } from '@nestjs/common';
 
 import
@@ -26,6 +27,9 @@ import
 	ModifyNominaDTO
 }from '../models/dto/index.dto';
 
+import { AuthGuard, PassportModule } from '@nestjs/passport';
+import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
+import {RoleGuard} from "src/Modules/role/guards/role.guard";
 
 @Controller('nomina')
 export class NominaController 
@@ -37,7 +41,7 @@ export class NominaController
 	(
 		private _nominaService:NominaService
 	)
-	{}
+	{} 
 
 	@Get('hello')
 	async sayHello(@Response() res:any):Promise<responseInterface>
@@ -45,13 +49,17 @@ export class NominaController
 		return res.status(200).json("ruta de control de nómina");
 	}
 
+	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard) 
 	@Get('all/:enrutador')//servicio que entrega todas las nominas que maneja el enrutador
 	async getAllNominas(@Param('enrutador') nomina:string, @Response() res:any):Promise<responseInterface>
 	{
 		this._Response = await this._nominaService.getAllNominas(nomina);
 		return res.status(this._Response.status).json(this._Response);
 	}
- 
+ 	
+ 	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Get('detalles/:id')//servicio que me entrega detalladamente una nomina en particular, a traves del codigo de nominas
 	async getOneNominas(@Param('id') nomina:string, @Response() res:any):Promise<responseInterface>
 	{
@@ -59,13 +67,17 @@ export class NominaController
 		return res.status(this._Response.status).json(this._Response);
 	}
 
+	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Post('crear')//servicio para crear una nomina, donde requiere el id del cobrador y la id del enrutador, junto a los datos de salario
 	async createOneNominas(@Body() nomina:CreateNominaDTO, @Response() res:any):Promise<responseInterface>
 	{
 		this._Response = await this._nominaService.createOneNomina(nomina);
-		return res.status(this._Response.status).json(this._Response);
+		return res.status(this._Response.status).json(this._Response); 
 	}
 
+	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Put('modificar')//servicio para modificar la nomina de un cobrador
 	async modifyOneNominas(@Body() nomina:ModifyNominaDTO, @Response() res:any):Promise<responseInterface>
 	{
@@ -73,6 +85,8 @@ export class NominaController
 		return res.status(this._Response.status).json(this._Response);
 	}
 
+	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Delete('borrar/:id')
 	async deleteOneNominas(@Param('id') nomina:string, @Response() res:any):Promise<responseInterface>
 	{

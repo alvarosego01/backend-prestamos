@@ -7,7 +7,8 @@ import
 	Get,
 	Post,
 	Put,
-	Delete 
+	Delete,
+	UseGuards 
 } from '@nestjs/common';
 
 import
@@ -21,6 +22,11 @@ import
 { 
 	GetSalarioNominaDTO
 } from '../models/dto/index.dto';
+
+import { AuthGuard, PassportModule } from '@nestjs/passport';
+import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
+import {RoleGuard} from "src/Modules/role/guards/role.guard";
+
 
 @Controller('nomina/pago')
 export class PagoController 
@@ -38,6 +44,8 @@ export class PagoController
 		return res.status(200).json("controlador encargado del servicio de pagos a nomina");
 	}
 
+	@RolesDecorator('ENRUTATOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Get('calculo/cobrador') //ruta que calcular el salario por cobrador
 	async getCalculoSalarioByCobrador(@Response() res:any, @Body() ids:GetSalarioNominaDTO):Promise<responseInterface>
 	{
@@ -45,6 +53,8 @@ export class PagoController
 		return res.status(this._Response.status).json(this._Response);
 	} 
 
+	@RolesDecorator('ENRUTATOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Get('calculo/enrutador') //ruta que calcular el salario por cobrador
 	async getCalculoSalarioByEnrutador(@Response() res:any, @Body() ids:GetSalarioNominaDTO):Promise<responseInterface>
 	{

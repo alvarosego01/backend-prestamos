@@ -52,8 +52,8 @@ export class UsersController {
     return res.status(this._Response.status).json(this._Response);
   }
 
-  // @RolesDecorator('ADMIN_ROLE')
-  // @UseGuards(AuthGuard(), RoleGuard)
+  @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  @UseGuards(AuthGuard(), RoleGuard)
   @Get()
   async getUsers(@Response() res: any): Promise<responseInterface>
   {

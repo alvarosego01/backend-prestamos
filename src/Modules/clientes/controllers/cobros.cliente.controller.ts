@@ -7,7 +7,8 @@ import
     Post, 
     Put, 
     Delete, 
-    Param 
+    Param,
+    UseGuards 
 } 
 from '@nestjs/common';
 import 
@@ -22,6 +23,10 @@ import
 } 
 from '../models/dto/index.dto';
 import {CobrosClienteService} from '../services/services.index';
+
+import { AuthGuard, PassportModule } from '@nestjs/passport';
+import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
+import {RoleGuard} from "src/Modules/role/guards/role.guard";
 
 @Controller('cliente/cobros')
 export class CobrosClienteController 
@@ -39,6 +44,9 @@ export class CobrosClienteController
         return res.status(200).json("ruta para control de cobros");
     }
 
+
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
     @Get('realizados/:cliente')
     async getAllPaymentDo(@Param('cliente') id:string, @Response() res:any):Promise<responseInterface>
     {
@@ -46,6 +54,8 @@ export class CobrosClienteController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
     @Get('realizado/:pago')
     async getOnePaymentDo(@Param('pago') id:string, @Response() res:any):Promise<responseInterface>
     {
@@ -53,6 +63,8 @@ export class CobrosClienteController
         return res.status(this._Response.status).json(this._Response); 
     }
 
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
     @Post('generar')
     async createNewPayment(@Body() body:createCobroClienteDto, @Response() res:any):Promise <responseInterface>
     {
@@ -60,6 +72,8 @@ export class CobrosClienteController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
     @Put('modificar')
     async modifyOldPayment(@Body() body:modifyCobroClienteDto, @Response() res:any):Promise<responseInterface>
     {
@@ -67,6 +81,8 @@ export class CobrosClienteController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
     @Delete('borrar/:id')
     async deleteOldPayment(@Param('id') id:string, @Response() res:any):Promise<responseInterface>
     {

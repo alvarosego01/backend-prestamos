@@ -7,7 +7,8 @@ import
 	Get,
 	Post,
 	Put,
-	Delete 
+	Delete,
+	UseGuards 
 } from '@nestjs/common';
 import
 {
@@ -22,7 +23,11 @@ import
 	ModifyGastosOpDTO,
 	RetrieveGastosOpDTO,
 	DeleteGastosOpDTO
-} from '../models/dto/index.dto'
+} from '../models/dto/index.dto';
+
+import { AuthGuard, PassportModule } from '@nestjs/passport';
+import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
+import {RoleGuard} from "src/Modules/role/guards/role.guard";
 
 @Controller('cajachica/gastos') 
 export class GastosoperacionesController 
@@ -40,6 +45,8 @@ export class GastosoperacionesController
 		return res.status(200).json('Ruta para controlde gastos de operaciones');
 	}
 
+	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Get('historial') //retorna datos por enrutador
 	async getAllGastosOperacion(@Response() res:any, @Body() ids:RetrieveGastosOpDTO):Promise<responseInterface>
 	{
@@ -47,6 +54,8 @@ export class GastosoperacionesController
 		return res.status(this._Response.status).json(this._Response);
 	}
 
+	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Get('historial/detalles') //retorna un slot del historial en especifico
 	async getOneGastoOperacion(@Response() res:any, @Body() ids:RetrieveGastosOpDTO):Promise<responseInterface>
 	{
@@ -54,6 +63,8 @@ export class GastosoperacionesController
 		return res.status(this._Response.status).json(this._Response);
 	}	
 
+	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Post('')
 	async postOneGastosOperacion(@Response() res:any, @Body() body:CreateGastosOpDTO):Promise<responseInterface>
 	{
@@ -61,6 +72,8 @@ export class GastosoperacionesController
 		return res.status(this._Response.status).json(this._Response);
 	}
 
+	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Put('')
 	async putOneGastosOperacion(@Response() res:any, @Body() body:ModifyGastosOpDTO):Promise<responseInterface>
 	{
@@ -68,6 +81,8 @@ export class GastosoperacionesController
 		return res.status(this._Response.status).json(this._Response);
 	}
 
+	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Delete('borrar')
 	async deleteOneGastosOperacion(@Response() res:any, @Body() body:DeleteGastosOpDTO):Promise<responseInterface>
 	{

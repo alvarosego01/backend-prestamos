@@ -6,7 +6,8 @@ import {
   Post,
   Body,
   Put,
-  Delete
+  Delete,
+  UseGuards
 } from '@nestjs/common';
 
 import 
@@ -23,7 +24,12 @@ import
 {
 	CreateCajaChicaDTO,
 	ModifyCajaChicaDTO
-} from '../models/dto/cajachica.dto'
+} from '../models/dto/cajachica.dto';
+
+import { AuthGuard, PassportModule } from '@nestjs/passport';
+import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
+import {RoleGuard} from "src/Modules/role/guards/role.guard";
+
 
 @Controller('cajachica')
 export class CajachicaController 
@@ -41,6 +47,8 @@ export class CajachicaController
 		return res.status(200).json(await this._cajachicaService.sayHello());
 	}
 
+	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Get('all/:enrutador')//metodo que retorna todas las cajas chicas asignadas atraves de un enrutador
 	async getAllCajachicaByEnrutator(@Param('enrutador') id:string, @Response() res:any):Promise<responseInterface>
 	{
@@ -48,6 +56,8 @@ export class CajachicaController
 		return res.status(this._Response.status).json(this._Response);
 	}
 
+	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Get('detalles/:id')//metodo que me retorna una caja chica en particular
 	async getOneCajachicaByID(@Param('id') id:string, @Response() res:any):Promise<responseInterface>
 	{
@@ -55,6 +65,8 @@ export class CajachicaController
 		return res.status(this._Response.status).json(this._Response);
 	}
 
+	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Post('crear')//método para crear una caja chica
 	async postOneCajachica(@Body() caja:CreateCajaChicaDTO, @Response() res:any):Promise<responseInterface>
 	{
@@ -62,6 +74,8 @@ export class CajachicaController
 		return res.status(this._Response.status).json(this._Response);
 	}
 
+	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Put('modificar')//método para modificar una caja chica desde el id del cobrador
 	async putOneCajachica(@Body() caja:ModifyCajaChicaDTO, @Response() res:any):Promise<responseInterface>
 	{
@@ -69,6 +83,8 @@ export class CajachicaController
 		return res.status(this._Response.status).json(this._Response);
 	}
 
+	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  	@UseGuards(AuthGuard(), RoleGuard)
 	@Delete('eliminar/:id')//método que me permite borrar una caja chica por ID
 	async delCajachicaByID(@Param('id') id:string, @Response() res:any):Promise<responseInterface>
 	{

@@ -23,10 +23,13 @@ import
 
 } from './models/schemas/schemas.module';
 
+import { AuthModule } from "../auth/auth.module";
+
 @Module({
 	imports:
 	[
-		SchemasModule
+		SchemasModule,
+		AuthModule
 	],
 	controllers:
 	[

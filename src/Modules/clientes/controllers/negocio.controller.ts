@@ -1,4 +1,4 @@
-import { Param, Response, Controller, Get, Body, Post, Put, Delete } from '@nestjs/common';
+import { Param, Response, Controller, Get, Body, Post, Put, Delete, UseGuards } from '@nestjs/common';
 import {responseInterface} from 'src/Response/interfaces/interfaces.index';
 import 
 {
@@ -9,6 +9,10 @@ import
 } 
 from '../models/dto/index.dto';
 import {NegocioService} from '../services/services.index';
+
+import { AuthGuard, PassportModule } from '@nestjs/passport';
+import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
+import {RoleGuard} from "src/Modules/role/guards/role.guard";
 
 @Controller('negocio')
 export class NegocioController 
@@ -26,20 +30,24 @@ export class NegocioController
         return res.status(200).json("ruta para asigancion e negocios de clientes");
     }
 
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
     @Get()//ruta para obtener todos los negocios de un cliente 
     async getAllNegocio(@Response() res:any, @Body() value:NegocioPeticionDto):Promise<responseInterface>
     {
         this._Response = await this._negocioService.getAllNegocio(value);
-        return res.status(this._Response.status).json(this._Response);
+        return res.status(this._Response.status).json(this._Response); 
     }
 
-    @Get('calcular/:id')
+    /*@Get('calcular/:id')
     async getCalculoSalario(@Response() res:any, @Param('id') id:string)
     {
         console.log("calculo de salario");
         return res.status(this._Response.status).json(this._Response);
-    }
+    }*/
 
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
     @Get('detalles')//ruta para obtener un negocio hecho por el cliente
     async getOneNegocio(@Response() res:any, @Body() value:NegocioUnicoPeticionDto):Promise<responseInterface>
     {
@@ -47,6 +55,8 @@ export class NegocioController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
     @Post('crear')
     async makeOneNegocio(@Response() res:any, @Body() value:NegocioCreacionDto):Promise<responseInterface>
     {
@@ -54,6 +64,8 @@ export class NegocioController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
     @Put('modificar')
     async modifyOneNegocio(@Response() res:any, @Body() value:NegocioModificacionDto):Promise<responseInterface>
     {
@@ -61,6 +73,8 @@ export class NegocioController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
     @Delete('eliminar')
     async deleteOneNegocio(@Response() res:any, @Body() value:any):Promise<responseInterface>
     {
