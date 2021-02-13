@@ -190,7 +190,7 @@ export class LicecniaUsuarioService
         const data = 
         {
             dias: licencia.dias,
-            status: status,
+            status: licencia.status,
             updatedAt: this._dateService.setDate(),
         }
 
