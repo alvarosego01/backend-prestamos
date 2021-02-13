@@ -13,6 +13,8 @@ import
 } 
 from './services/index.service';
 
+import { AuthModule } from '../auth/auth.module';
+
 @Module({
     controllers:[
         BitacoraMainController
@@ -23,7 +25,8 @@ from './services/index.service';
         BitacoraService
     ],
     imports:[
-        ModelsModule
+        ModelsModule,
+        AuthModule
     ],
     exports:[
         BitacoraService,

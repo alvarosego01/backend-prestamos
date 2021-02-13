@@ -109,8 +109,6 @@ export class Users extends Document {
   })
   edad: number;
 
-  
-
   @Prop({
     default: 'ACTIVE',
   })
@@ -157,7 +155,12 @@ export class Users extends Document {
     default: null,
   })
   enrutator_id: string;
-
+/*
+  @Prop({
+    type: Boolean,
+    default: true,
+  })
+  can_in: boolean;//valor de uso interno para licencias*/
 }
 
 export const UsersSchema = SchemaFactory.createForClass(Users)

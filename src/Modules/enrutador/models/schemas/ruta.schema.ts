@@ -50,7 +50,7 @@ export class Ruta extends Document
 
     @Prop({
         type: String,
-        required: [true, "Falta establecer el departamento"],
+        required: [true, "Falta establecer el departamento"], 
         default: null
     })
     department:string;

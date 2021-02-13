@@ -7,7 +7,8 @@ import
 	Get,
 	Post,
 	Put,
-	Delete 
+	Delete,
+	UseGuards 
 } from '@nestjs/common';
 
 import
@@ -15,7 +16,7 @@ import
 	responseInterface
 } from '../../../Response/interfaces/interfaces.index';
 
-import
+import 
 {
 	PermisoService
 } from '../services/index.service';
@@ -24,7 +25,12 @@ import
 {
 	UserPermisosDTO,
 	ModifyPermisosDTO
-} from '../models/dto/index.dto'
+} from '../models/dto/index.dto';
+
+import { AuthGuard, PassportModule } from '@nestjs/passport';
+import {PermisosGuard} from '../guards/permisos.index.guard';
+import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
+import {RoleGuard} from "src/Modules/role/guards/roleGuard.index";
 
 
 @Controller('permisos')
@@ -37,7 +43,7 @@ export class PermisoController
 		private _permisoService:PermisoService
 	){}
 
-
+	@UseGuards(AuthGuard(), PermisosGuard)
 	@Get('hello')
 	async sayHello(@Response() res:any):Promise<responseInterface>
 	{

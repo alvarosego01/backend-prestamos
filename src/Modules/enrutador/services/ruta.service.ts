@@ -31,7 +31,11 @@ export class RutaService
 
         const args: _argsPagination = 
         {
-            findObject: { enrutador_id: enrutador },
+            findObject: 
+            { 
+                enrutador_id: enrutador, 
+                populate: [{ path: 'Negocio' }] 
+            },
             options: parameters
         }
 
@@ -56,10 +60,9 @@ export class RutaService
             findObject: 
             {
                 _id:ruta,
-                enrutador_id:enrutador,
+                enrutador_id:enrutador, 
             },
-            populate: null
-            // select: "rol"
+            populate: [{ path: 'Negocio' }]
         }
 
         await this._processData._findOneDB(this.RutaModel, args).then(r => 
@@ -87,7 +90,7 @@ export class RutaService
             this._Response = err;
         });
         
-        return this._Response;
+        return this._Response; 
     }
 
     //necesito el id del enrutador y el id de la ruta para modificarla

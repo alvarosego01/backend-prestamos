@@ -17,7 +17,6 @@ import
 from 'src/Response/interfaces/interfaces.index';
 import { solicitudLicenciaDto } from '../models/dto/dto.index';
 import { LicenciaSolicitud } from '../models/schemas/index.schema';
-
 @Injectable()
 export class SolicitudLicenciaService
 { 

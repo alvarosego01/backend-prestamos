@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Global } from '@nestjs/common';
 
 import
 {
@@ -6,6 +6,7 @@ import
 
 } from './index.service';
 
+@Global()
 @Module({
 	imports:[],
 	exports:[PermisoService],

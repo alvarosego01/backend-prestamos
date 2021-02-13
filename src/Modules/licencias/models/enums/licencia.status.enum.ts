@@ -5,5 +5,7 @@ export enum STATUS
     CANCELADA  = "CANCELADA",
     INDEFINIDO = "INDEFINIDO",
     CADUCADO   = "CADUCADO",
-    VIGENTE    = "VIGENTE"
+    VIGENTE    = "VIGENTE",
+    ACTIVE	   = "ACTIVE",
+    INACTIVE   = "INACTIVE"
 }

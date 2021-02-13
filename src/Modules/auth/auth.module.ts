@@ -15,6 +15,7 @@ import { RoleService } from '../role/services/role.service';
 import { UsersService } from '../users/services/users.service';
 
 // import { ModelsModule } from '../users/models/models.module';
+import {ServicesModule} from '../permisos/services/services.module';
 
 
 @Module({
@@ -38,7 +39,7 @@ import { UsersService } from '../users/services/users.service';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, SetUserMenuService, RoleService, UsersService],
+  providers: [AuthService, JwtStrategy, SetUserMenuService, RoleService, UsersService, ServicesModule],
   exports: [JwtStrategy, PassportModule, SetUserMenuService],
 })
 

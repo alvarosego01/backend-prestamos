@@ -5,7 +5,7 @@ import { MiddlewareModule } from "./Middlewares/middleware.module";
 import { Module } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-
+import { ScheduleModule } from '@nestjs/schedule';
 // conexion con mongo
 
 // MODULOS DE RUTAS
@@ -34,6 +34,7 @@ import { _MONGOOSEMODULE } from "./Database/mongo-config";
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ClassesModule,
     _MONGOOSEMODULE,
     ConfigModule,

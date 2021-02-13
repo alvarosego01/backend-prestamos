@@ -27,8 +27,10 @@ import
 } 
 from "./services/services.index";
 
+import { AuthModule } from '../auth/auth.module';
+
 @Module({
-    imports:[_CLIENTESCHEMA, _COBROSCHEMA, _CAMBIOCOBROSCHEMA, _NEGOCIOSCHEMA, _CUOTASCHEMA],
+    imports:[_CLIENTESCHEMA, _COBROSCHEMA, _CAMBIOCOBROSCHEMA, _NEGOCIOSCHEMA, _CUOTASCHEMA, AuthModule, ],
     controllers:[ClientesController, CobrosClienteController, PeticionCobrosController, NegocioController],
     providers:[ClienteService, RutaClienteService, CobrosClienteService, PeticionesCobrosService, NegocioService],
     exports:[ClienteService, RutaClienteService, CobrosClienteService]

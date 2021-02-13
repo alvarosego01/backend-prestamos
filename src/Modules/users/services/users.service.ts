@@ -187,6 +187,41 @@ export class UsersService
     return this._Response;
   }
 
+  async modifyActiveUser(status:string, _id:string):Promise<responseInterface>
+    {
+        // se crea un objeto con los nuevos valores
+        const data = 
+        {
+            status: status,
+            updatedAt: this._dateProcessService.setDate(),
+        }
+
+        // se crea el objeto de argumentos con el id de busqueda en especifico y la data a reemplazar en set
+        const args: _argsUpdate = {
+          findObject: {
+            _id: _id,
+          },
+          set: {
+            $set: data
+          },
+          populate: {
+            path: 'usuario',
+            select: '-pass'
+          }
+        }
+
+        await this._processData._updateDB(this.UsersModel, args).then( async r => {
+
+          this._Response = r;
+          this._Response.message = 'Usuario desactivado!';
+
+        }, err => 
+        {
+          this._Response = err;
+        });
+        return this._Response;
+    }
+
   async deleteUsers(id:string):Promise<responseInterface>
   {
     await this._processData._deleteSoftDB(this.UsersModel, id ).then(r  => {

@@ -21,6 +21,7 @@ import { responseInterface, _argsFind } from 'src/Response/interfaces/interfaces
 import { ProcessDataService } from 'src/Classes/classes.index';
 import { SetUserMenuService } from './authServices.index';
 import { UserDto } from 'src/Modules/users/models/dto/user.dto';
+import {PermisoService} from '../../permisos/services/permisos.service';
 
 
 @Injectable()
@@ -32,7 +33,8 @@ export class AuthService {
     @InjectModel(Users.name) private UsersModel: Model<Users>,
     private readonly _jwtService: JwtService,
     private _processData: ProcessDataService,
-    public _setUserMenu: SetUserMenuService
+    public _setUserMenu: SetUserMenuService,
+    private _permisoService: PermisoService
   ) {}
 
   async signup(signupDto: SignupDto): Promise<responseInterface>
@@ -81,7 +83,7 @@ export class AuthService {
     return this._Response;
 
   }
-
+  
   async signin(signinDto: SigninDto): Promise<responseInterface>
   {
     const { email, pass } = signinDto;
@@ -136,7 +138,7 @@ export class AuthService {
           rolName: r.data.rol.rol,
           token: token,
           createdAt: r.data.createdAt,
-          updatedAt: r.data.updatedAt,
+          updatedAt: r.data.updatedAt
           // userMenu: this._setUserMenu.setMenu(r.data.rol.rol)
 
         }

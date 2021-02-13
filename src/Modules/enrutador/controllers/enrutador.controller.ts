@@ -5,7 +5,7 @@ import { EnrutadorService } from '../services/services.index';
 
 import { AuthGuard, PassportModule } from '@nestjs/passport';
 import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
-import {RoleGuard} from "src/Modules/role/guards/role.guard";
+import {RoleGuard} from "src/Modules/role/guards/roleGuard.index";
 
 @Controller('enrutador')
 export class EnrutadorController 
