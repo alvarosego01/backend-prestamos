@@ -92,11 +92,11 @@ export class PermisoService
 	    const args: _argsFind = {
 	      	findObject: {
 	        	usuario: id,
-	      	},
+	      	}/*,
 	      	populate: {
-					path: 'usuario',
-					select: '-pass'
-			}
+					  path: 'usuario',
+					  select: '-pass'
+			    }*/
 	    }
 
 	    await this._processData._findOneDB(this.PermisoModel, args).then(r => 

@@ -7,4 +7,6 @@ export interface IJwtPayload {
   // subRole:
   // username: string;
   // iat?: Date;
+  status: string;
+  permisos?:any; 
 }

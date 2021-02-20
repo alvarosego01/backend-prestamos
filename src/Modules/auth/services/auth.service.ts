@@ -83,6 +83,12 @@ export class AuthService {
     return this._Response;
 
   }
+
+  private async permisos(id:string):Promise<responseInterface>
+  {
+    this._Response = await this._permisoService.getOnePermisoByUser(id);
+    return this._Response.data;
+  }
   
   async signin(signinDto: SigninDto): Promise<responseInterface>
   {
@@ -117,7 +123,9 @@ export class AuthService {
         const payload: IJwtPayload = {
           _id: r.data._id,
           email: r.data.email,
-          rol: r.data.rol
+          rol: r.data.rol,
+          status: r.data.status,
+          permisos: await this.permisos(r.data._id)
         };
         const token = await this._jwtService.sign(payload);
         const l: sessionDTO = {

@@ -46,10 +46,12 @@ export class LicecniaUsuarioService
     }
 
     //reloj de sistema para las licecnias
-    @Cron('*/5 * * * * *',
+    //("00 30 2 */1 * *")
+    
+    @Cron('00 30 2 */1 * *',
     {
         name: "Lincense_time" 
-    })//("00 30 2 */1 * *")
+    })
     private async handleCron()
     {
         
@@ -94,7 +96,6 @@ export class LicecniaUsuarioService
     async modifyUserByUser(id:string, status:STATUS):Promise<responseInterface>
     {
         this._Response = await this._userServiceControl.modifyActiveUser(status, id);
-        this.logger.debug(this._Response);
         return this._Response;
     }
 

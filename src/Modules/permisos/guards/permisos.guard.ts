@@ -1,18 +1,10 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { PermisoService } from '../services/permisos.service';
 
 @Injectable()
 export class PermisosGuard implements CanActivate 
 {
- 	constructor
- 	(
- 		private readonly _permisoService:PermisoService
- 	)
- 	{}
-
- 	private async getPermisos(_id:string){ return await this._permisoService.getOnePermisoByUser(_id); }
-
+	private return_var:boolean = false;
   	canActivate(
   	  context: ExecutionContext,
   	): boolean  
@@ -21,7 +13,39 @@ export class PermisosGuard implements CanActivate
   		const request = context.switchToHttp().getRequest();
     	const { user } = request;
 
-    	console.log(this.getPermisos(user._id));
-    	return true;
+    	if (user.rol === 'ADMIN_ROLE' || user.rol === 'ENRUTATOR_ROLE')
+    	{ 
+    		this.return_var = true; console.log(user.permisos);
+    	}
+    	else 
+    	{
+    		(user.permisos.obtener.cliente === true)? this.return_var = true : this.return_var = false;
+    	}
+
+    	return this.return_var;
   	}
 }
+
+/*export class GetClientGuard implements CanActivate 
+{
+	private return_var:boolean = false;
+  	canActivate(
+  	  context: ExecutionContext,
+  	): boolean  
+  	{
+
+  		const request = context.switchToHttp().getRequest();
+    	const { user } = request;
+
+    	if (user.rol === 'ADMIN_ROLE' || user.rol === 'ENRUTATOR_ROLE')
+    	{ 
+    		this.return_var = true;
+    	}
+    	else 
+    	{
+    		(user.permisos.obtener.cliente === true)? this.return_var = true : this.return_var = false;
+    	}
+
+    	return this.return_var;
+  	}
+}*/
