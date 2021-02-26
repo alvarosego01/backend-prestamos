@@ -34,6 +34,7 @@ export class CambioCobro extends Document
         required: [true, 'Debe instanciar el enrutador encargado']
     })
     enrutador_id: string;
+<<<<<<< HEAD
 
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
@@ -42,12 +43,22 @@ export class CambioCobro extends Document
     })
     cobro_id: string;
 
+=======
+    
+>>>>>>> teddy
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Cliente',
         required: [true, 'Debe instanciar el cliente del cobro a cambiar']
     })
     cliente_id: string;
+
+    @Prop({
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'Cobros',
+        required: [true, 'Debe instanciar el codigo del cobro']
+    })
+    cobro_id: string;
 
     @Prop({
         type: String,

@@ -41,8 +41,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const { email } = payload;
 
     // console.log('validate');
-
-
     const args: _argsFind = {
       findObject: {
         email: email,

@@ -1,7 +1,7 @@
 import { Model } from "mongoose";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Users } from "../models/schemas/userSchema";
+import { Users } from "../models/schemas/userSchema"; 
 // import { model } from "../models/schemas/userSchema";
 
 // servicios de response handler y process data
@@ -138,11 +138,12 @@ export class UsersService
   {
     const data = new this.UsersModel(user);
 
-    await this._processData._saveDB(data).then(r => {
+    await this._processData._saveDB(data).then(r => 
+    {
       this._Response = r;
-    }, err => {
-      this._Response = null;
-      this._Response.message = err;
+    }, err => 
+    {
+      this._Response = err;
     });
 
     return this._Response;
@@ -217,7 +218,7 @@ export class UsersService
         last_session: r.data.last_session
         // userMenu: this._setUserMenu.setMenu(r.data.rol.rol)
 
-      }
+      } 
 
       this._Response = r;
       this._Response.data = l;
@@ -231,6 +232,41 @@ export class UsersService
 
     return this._Response;
   }
+
+  async modifyActiveUser(status:string, _id:string):Promise<responseInterface>
+    {
+        // se crea un objeto con los nuevos valores
+        const data = 
+        {
+            status: status,
+            updatedAt: this._dateProcessService.setDate(),
+        }
+
+        // se crea el objeto de argumentos con el id de busqueda en especifico y la data a reemplazar en set
+        const args: _argsUpdate = {
+          findObject: {
+            _id: _id,
+          },
+          set: {
+            $set: data
+          },
+          populate: {
+            path: 'usuario',
+            select: '-pass'
+          }
+        }
+
+        await this._processData._updateDB(this.UsersModel, args).then( async r => {
+
+          this._Response = r;
+          this._Response.message = 'Usuario desactivado!';
+
+        }, err => 
+        {
+          this._Response = err;
+        });
+        return this._Response;
+    }
 
   async deleteUsers(id:string):Promise<responseInterface>
   {

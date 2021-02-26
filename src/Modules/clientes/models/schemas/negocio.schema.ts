@@ -34,8 +34,13 @@ export class concurrencia extends Document
 
 
 @Schema()
+<<<<<<< HEAD
 export class Cuota extends Document
 {
+=======
+export class Cuota extends Document   
+{ 
+>>>>>>> teddy
     //monto obtenido del cobro
     @Prop({
         type: Number,

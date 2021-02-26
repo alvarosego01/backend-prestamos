@@ -23,13 +23,17 @@ import
 } 
 from './services/services.index';
 
+import {UsersService} from '../users/services/services.index';
+
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
     imports:
     [
         _LICENCIASCHEMA,
        _LICENCIASOLICITUDSCHEMA,
-       _LICENCIAUSUARIOSCHEMA
+       _LICENCIAUSUARIOSCHEMA,
+       AuthModule
     ],
     controllers:
     [ 
@@ -43,7 +47,8 @@ from './services/services.index';
         LicenciasService,
         ControlLicenciaService,
         SolicitudLicenciaService,
-        LicecniaUsuarioService
+        LicecniaUsuarioService,
+        UsersService
     ]
 })
 export class LicenciasModule {}

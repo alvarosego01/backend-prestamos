@@ -15,6 +15,8 @@ import
 } 
 from '../models/schemas/index.schema';
 
+import {Cron, CronExpression} from '@nestjs/schedule'
+
 @Injectable()
 export class ControlLicenciaService 
 {
@@ -24,8 +26,14 @@ export class ControlLicenciaService
     (
         private _processData:ProcessDataService,
         private _dateService: DateProcessService,
-    ){}
+    )
+    {
 
-    
+    }
+
+    private relooControl()
+    {
+
+    }
 
 }

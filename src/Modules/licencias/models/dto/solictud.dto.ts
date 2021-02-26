@@ -16,10 +16,12 @@ export class setLicenciaUserDto
     @IsNotEmpty()
     @IsString()
     licencia:string
-
+ 
     @IsNotEmpty()
     @IsString()
     dias:number
 
+    @IsNotEmpty()
+    @IsString()
     status:string
 }

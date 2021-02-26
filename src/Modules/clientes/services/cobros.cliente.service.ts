@@ -164,6 +164,7 @@ export class CobrosClienteService
            _Negocio.cuotas.push(data);
 
            //actualizamos las tablas de cobro y negocio
+           cobro.cuota_nro = data.cuotas_pagas;
            _Negocio = await this.refreshNegocioCliente(_Negocio);
            _Cobro = await this.saveNewCobro(cobro);
 
@@ -234,7 +235,7 @@ export class CobrosClienteService
         this.addNewCuota(negocio, cobro);
         //me jalo la ultima cuota realizada
         aux = negocio.cuotas[negocio.cuotas.length -1];
-        console.log(aux);
+        //console.log(aux);
         //opero la penalizacion, el restante y el nro de cuotas pagadas
         this._Cuota.restante      = aux.restante - cobro.monto ;
         this._Cuota.cuotas_pagas  = aux.cuotas_pagas +1;

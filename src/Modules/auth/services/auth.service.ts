@@ -21,6 +21,7 @@ import { responseInterface, _argsFind, _argsUpdate } from 'src/Response/interfac
 import { DateProcessService, ProcessDataService } from 'src/Classes/classes.index';
 import { SetUserMenuService } from './authServices.index';
 import { UserDto } from 'src/Modules/users/models/dto/user.dto';
+import {PermisoService} from '../../permisos/services/permisos.service';
 
 
 import {VisitGateway} from '../socket/gateways/gateways.index';
@@ -37,7 +38,8 @@ export class AuthService {
     private _processData: ProcessDataService,
     public _setUserMenu: SetUserMenuService,
     private _dateProcessService: DateProcessService,
-    private _visitGateway: VisitGateway
+    private _visitGateway: VisitGateway,
+    private _permisoService: PermisoService
   ) {}
 
   async signup(signupDto: SignupDto): Promise<responseInterface>
@@ -103,6 +105,12 @@ export class AuthService {
 
   }
 
+  private async permisos(id:string):Promise<responseInterface>
+  {
+    this._Response = await this._permisoService.getOnePermisoByUser(id);
+    return this._Response.data;
+  }
+
   async signin(signinDto: SigninDto): Promise<responseInterface>
   {
     const { email, pass } = signinDto;
@@ -136,7 +144,9 @@ export class AuthService {
         const payload: IJwtPayload = {
           _id: r.data._id,
           email: r.data.email,
-          rol: r.data.rol
+          rol: r.data.rol,
+          status: r.data.status,
+          permisos: await this.permisos(r.data._id)
         };
         const token = await this._jwtService.sign(payload);
         const l: sessionDTO = {
@@ -159,6 +169,8 @@ export class AuthService {
           createdAt: r.data.createdAt,
           updatedAt: r.data.updatedAt,
           last_session: r.data.last_session
+
+          // updatedAt: r.data.updatedAt
           // userMenu: this._setUserMenu.setMenu(r.data.rol.rol)
 
         }

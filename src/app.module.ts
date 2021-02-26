@@ -5,7 +5,7 @@ import { MiddlewareModule } from "./Middlewares/middleware.module";
 import { Module } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-
+import { ScheduleModule } from '@nestjs/schedule';
 // conexion con mongo
 
 // MODULOS DE RUTAS
@@ -19,8 +19,10 @@ import {
   EnrutadorModule,
   ClientesModule,
   LicenciasModule,
-  CobradorModule,
-  BitacoraModule
+  BitacoraModule,
+  NominaModule,
+  PermisosModule,
+  CobradoresModule
 } from "./Modules/Routes.module.index";
 
 // MODULOS DE LOADING Y OTROS
@@ -32,6 +34,7 @@ import { _MONGOOSEMODULE } from "./Database/mongo-config";
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ClassesModule,
     _MONGOOSEMODULE,
     ConfigModule,
@@ -42,11 +45,14 @@ import { _MONGOOSEMODULE } from "./Database/mongo-config";
     ChatModule,
     AdminModule,
     RoleModule,
-    CobradorModule,
+    // CobradorModule,
     EnrutadorModule,
     ClientesModule,
     LicenciasModule,
-    BitacoraModule
+    BitacoraModule,
+    NominaModule,
+    PermisosModule,
+    CobradoresModule
   ],
   controllers: [AppController],
   providers: [ AppService],

@@ -14,3 +14,12 @@ export { EnrutadorModule} from "./enrutador/enrutador.module"
 export { ClientesModule } from "./clientes/clientes.module"
 export { LicenciasModule } from "./licencias/licencias.module"
 export { BitacoraModule } from "./bitacora/bitacora.module"
+export { NominaModule } from "./nomina/nomina.module"
+export { PermisosModule } from "./permisos/permisos.module"
+export { CobradoresModule } from "./cobradores/cobradores.module"
+
+
+
+
+
+

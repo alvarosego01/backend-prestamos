@@ -9,6 +9,9 @@ import {AuthGuard} from "@nestjs/passport";
 import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
 import {RoleGuard} from "src/Modules/role/guards/role.guard";
 
+import { AuthGuard, PassportModule } from '@nestjs/passport';
+import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
+import {RoleGuard} from "src/Modules/role/guards/role.guard";
 
 @Controller("admin")
 export class AdminController
@@ -21,7 +24,14 @@ export class AdminController
         private _licAdmin:AdminLicService,
         private _histAdmin:AdminHistService
     ){}
+<<<<<<< HEAD
 
+=======
+    
+
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
+>>>>>>> teddy
     @Get("users")
     async getUser(@Response() res:any):Promise<responseInterface>
     {
@@ -30,6 +40,8 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
     @Get("users/roles")
     async getRoles(@Response() res:any):Promise<responseInterface>
     {
@@ -38,9 +50,14 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
+<<<<<<< HEAD
 
     @RolesDecorator('ADMIN_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
+=======
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
+>>>>>>> teddy
     @Post("users/roles/:id")
     async setRoleUser(@Body() body: any, @Response() res:any, @Param('id') id:string):Promise<responseInterface>
     {
@@ -48,8 +65,14 @@ export class AdminController
 
         return res.status(this._Response.status).json(this._Response);
     }
+<<<<<<< HEAD
 
 
+=======
+    
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
+>>>>>>> teddy
     @Get("users/licencias")
     async getSavedLicenses(@Response() res:any):Promise<responseInterface>
     {
@@ -58,6 +81,8 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
     @Post("users/licencias")
     async setUsers(@Body() body: LicenseDto, @Response() res: any): Promise<responseInterface>
     {
@@ -66,6 +91,8 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
     @Delete("users/licencias/:id") //borrar la licencia de un usuario
     async deleteUserLicense(@Response() res:any, @Param('id') id:string):Promise<responseInterface>
     {
@@ -74,6 +101,8 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
     @Get("users/licencias/:id") //ver la licencia de un usuario en particular
     async getUserLicense(@Response() res:any, @Param('id') id:string):Promise<responseInterface>
     {
@@ -82,6 +111,8 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard(), RoleGuard) 
     @Put("users/licencias/:id") //modificar licencia a un usuario
     async changeStatusLic(@Body() body: LicenseChangeStatusDto, @Response() res: any, @Param('id') id:string): Promise<responseInterface>
     {
@@ -90,6 +121,7 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
+<<<<<<< HEAD
     /*
     @Get("bitacora")//obtiene todos los registro de bitacora
     async getBitacoraAdmin(@Response() res: any): Promise<responseInterface>
@@ -118,3 +150,7 @@ export class AdminController
 
 
 }
+=======
+    
+}
+>>>>>>> teddy

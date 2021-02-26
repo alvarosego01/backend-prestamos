@@ -8,7 +8,7 @@ import { DateProcessService } from "../classes.index";
 @Injectable()
 export class ProcessDataService {
   constructor(
-    private _dateProcessService: DateProcessService
+    private _dateProcessService: DateProcessService 
   ){
 
   }
@@ -117,6 +117,50 @@ export class ProcessDataService {
         resolve(resp);
 
     	});
+
+    });
+  }
+
+  async _AllFindDB(dataBody: any, parameters: _argsPagination = null): Promise<responseInterface> {
+
+    return new Promise(async (resolve, reject) => {
+
+    await dataBody.find(
+      parameters.findObject,
+      (error, response) => {
+
+        if (error) {
+
+          const resp: responseInterface = {
+            ok: false,
+            status: 500,
+            message: 'Algo ha salido mal, intente más tarde',
+            err: error,
+          };
+          reject(resp);
+
+        }
+
+        if(!response){
+
+          const resp: responseInterface = {
+            ok: false,
+            status: 404,
+            message: 'No hay resultados en este momento'
+
+          };
+          reject(resp);
+
+        }
+
+        const resp: responseInterface = {
+          ok: true,
+          status: 200,
+          data: response
+        };
+        resolve(resp);
+
+      });
 
     });
   }
