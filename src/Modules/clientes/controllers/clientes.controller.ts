@@ -1,19 +1,12 @@
-<<<<<<< HEAD
 import { Controller, Response, Get, Post, Body, Param, Delete, UseGuards, Put } from '@nestjs/common';
 import {AuthGuard} from '@nestjs/passport';
 import {SameUserAuthGuard} from 'src/Modules/auth/guards/same-user-auth.guard';
 import {RolesDecorator} from 'src/Modules/role/decorators/role.decorator';
 import {RoleGuard} from 'src/Modules/role/guards/role.guard';
-=======
-import { Controller, Response, Get, Post, Body, Param, Delete, UseGuards } from '@nestjs/common';
->>>>>>> teddy
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
 import { ClienteDto } from '../models/dto/index.dto';
 import { ClienteService, RutaClienteService } from '../services/services.index';
 
-import { AuthGuard, PassportModule } from '@nestjs/passport';
-import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
-import {RoleGuard} from "src/Modules/role/guards/roleGuard.index";
 
 @Controller('clientes')
 export class ClientesController
@@ -75,7 +68,7 @@ export class ClientesController
 
 =======
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
+    @UseGuards(AuthGuard(), RoleGuard)
 >>>>>>> teddy
     @Get('all/:cobrador')//obtengo los cliente pertenecientes al cobrdor
     async getAllClientes(@Param('cobrador') cobrador:string, @Response() res:any):Promise<responseInterface>
@@ -90,7 +83,7 @@ export class ClientesController
 =======
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
+    @UseGuards(AuthGuard(), RoleGuard)
     @Get(':cliente/:cobrador')//obtengo el cliente perteneciente al cobrador
     async getOneCliente(@Param() params:string[], @Response() res:any):Promise<responseInterface>
 >>>>>>> teddy
@@ -104,7 +97,7 @@ export class ClientesController
     async getOneClienteById(@Param() params:string[], @Response() res:any):Promise<responseInterface>
 =======
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
+    @UseGuards(AuthGuard(), RoleGuard)
     @Post('crear/:cobrador')//tomo formulario y creo un cliente
     async createNewCliente(@Param('cobrador') cobrador:string, @Body() body:ClienteDto, @Response() res:any):Promise<responseInterface>
 >>>>>>> teddy
@@ -118,7 +111,7 @@ export class ClientesController
     async getOneCliente(@Param() params:string[], @Response() res:any):Promise<responseInterface>
 =======
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
+    @UseGuards(AuthGuard(), RoleGuard)
     @Delete('borrar/:cliente')//tomo el id del cliente y lo borro, pero bajo confirmacion del admin
     async delOneCliente(@Param('cliente') cliente:string, @Response() res:any):Promise<responseInterface>
 >>>>>>> teddy
@@ -138,7 +131,7 @@ export class ClientesController
     async delOneCliente(@Param('cliente') cliente:string, @Response() res:any):Promise<responseInterface>
 =======
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
+    @UseGuards(AuthGuard(), RoleGuard)
     @Post('enlazar/:cliente/:ruta')//tomo el id del cliente y el id de la ruta y lo enlazo
     async linkToRouteOneCliente(@Param() params:string[], @Body() enlace:any, @Response() res:any):Promise<responseInterface>
 >>>>>>> teddy

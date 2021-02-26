@@ -1,12 +1,5 @@
-<<<<<<< HEAD
 import { Response, Controller, Get, Post, Body, Put, Param, Delete, UseGuards , Request} from '@nestjs/common';
-import {AuthGuard} from '@nestjs/passport';
 import {SameUserAuthGuard} from 'src/Modules/auth/guards/same-user-auth.guard';
-import {RolesDecorator} from 'src/Modules/role/decorators/role.decorator';
-import {RoleGuard} from 'src/Modules/role/guards/role.guard';
-=======
-import { Response, Controller, Get, Post, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
->>>>>>> teddy
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
 import { RutaDto } from '../models/dto/ruta.dto';
 import { RutaService } from '../services/ruta.service';
