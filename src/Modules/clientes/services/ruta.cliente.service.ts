@@ -28,53 +28,48 @@ export class RutaClienteService
         private _dateProcessService:DateProcessService
     ){}
 
-    // async linkToRouteOneCliente(ruta:string, cliente:string):Promise<responseInterface>
-    // {
-    //     const args: _argsFind =
-    //     {
-    //         findObject: { _id:ruta },
-    //         populate: null
-    //         // select: "rol"
-    //     }
+    async linkToRouteOneCliente(ruta:string, cliente:string):Promise<responseInterface>
+    {
+        const args: _argsFind =
+        {
+            findObject: { _id:ruta },
+            populate: null
+            // select: "rol"
+        }
 
-    //     await this._processData._findOneDB(this.rutaModel, args).then(r =>
-    //     {
-    //        return this.assignOneCliente(r.data, cliente);
+        await this._processData._findOneDB(this.rutaModel, args).then(r =>
+        {
+           return this.assignOneCliente(r.data, cliente);
 
-    //     }, err =>
-    //     {
-    //         this._Response = err;
-    //     });
+        }, err =>
+        {
+            this._Response = err;
+        });
 
-    //     return this._Response;
-    // }
+        return this._Response;
+    }
 
-    // private async assignOneCliente(ruta:Ruta, cliente:string):Promise<responseInterface>
-    // {
-        // ruta.clientes_id.push(cliente);
+    private async assignOneCliente(ruta:Ruta, cliente:string):Promise<responseInterface>
+    {
+        ruta.negocios_id.push(cliente);
+        ruta.updatedAt = this._dateProcessService.setDate();
 
-        // ruta.updatedAt = this._dateProcessService.setDate();
-    // private async assignOneCliente(ruta:Ruta, cliente:string):Promise<responseInterface>
-    // {
-        // ruta.negocios_id.push(cliente);
-        // ruta.updatedAt = this._dateProcessService.setDate();
+        const _args:_argsUpdate =
+        {
+            findObject: { _id:ruta },
+            set: { $set:ruta }
+        }
 
-    //     const _args:_argsUpdate =
-    //     {
-    //         findObject: { _id:ruta },
-    //         set: { $set:ruta }
-    //     }
+        await this._processData._updateDB(this.rutaModel, _args).then(r =>
+        {
+            this._Response = r;
 
-    //     await this._processData._updateDB(this.rutaModel, _args).then(r =>
-    //     {
-    //         this._Response = r;
+        }, err =>
+        {
 
-    //     }, err =>
-    //     {
+            this._Response = err;
+        });
 
-    //         this._Response = err;
-    //     });
-
-    //     return this._Response;
-    // }
+        return this._Response;
+    }
 }

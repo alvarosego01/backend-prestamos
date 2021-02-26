@@ -5,9 +5,7 @@ import { RoleUserDto } from "../models/dto/admin.dto";
 import { LicenseDto, LicenseChangeStatusDto, BitacoraDto} from "../models/dto/dto.index";
 import { BitacoraInterface } from "../models/interfaces/bitacora.interface";
 import { ActionAdmin, ActionDescp } from "../models/actionTypes.enum";
-import {AuthGuard} from "@nestjs/passport";
-import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
-import {RoleGuard} from "src/Modules/role/guards/role.guard";
+
 
 import { AuthGuard, PassportModule } from '@nestjs/passport';
 import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
@@ -24,14 +22,11 @@ export class AdminController
         private _licAdmin:AdminLicService,
         private _histAdmin:AdminHistService
     ){}
-<<<<<<< HEAD
 
-=======
-    
+
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
->>>>>>> teddy
+    @UseGuards(AuthGuard(), RoleGuard)
     @Get("users")
     async getUser(@Response() res:any):Promise<responseInterface>
     {
@@ -41,7 +36,7 @@ export class AdminController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
+    @UseGuards(AuthGuard(), RoleGuard)
     @Get("users/roles")
     async getRoles(@Response() res:any):Promise<responseInterface>
     {
@@ -50,14 +45,8 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
-<<<<<<< HEAD
-
-    @RolesDecorator('ADMIN_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
-=======
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
->>>>>>> teddy
+    @UseGuards(AuthGuard(), RoleGuard)
     @Post("users/roles/:id")
     async setRoleUser(@Body() body: any, @Response() res:any, @Param('id') id:string):Promise<responseInterface>
     {
@@ -65,14 +54,11 @@ export class AdminController
 
         return res.status(this._Response.status).json(this._Response);
     }
-<<<<<<< HEAD
 
 
-=======
-    
+
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
->>>>>>> teddy
+    @UseGuards(AuthGuard(), RoleGuard)
     @Get("users/licencias")
     async getSavedLicenses(@Response() res:any):Promise<responseInterface>
     {
@@ -82,7 +68,7 @@ export class AdminController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
+    @UseGuards(AuthGuard(), RoleGuard)
     @Post("users/licencias")
     async setUsers(@Body() body: LicenseDto, @Response() res: any): Promise<responseInterface>
     {
@@ -92,7 +78,7 @@ export class AdminController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
+    @UseGuards(AuthGuard(), RoleGuard)
     @Delete("users/licencias/:id") //borrar la licencia de un usuario
     async deleteUserLicense(@Response() res:any, @Param('id') id:string):Promise<responseInterface>
     {
@@ -102,7 +88,7 @@ export class AdminController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
+    @UseGuards(AuthGuard(), RoleGuard)
     @Get("users/licencias/:id") //ver la licencia de un usuario en particular
     async getUserLicense(@Response() res:any, @Param('id') id:string):Promise<responseInterface>
     {
@@ -112,7 +98,7 @@ export class AdminController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
+    @UseGuards(AuthGuard(), RoleGuard)
     @Put("users/licencias/:id") //modificar licencia a un usuario
     async changeStatusLic(@Body() body: LicenseChangeStatusDto, @Response() res: any, @Param('id') id:string): Promise<responseInterface>
     {
@@ -121,7 +107,6 @@ export class AdminController
         return res.status(this._Response.status).json(this._Response);
     }
 
-<<<<<<< HEAD
     /*
     @Get("bitacora")//obtiene todos los registro de bitacora
     async getBitacoraAdmin(@Response() res: any): Promise<responseInterface>
@@ -133,24 +118,22 @@ export class AdminController
     */
 
     //to DO -> la siguiente ruta es de prueba de bitacora, tratar de implementar cuanto antes
-    private body:BitacoraInterface;
-    @Post("bitacora")
-    async setBitacora( @Response() res: any)
-    {
-        this.body = new BitacoraDto;
-        this.body.status = ActionAdmin.LICENSE;
-        this.body.admin = "5f74f168e6e4cd1f64bf0b93";
-        this.body.usuario = "5f74f168e6e4cd1f64bf0b93";
-        this.body.descripcion = ActionDescp.SET_LICENSE;
+//     private body:BitacoraInterface;
+//     @Post("bitacora")
+//     async setBitacora( @Response() res: any)
+//     {
+//         this.body = new BitacoraDto;
+//         this.body.status = ActionAdmin.LICENSE;
+//         this.body.admin = "5f74f168e6e4cd1f64bf0b93";
+//         this.body.usuario = "5f74f168e6e4cd1f64bf0b93";
+//         this.body.descripcion = ActionDescp.SET_LICENSE;
 
-        console.log("ActionAdmin", this.body, " ", this._histAdmin.setBitacora(this.body));
+//         console.log("ActionAdmin", this.body, " ", this._histAdmin.setBitacora(this.body));
 
-        return res.status(200).json(this.body);
-    }
+//         return res.status(200).json(this.body);
+//     }
 
+
+// }
 
 }
-=======
-    
-}
->>>>>>> teddy
