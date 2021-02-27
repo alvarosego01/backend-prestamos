@@ -4,6 +4,7 @@ import { VisitListService } from './services/visit-list.service';
 
 
 
+
 @Module({
   providers: [ VisitGateway, VisitListService],
   exports: [ VisitListService, VisitGateway ]
