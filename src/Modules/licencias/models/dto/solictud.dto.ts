@@ -21,7 +21,6 @@ export class setLicenciaUserDto
     @IsString()
     dias:number
 
-    @IsNotEmpty()
     @IsString()
     status:string
 }

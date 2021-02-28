@@ -60,15 +60,14 @@ export class RutaService
     }
 
     //necesito el id del enrutador y el id de la ruta
-    async getOneRoute(enrutador:string, ruta:string):Promise<responseInterface>
+    async getOneRoute(ruta:string):Promise<responseInterface>
     {
 
         const args: _argsFind =
         {
             findObject:
             {
-                _id:ruta,
-                enrutador_id:enrutador,
+                _id:ruta
             },
             // populate: "clientes_id"
             // populate: {

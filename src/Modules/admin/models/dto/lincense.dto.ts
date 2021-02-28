@@ -15,7 +15,7 @@ export class LicenseDto
   @IsString()
   admin: string;
   @IsNotEmpty()
-  @IsNumber()
+  @IsNumber() 
   precio: number;
   @IsNotEmpty()
   @IsNumber()

@@ -20,6 +20,7 @@ import {AuthGuard} from "@nestjs/passport";
 import {SameUserAuthGuard} from "src/Modules/auth/guards/same-user-auth.guard";
 import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
 import {RoleGuard} from "src/Modules/role/guards/role.guard";
+import { UsersService } from "src/Modules/users/services/users.service";
 
 
 import {responseInterface} from "src/Response/interfaces/interfaces.index";
@@ -30,7 +31,12 @@ export class SearchController {
 
   _Response: responseInterface;
 
-  constructor(private _searchService: SearchService) { }
+  constructor(
+    private _searchService: SearchService,
+    private _userService: UsersService
+    ) { }
+
+
 
 
   // @RolesDecorator('ADMIN_ROLE')
@@ -88,5 +94,11 @@ export class SearchController {
     return res.status(this._Response.status).json(this._Response);
   }
 
+
+  // constructor(private _userService: UsersService) {}
+  @Get()
+  getHello(): string {
+    return "Ruta para el sistema de busqueda";
+  }
 
 }

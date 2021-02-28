@@ -55,7 +55,10 @@ export class UsersController {
 
   // @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
   // @UseGuards(AuthGuard('jwt'), RoleGuard)
-  @Get("getOne/:id")
+  // @Get("getOne/:id")
+  @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  @UseGuards(AuthGuard(), RoleGuard)
+  @Get(":id")
   async getOneUser(
     @Param("id") id: string,
     @Response() res: any
@@ -79,6 +82,8 @@ export class UsersController {
     return res.status(this._Response.status).json(this._Response);
   }
 
+  @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  @UseGuards(AuthGuard(), RoleGuard)
   @Post()
   async setUsers(@Body() body:Users, @Response() res:any ): Promise<responseInterface>
   {
@@ -87,7 +92,9 @@ export class UsersController {
     return res.status(this._Response.status).json(this._Response);
   }
 
-  @UseGuards(AuthGuard('jwt'), SameUserAuthGuard)
+  // @UseGuards(AuthGuard('jwt'), SameUserAuthGuard)
+  @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  @UseGuards(AuthGuard(), RoleGuard)
   @Put(':id')
   @UsePipes(ValidationPipe)
   async modifyUsers(@Body() user: updateUserDto, @Param('id') id:string, @Response() res:any)
@@ -98,8 +105,11 @@ export class UsersController {
   }
 
 
-  @RolesDecorator('ADMIN_ROLE')
-  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  // @RolesDecorator('ADMIN_ROLE')
+  // @UseGuards(AuthGuard('jwt'), RoleGuard)
+
+  @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  @UseGuards(AuthGuard(), RoleGuard)
   @Delete(':id')
   async deleteUsers(@Param('id') id:string, @Response() res:any)
   {

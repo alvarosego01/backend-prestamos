@@ -12,7 +12,6 @@ import { ScheduleModule } from '@nestjs/schedule';
 import {
   UsersModule,
   SearchModule,
-  ChatModule,
   AdminModule,
   AuthModule,
   RoleModule,
@@ -42,7 +41,6 @@ import { _MONGOOSEMODULE } from "./Database/mongo-config";
     MiddlewareModule,
     UsersModule,
     SearchModule,
-    ChatModule,
     AdminModule,
     RoleModule,
     // CobradorModule,

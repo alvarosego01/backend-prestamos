@@ -32,7 +32,7 @@ export class LicenciasController
         return res.status(200).json("ruta especializadas en licencias y solicitudes de las mismas");
     }
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @RolesDecorator('ADMIN_ROLE')
     @UseGuards(AuthGuard(), RoleGuard)
     @Get()//obtengo todas las licencias creadas
     async getAllLicencias( @Response() res:any ):Promise<responseInterface>
@@ -41,7 +41,7 @@ export class LicenciasController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @RolesDecorator('ADMIN_ROLE')
     @UseGuards(AuthGuard(), RoleGuard)
     @Post('crear')//paso el formulario de creación de licencias
     async createNewLicencia(@Body() body:creationLicenciaDto, @Response() res:any ):Promise<responseInterface>
@@ -50,7 +50,7 @@ export class LicenciasController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @RolesDecorator('ADMIN_ROLE')
     @UseGuards(AuthGuard(), RoleGuard)
     @Put('modificar/:id')//paso el formulario de creación de licencias para modificarla
     async modifyLicencia(@Param('id') id:string ,@Body() body:creationLicenciaDto, @Response() res:any ):Promise<responseInterface>
@@ -59,7 +59,7 @@ export class LicenciasController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @RolesDecorator('ADMIN_ROLE')
     @UseGuards(AuthGuard(), RoleGuard)
     @Delete('eliminar/:id')//elimino una licencia con el id
     async deleteLicencia(@Param('id') id:string ,@Response() res:any ):Promise<responseInterface>

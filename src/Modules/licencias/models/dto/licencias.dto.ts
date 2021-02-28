@@ -23,7 +23,7 @@ export class creationLicenciaDto
     observacion: string
 }
 
-export class modifyLicenciaDto
+export class modifyLicenciaDto 
 {
     @IsString()
     alias: string

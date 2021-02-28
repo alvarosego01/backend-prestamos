@@ -37,7 +37,7 @@ export class modifyCobroClienteDto
     @IsString()
     cobro_id:string;
 
-    @IsString()
+    @IsString() 
     observacion:string;
 
     @IsNotEmpty()

@@ -39,13 +39,6 @@ export class NegocioController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    /*@Get('calcular/:id')
-    async getCalculoSalario(@Response() res:any, @Param('id') id:string)
-    {
-        console.log("calculo de salario");
-        return res.status(this._Response.status).json(this._Response);
-    }*/
-
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'ENRUTATOR_ROLE')
     @UseGuards(AuthGuard(), RoleGuard)
     @Get('detalles')//ruta para obtener un negocio hecho por el cliente

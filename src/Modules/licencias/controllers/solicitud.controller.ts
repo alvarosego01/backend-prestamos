@@ -35,9 +35,7 @@ export class SolicitudLicenciaController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
-    @Post('postear')//ruta para pedir solictud de licencia
+    @Post('postear')//ruta para pedir una licencia
     async postRequireNewLicencia(@Body() body:solicitudLicenciaDto, @Response() res:any ):Promise<responseInterface>
     {
         this._Response = await this._solicitudLicenciaService.postRequireNewLicencia(body);
@@ -46,7 +44,7 @@ export class SolicitudLicenciaController
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     @UseGuards(AuthGuard(), RoleGuard)
-    @Delete('/borrar/:solicitud')//ruta para pedir solictud de licencia
+    @Delete('/borrar/:solicitud')//ruta para borrar solictud de licencia
     async deleteRequiredLicencia(@Param('solicitud') id:string, @Response() res:any ):Promise<responseInterface>
     {
         this._Response = await this._solicitudLicenciaService.deleteRequiredLicencia(id);
