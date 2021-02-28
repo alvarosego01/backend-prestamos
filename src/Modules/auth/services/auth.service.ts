@@ -148,6 +148,10 @@ export class AuthService {
           status: r.data.status,
           permisos: await this.permisos(r.data._id)
         };
+
+
+        console.log('payload', payload);
+
         const token = await this._jwtService.sign(payload);
         const l: sessionDTO = {
           _id: r.data._id,
