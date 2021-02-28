@@ -107,8 +107,8 @@ export class AuthService {
 
   private async permisos(id:string):Promise<responseInterface>
   {
-    this._Response = await this._permisoService.getOnePermisoByUser(id);
-    return this._Response.data;
+    let l: responseInterface = await this._permisoService.getOnePermisoByUser(id);
+    return l.data;
   }
 
   async signin(signinDto: SigninDto): Promise<responseInterface>
