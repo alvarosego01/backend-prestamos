@@ -54,7 +54,7 @@ export class BitacoraService
         {
             this._Response = err;
         });
-        return this._Response;
+        return this._Response; 
     }
 
     async getOneReportLog(log:GetReportDto):Promise<responseInterface>
@@ -81,7 +81,7 @@ export class BitacoraService
         {
             this._Response = err;
         });
-        return this._Response;
+        return this._Response; 
     }
 
     async getReportLog(log:GetReportDto):Promise<responseInterface>

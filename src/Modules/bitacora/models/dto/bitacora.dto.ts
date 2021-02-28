@@ -12,7 +12,7 @@ export class BitacoraDto
 
     @IsString()
     @IsNotEmpty()
-    action:string;
+    action:string; 
 
     @IsString()
     type:string;

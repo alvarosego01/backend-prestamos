@@ -42,7 +42,7 @@ export class BitacoraMainController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @RolesDecorator('ADMIN_ROLE')
     @UseGuards(AuthGuard(), RoleGuard) 
     @Get('report/all')//ruta solo administrativa, para obtener TODOS los roles
     async getAllReportLog(@Response() res:any):Promise<responseInterface>

@@ -1,4 +1,4 @@
-import { Response, Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Response, Body, Controller, Get, Param, Post, UseGuards, Put } from '@nestjs/common';
 import {responseInterface} from 'src/Response/interfaces/interfaces.index';
 import 
 {
@@ -24,7 +24,7 @@ export class LicenciaUsuarioController
     ) {}
     
     
-    @RolesDecorator('ADMIN_ROLE')
+    @RolesDecorator('ADMIN_ROLE') 
     @UseGuards(AuthGuard(), RoleGuard)
     @Post('establecer')//ruta para establecerle la licecnia al usuario
     async setUserNewLicencia(@Body() body:setLicenciaUserDto, @Response() res:any):Promise<responseInterface>
@@ -35,7 +35,7 @@ export class LicenciaUsuarioController
 
     @RolesDecorator('ADMIN_ROLE')
     @UseGuards(AuthGuard(), RoleGuard)
-    @Post('modificar')//modificar la licencia del usuario, buscandolo por su id
+    @Put('modificar')//modificar la licencia del usuario, buscandolo por su id
     async modifyUserLicencia(@Body() body:modifyUserLicenciaDto, @Response() res:any):Promise<responseInterface>
     {
         this._Response = await this._LicenciaUsuarioService.modifyOneLicense(body);
@@ -62,7 +62,7 @@ export class LicenciaUsuarioController
 
     @RolesDecorator('ADMIN_ROLE')
     @UseGuards(AuthGuard(), RoleGuard)
-    @Post('reactivar/:usuario')//ruta para obtener todas las licencias del usuario
+    @Post('reactivar/:usuario')//ruta para reactivar el usuario
     async reactiveUserByID(@Param('usuario') id: string, @Response() res:any): Promise<responseInterface>
     {
         this._Response = await this._LicenciaUsuarioService.modifyUserByUser(id, STATUS.ACTIVE);
@@ -71,7 +71,7 @@ export class LicenciaUsuarioController
 
     @RolesDecorator('ADMIN_ROLE')
     @UseGuards(AuthGuard(), RoleGuard)
-    @Post('desactivar/:usuario')//ruta para obtener todas las licencias del usuario
+    @Post('desactivar/:usuario')//ruta para desactivar el usuario
     async desactiveUserByID(@Param('usuario') id: string, @Response() res:any): Promise<responseInterface>
     {
         this._Response = await this._LicenciaUsuarioService.modifyUserByUser(id, STATUS.INACTIVE);
@@ -89,7 +89,7 @@ export class LicenciaUsuarioController
 
     @RolesDecorator('ADMIN_ROLE')
     @UseGuards(AuthGuard(), RoleGuard)
-    @Post('borrar/:licencia')//ruta para obtener todas las licencias del usuario
+    @Post('borrar/:licencia')//ruta para la licencia del usuario
     async deleteLicenseByID(@Param('licencia') id:string, @Response() res:any): Promise<responseInterface>
     {
         this._Response = await this._LicenciaUsuarioService.deleteLicenseByID(id);

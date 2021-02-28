@@ -83,6 +83,8 @@ export class LicecniaUsuarioService
         {
             lcUs.dias = lcUs.dias -1; 
             (lcUs.status === STATUS.INDEFINIDO)? lcUs.dias = 1 : false;
+            (lcUs.status === STATUS.CADUCADO)?   lcUs.dias = 0 : false;
+            (lcUs.status === STATUS.CANCELADA)?  lcUs.dias = 0 : false;
             (lcUs.dias <= 0)? lcUs.dias = 0 : false;
             (lcUs.dias <= 0)? this.modifyUserByUser(lcUs.usuario, STATUS.INACTIVE) : false;
             (lcUs.dias <= 0)? this.modifyOneLicense({_id:lcUs._id, status: STATUS.CADUCADO, dias: lcUs.dias }) : false;
@@ -192,7 +194,7 @@ export class LicecniaUsuarioService
         {
             dias: licencia.dias,
             status: licencia.status,
-            updatedAt: this._dateService.setDate(),
+            updatedAt: this._dateService.setDate(), 
         }
 
         // se crea el objeto de argumentos con el id de busqueda en especifico y la data a reemplazar en set
