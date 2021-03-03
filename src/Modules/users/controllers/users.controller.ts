@@ -45,7 +45,7 @@ export class UsersController {
   async getUsersEnrouters(@Response() res: any): Promise<responseInterface>
   {
 
-    console.log('entra a la maldita ruta');
+    // console.log('entra a la maldita ruta');
 
     this._Response = await this._userService.getUsersEnrouters();
 
