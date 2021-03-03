@@ -1,14 +1,14 @@
-import 
-{ 
-	Controller, 
+import
+{
+	Controller,
 	Response,
-	Param, 
+	Param,
 	Body,
 	Get,
 	Post,
 	Put,
 	Delete,
-	UseGuards 
+	UseGuards
 } from '@nestjs/common';
 
 import
@@ -16,12 +16,12 @@ import
 	responseInterface
 } from '../../../Response/interfaces/interfaces.index';
 
-import 
+import
 {
 	PermisoService
 } from '../services/index.service';
 
-import 
+import
 {
 	UserPermisosDTO,
 	ModifyPermisosDTO
@@ -34,7 +34,7 @@ import {RoleGuard} from "src/Modules/role/guards/roleGuard.index";
 
 
 @Controller('permisos')
-export class PermisoController 
+export class PermisoController
 {
 	private _Response:responseInterface;
 
@@ -43,7 +43,7 @@ export class PermisoController
 		private _permisoService:PermisoService
 	){}
 
-	@UseGuards(AuthGuard(), PermisosGuard)
+	@UseGuards(AuthGuard('jwt'), PermisosGuard)
 	@Get('hello')
 	async sayHello(@Response() res:any):Promise<responseInterface>
 	{
@@ -57,14 +57,14 @@ export class PermisoController
 		return res.status(this._Response.status).json(this._Response);
 	}
 
-	@Get('detalles/:id')//servicio que me entrega detalladamente un permiso a traves del id 
+	@Get('detalles/:id')//servicio que me entrega detalladamente un permiso a traves del id
 	async getOnePermisos(@Param('id') permiso:string, @Response() res:any):Promise<responseInterface>
 	{
 		this._Response = await this._permisoService.getOnePermiso(permiso);
 		return res.status(this._Response.status).json(this._Response);
 	}
 
-	@Get('user/:id')//servicio que me entrega detalladamente un permiso a traves del id 
+	@Get('user/:id')//servicio que me entrega detalladamente un permiso a traves del id
 	async getOnePermisoByUser(@Param('id') permiso:string, @Response() res:any):Promise<responseInterface>
 	{
 		this._Response = await this._permisoService.getOnePermisoByUser(permiso);

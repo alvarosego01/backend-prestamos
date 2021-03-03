@@ -31,7 +31,7 @@ export class NegocioController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get()//ruta para obtener todos los negocios de un cliente
     async getAllNegocio(@Response() res:any, @Body() value:NegocioPeticionDto):Promise<responseInterface>
     {
@@ -40,7 +40,7 @@ export class NegocioController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get('detalles')//ruta para obtener un negocio hecho por el cliente
     async getOneNegocio(@Response() res:any, @Body() value:NegocioUnicoPeticionDto):Promise<responseInterface>
     {
@@ -59,7 +59,7 @@ export class NegocioController
     // }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Put('modificar')
     async modifyOneNegocio(@Response() res:any, @Body() value:NegocioModificacionDto):Promise<responseInterface>
     {
@@ -68,7 +68,7 @@ export class NegocioController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Delete('eliminar')
     async deleteOneNegocio(@Response() res:any, @Body() value:any):Promise<responseInterface>
     {
@@ -87,7 +87,7 @@ export class NegocioController
 
 
 @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-@UseGuards(AuthGuard(), RoleGuard)
+@UseGuards(AuthGuard('jwt'), RoleGuard)
 @Post('crear')
 async makeOneNegocio(@Response() res:any, @Body() value:NegocioCreacionDto):Promise<responseInterface>
 {

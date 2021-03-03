@@ -1,14 +1,14 @@
-import 
-{ 
-	Controller, 
-	Response, 
+import
+{
+	Controller,
+	Response,
 	Body,
 	Param,
 	Get,
 	Post,
 	Put,
 	Delete,
-	UseGuards 
+	UseGuards
 } from '@nestjs/common';
 import
 {
@@ -17,7 +17,7 @@ import
 
 import { GastosoperacionesService } from '../services/gastosoperaciones.service';
 
-import 
+import
 {
 	CreateGastosOpDTO,
 	ModifyGastosOpDTO,
@@ -29,8 +29,8 @@ import { AuthGuard, PassportModule } from '@nestjs/passport';
 import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
 import {RoleGuard} from "src/Modules/role/guards/roleGuard.index";
 
-@Controller('cajachica/gastos') 
-export class GastosoperacionesController 
+@Controller('cajachica/gastos')
+export class GastosoperacionesController
 {
 	private _Response:responseInterface;
 
@@ -46,7 +46,7 @@ export class GastosoperacionesController
 	}
 
 	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
-  	@UseGuards(AuthGuard(), RoleGuard)
+  	@UseGuards(AuthGuard('jwt'), RoleGuard)
 	@Get('historial') //retorna datos por enrutador
 	async getAllGastosOperacion(@Response() res:any, @Body() ids:RetrieveGastosOpDTO):Promise<responseInterface>
 	{
@@ -55,16 +55,16 @@ export class GastosoperacionesController
 	}
 
 	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
-  	@UseGuards(AuthGuard(), RoleGuard)
+  	@UseGuards(AuthGuard('jwt'), RoleGuard)
 	@Get('historial/detalles') //retorna un slot del historial en especifico
 	async getOneGastoOperacion(@Response() res:any, @Body() ids:RetrieveGastosOpDTO):Promise<responseInterface>
 	{
 		this._Response = await this._gastosOperacion.getOneGastoOperacion(ids);
 		return res.status(this._Response.status).json(this._Response);
-	}	
+	}
 
 	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
-  	@UseGuards(AuthGuard(), RoleGuard)
+  	@UseGuards(AuthGuard('jwt'), RoleGuard)
 	@Post('')
 	async postOneGastosOperacion(@Response() res:any, @Body() body:CreateGastosOpDTO):Promise<responseInterface>
 	{
@@ -73,7 +73,7 @@ export class GastosoperacionesController
 	}
 
 	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-  	@UseGuards(AuthGuard(), RoleGuard)
+  	@UseGuards(AuthGuard('jwt'), RoleGuard)
 	@Put('')
 	async putOneGastosOperacion(@Response() res:any, @Body() body:ModifyGastosOpDTO):Promise<responseInterface>
 	{
@@ -82,7 +82,7 @@ export class GastosoperacionesController
 	}
 
 	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-  	@UseGuards(AuthGuard(), RoleGuard)
+  	@UseGuards(AuthGuard('jwt'), RoleGuard)
 	@Delete('borrar')
 	async deleteOneGastosOperacion(@Response() res:any, @Body() body:DeleteGastosOpDTO):Promise<responseInterface>
 	{

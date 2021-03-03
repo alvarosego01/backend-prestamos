@@ -7,7 +7,7 @@ import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
 import {RoleGuard} from "src/Modules/role/guards/roleGuard.index";
 
 @Controller('cliente/cobros/control')
-export class PeticionCobrosController 
+export class PeticionCobrosController
 {
     private _Response:responseInterface;
 
@@ -17,7 +17,7 @@ export class PeticionCobrosController
     ){}
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get(':enrutador')
     async getAllCobrosByEnrutador(@Param('enrutador') id:string, @Response() res:any):Promise<responseInterface>
     {
@@ -26,7 +26,7 @@ export class PeticionCobrosController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get('peticion/:peticion')
     async getOneCobrosById(@Param('peticion') id:string, @Response() res:any):Promise<responseInterface>
     {
@@ -35,7 +35,7 @@ export class PeticionCobrosController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Post('confirmar/:peticion')
     async confirmarOneCobroById(@Param('peticion') id:string, @Response() res:any):Promise<responseInterface>
     {
@@ -44,7 +44,7 @@ export class PeticionCobrosController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard) 
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Post('denegar/:peticion')
     async denegarOneCobroById(@Param('peticion') id:string, @Response() res:any):Promise<responseInterface>
     {

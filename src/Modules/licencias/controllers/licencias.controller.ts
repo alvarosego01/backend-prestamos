@@ -1,15 +1,15 @@
 import { Controller, Param, Body, Response, Get, Post, Put, Delete, UseGuards } from '@nestjs/common';
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
-import 
-{ 
+import
+{
     creationLicenciaDto,
     modifyLicenciaDto
-} 
+}
 from '../models/dto/dto.index';
-import 
-{ 
-    LicenciasService 
-} 
+import
+{
+    LicenciasService
+}
 from '../services/services.index';
 
 import { AuthGuard, PassportModule } from '@nestjs/passport';
@@ -17,7 +17,7 @@ import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
 import {RoleGuard} from "src/Modules/role/guards/roleGuard.index";
 
 @Controller('licencias')
-export class LicenciasController 
+export class LicenciasController
 {
     private _Response:responseInterface;
 
@@ -33,7 +33,7 @@ export class LicenciasController
     }
 
     @RolesDecorator('ADMIN_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get()//obtengo todas las licencias creadas
     async getAllLicencias( @Response() res:any ):Promise<responseInterface>
     {
@@ -42,7 +42,7 @@ export class LicenciasController
     }
 
     @RolesDecorator('ADMIN_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Post('crear')//paso el formulario de creación de licencias
     async createNewLicencia(@Body() body:creationLicenciaDto, @Response() res:any ):Promise<responseInterface>
     {
@@ -51,7 +51,7 @@ export class LicenciasController
     }
 
     @RolesDecorator('ADMIN_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Put('modificar/:id')//paso el formulario de creación de licencias para modificarla
     async modifyLicencia(@Param('id') id:string ,@Body() body:creationLicenciaDto, @Response() res:any ):Promise<responseInterface>
     {
@@ -60,7 +60,7 @@ export class LicenciasController
     }
 
     @RolesDecorator('ADMIN_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Delete('eliminar/:id')//elimino una licencia con el id
     async deleteLicencia(@Param('id') id:string ,@Response() res:any ):Promise<responseInterface>
     {

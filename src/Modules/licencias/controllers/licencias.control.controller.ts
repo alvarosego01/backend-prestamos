@@ -1,16 +1,16 @@
 import { Controller, Response, Get, Post, Param, Body, Delete, UseGuards } from '@nestjs/common';
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
-import 
-{ 
-    modifyUserLicenciaDto, 
+import
+{
+    modifyUserLicenciaDto,
     solicitudLicenciaDto ,
     setLicenciaUserDto
-} 
+}
 from '../models/dto/dto.index';
-import 
-{ 
+import
+{
     ControlLicenciaService
-} 
+}
 from '../services/services.index';
 
 import { AuthGuard, PassportModule } from '@nestjs/passport';
@@ -18,7 +18,7 @@ import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
 import {RoleGuard} from "src/Modules/role/guards/roleGuard.index";
 
 @Controller('licencias/control')
-export class ControlLicenciasController 
+export class ControlLicenciasController
 {
     private _Response:responseInterface;
 
@@ -34,7 +34,7 @@ export class ControlLicenciasController
     }
 
     /*@RolesDecorator('ADMIN_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Post('reloj')//ruta que configura el sistema de reloj de conteo de dias
     async setOnOffTimer(@Body() body:any, @Response() res:any):Promise<responseInterface>
     {

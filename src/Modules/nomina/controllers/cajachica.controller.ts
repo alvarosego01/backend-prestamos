@@ -10,9 +10,9 @@ import {
   UseGuards
 } from '@nestjs/common';
 
-import 
-{ 
-	responseInterface 
+import
+{
+	responseInterface
 } from 'src/Response/interfaces/interfaces.index';
 
 import
@@ -32,7 +32,7 @@ import {RoleGuard} from "src/Modules/role/guards/roleGuard.index";
 
 
 @Controller('cajachica')
-export class CajachicaController 
+export class CajachicaController
 {
 	private _Response:responseInterface;
 
@@ -48,7 +48,7 @@ export class CajachicaController
 	}
 
 	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-  	@UseGuards(AuthGuard(), RoleGuard)
+  	@UseGuards(AuthGuard('jwt'), RoleGuard)
 	@Get('all/:enrutador')//metodo que retorna todas las cajas chicas asignadas atraves de un enrutador
 	async getAllCajachicaByEnrutator(@Param('enrutador') id:string, @Response() res:any):Promise<responseInterface>
 	{
@@ -57,7 +57,7 @@ export class CajachicaController
 	}
 
 	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
-  	@UseGuards(AuthGuard(), RoleGuard)
+  	@UseGuards(AuthGuard('jwt'), RoleGuard)
 	@Get('detalles/:id')//metodo que me retorna una caja chica en particular
 	async getOneCajachicaByID(@Param('id') id:string, @Response() res:any):Promise<responseInterface>
 	{
@@ -66,7 +66,7 @@ export class CajachicaController
 	}
 
 	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-  	@UseGuards(AuthGuard(), RoleGuard)
+  	@UseGuards(AuthGuard('jwt'), RoleGuard)
 	@Post('crear')//método para crear una caja chica
 	async postOneCajachica(@Body() caja:CreateCajaChicaDTO, @Response() res:any):Promise<responseInterface>
 	{
@@ -75,7 +75,7 @@ export class CajachicaController
 	}
 
 	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-  	@UseGuards(AuthGuard(), RoleGuard)
+  	@UseGuards(AuthGuard('jwt'), RoleGuard)
 	@Put('modificar')//método para modificar una caja chica desde el id del cobrador
 	async putOneCajachica(@Body() caja:ModifyCajaChicaDTO, @Response() res:any):Promise<responseInterface>
 	{
@@ -84,7 +84,7 @@ export class CajachicaController
 	}
 
 	@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-  	@UseGuards(AuthGuard(), RoleGuard)
+  	@UseGuards(AuthGuard('jwt'), RoleGuard)
 	@Delete('eliminar/:id')//método que me permite borrar una caja chica por ID
 	async delCajachicaByID(@Param('id') id:string, @Response() res:any):Promise<responseInterface>
 	{

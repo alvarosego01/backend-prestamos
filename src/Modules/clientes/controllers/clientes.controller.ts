@@ -92,7 +92,7 @@ export class ClientesController
 
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get('all/:cobrador')//obtengo los cliente pertenecientes al cobrdor
     async getAllClientes(@Param('cobrador') cobrador:string, @Response() res:any):Promise<responseInterface>
     {
@@ -102,7 +102,7 @@ export class ClientesController
 
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get(':cliente/:cobrador')//obtengo el cliente perteneciente al cobrador
     async getOneCliente(@Param() params:string[], @Response() res:any):Promise<responseInterface>
     {
@@ -111,7 +111,7 @@ export class ClientesController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Post('crear/:cobrador')//tomo formulario y creo un cliente
     async createNewCliente(@Param('cobrador') cobrador:string, @Body() body:ClienteDto, @Response() res:any):Promise<responseInterface>
     {
@@ -120,7 +120,7 @@ export class ClientesController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Delete('borrar/:cliente')//tomo el id del cliente y lo borro, pero bajo confirmacion del admin
     async delOneCliente(@Param('cliente') cliente:string, @Response() res:any):Promise<responseInterface>
     {
@@ -129,7 +129,7 @@ export class ClientesController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Post('enlazar/:cliente/:ruta')//tomo el id del cliente y el id de la ruta y lo enlazo
     async linkToRouteOneCliente(@Param() params:string[], @Body() enlace:any, @Response() res:any):Promise<responseInterface>
     {
@@ -171,7 +171,7 @@ export class ClientesController
 //     }
 
 //     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-//     @UseGuards(AuthGuard(), RoleGuard)
+//     @UseGuards(AuthGuard('jwt'), RoleGuard)
 //     @Get('all/:cobrador')//obtengo los cliente pertenecientes al cobrdor
 //     async getAllClientes(@Param('cobrador') cobrador:string, @Response() res:any):Promise<responseInterface>
 //     {
@@ -181,7 +181,7 @@ export class ClientesController
 
 
 //     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
-//     @UseGuards(AuthGuard(), RoleGuard)
+//     @UseGuards(AuthGuard('jwt'), RoleGuard)
 //     @Get(':cliente/:cobrador')//obtengo el cliente perteneciente al cobrador
 //     async getOneCliente(@Param() params:string[], @Response() res:any):Promise<responseInterface>
 //     {
@@ -190,7 +190,7 @@ export class ClientesController
 //     }
 
 //     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'ENRUTATOR_ROLE')
-//     @UseGuards(AuthGuard(), RoleGuard)
+//     @UseGuards(AuthGuard('jwt'), RoleGuard)
 //     @Post('crear/:cobrador')//tomo formulario y creo un cliente
 //     async createNewCliente(@Param('cobrador') cobrador:string, @Body() body:ClienteDto, @Response() res:any):Promise<responseInterface>
 //     {
@@ -199,7 +199,7 @@ export class ClientesController
 //     }
 
 //     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-//     @UseGuards(AuthGuard(), RoleGuard)
+//     @UseGuards(AuthGuard('jwt'), RoleGuard)
 //     @Delete('borrar/:cliente')//tomo el id del cliente y lo borro, pero bajo confirmacion del admin
 //     async delOneCliente(@Param('cliente') cliente:string, @Response() res:any):Promise<responseInterface>
 //     {
@@ -208,7 +208,7 @@ export class ClientesController
 //     }
 
 //     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-//     @UseGuards(AuthGuard(), RoleGuard)
+//     @UseGuards(AuthGuard('jwt'), RoleGuard)
 //     @Post('enlazar/:cliente/:ruta')//tomo el id del cliente y el id de la ruta y lo enlazo
 //     async linkToRouteOneCliente(@Param() params:string[], @Body() enlace:any, @Response() res:any):Promise<responseInterface>
 //     {

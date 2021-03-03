@@ -37,7 +37,7 @@ export class RoleController {
   //@RolesDecorator('ADMIN_ROLE')
   //@UseGuards(AuthGuard('jwt'), RoleGuard)
   @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-  @UseGuards(AuthGuard(), RoleGuard)
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Get(':id')
   async getRole(@Param('id') id: string, @Response() res: any): Promise<responseInterface> {
 
@@ -50,7 +50,7 @@ export class RoleController {
   //@RolesDecorator('ADMIN_ROLE')
   //@UseGuards(AuthGuard('jwt'), RoleGuard)
   @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-  @UseGuards(AuthGuard(), RoleGuard)
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Get()
   async getRoles(@Response() res: any): Promise<responseInterface> {
 
@@ -62,7 +62,7 @@ export class RoleController {
   //@RolesDecorator('ADMIN_ROLE')
   //@UseGuards(AuthGuard('jwt'), RoleGuard)
   @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-  @UseGuards(AuthGuard(), RoleGuard)
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Post()
   async createRole(@Body() body: Roles ,@Response() res: any): Promise<responseInterface> {
 
@@ -75,7 +75,7 @@ export class RoleController {
   //@UseGuards(AuthGuard('jwt'), RoleGuard)
   //@UsePipes(ValidationPipe)
   @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-  @UseGuards(AuthGuard(), RoleGuard)
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
   @UsePipes(ValidationPipe)
   @Put(':id')
   async updateRole(@Param('id') id: string, @Body() body: RolesDto, @Response() res: any) {
@@ -89,7 +89,7 @@ export class RoleController {
   //@UseGuards(AuthGuard('jwt'), RoleGuard)
   //@UsePipes(ValidationPipe)
   @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-  @UseGuards(AuthGuard(), RoleGuard)
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
   @UsePipes(ValidationPipe)
   @Delete(':id')
   async deleteRole(@Param('id') id: string, @Response() res: any) {

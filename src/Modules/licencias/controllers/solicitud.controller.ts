@@ -9,7 +9,7 @@ import {RoleGuard} from "src/Modules/role/guards/roleGuard.index";
 
 @Controller('licencias/solicitud')
 export class SolicitudLicenciaController
-{ 
+{
     private _Response: responseInterface;
 
     constructor
@@ -18,7 +18,7 @@ export class SolicitudLicenciaController
     ){}
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get('obtener')//ruta para pedir solictud de licencia
     async getAllRequireNewLicencia(@Response() res:any ):Promise<responseInterface>
     {
@@ -27,7 +27,7 @@ export class SolicitudLicenciaController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get('obtener/:id')//ruta para pedir solictud de licencia
     async getOneRequireNewLicencia(@Param('id') id:string, @Response() res:any ):Promise<responseInterface>
     {
@@ -43,7 +43,7 @@ export class SolicitudLicenciaController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Delete('/borrar/:solicitud')//ruta para borrar solictud de licencia
     async deleteRequiredLicencia(@Param('solicitud') id:string, @Response() res:any ):Promise<responseInterface>
     {

@@ -26,7 +26,7 @@ export class AdminController
 
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get("users")
     async getUser(@Response() res:any):Promise<responseInterface>
     {
@@ -36,7 +36,7 @@ export class AdminController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get("users/roles")
     async getRoles(@Response() res:any):Promise<responseInterface>
     {
@@ -46,7 +46,7 @@ export class AdminController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Post("users/roles/:id")
     async setRoleUser(@Body() body: any, @Response() res:any, @Param('id') id:string):Promise<responseInterface>
     {
@@ -58,7 +58,7 @@ export class AdminController
 
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get("users/licencias")
     async getSavedLicenses(@Response() res:any):Promise<responseInterface>
     {
@@ -68,7 +68,7 @@ export class AdminController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Post("users/licencias")
     async setUsers(@Body() body: LicenseDto, @Response() res: any): Promise<responseInterface>
     {
@@ -78,7 +78,7 @@ export class AdminController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Delete("users/licencias/:id") //borrar la licencia de un usuario
     async deleteUserLicense(@Response() res:any, @Param('id') id:string):Promise<responseInterface>
     {
@@ -88,7 +88,7 @@ export class AdminController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get("users/licencias/:id") //ver la licencia de un usuario en particular
     async getUserLicense(@Response() res:any, @Param('id') id:string):Promise<responseInterface>
     {
@@ -98,7 +98,7 @@ export class AdminController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Put("users/licencias/:id") //modificar licencia a un usuario
     async changeStatusLic(@Body() body: LicenseChangeStatusDto, @Response() res: any, @Param('id') id:string): Promise<responseInterface>
     {

@@ -26,7 +26,7 @@ export class RutasController
     // }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     //necesito el id del enrutador para escupir todas las rutas q le pertenecen
     @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
@@ -38,7 +38,7 @@ export class RutasController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     //necesito el id de ruta para obtener la ruta deseada
     @Get('/:ruta')
     async getOneRoute(@Param('ruta') params:string, @Response() res:any):Promise<responseInterface>
@@ -48,7 +48,7 @@ export class RutasController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     //tomo el formulario de rutas y creo una nueva
     @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard )
@@ -60,7 +60,7 @@ export class RutasController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     //tomo el mismo formulario mas el id de ruta y la modifico
     @Put('modificar/:route')
     async modifyRoute(@Param('route') route:string, @Body() body:RutaDto, @Response() res:any):Promise<responseInterface>
@@ -70,7 +70,7 @@ export class RutasController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     //necesito el id de la ruta para borrarla
     @Delete('eliminar/:id')
     async deleteRoute(@Param('id') id:string, @Response() res:any):Promise<responseInterface>

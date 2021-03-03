@@ -1,14 +1,14 @@
-import 
-{ 
-	Controller, 
-	Response, 
+import
+{
+	Controller,
+	Response,
 	Param,
 	Body,
 	Get,
 	Post,
 	Put,
 	Delete,
-	UseGuards 
+	UseGuards
 } from '@nestjs/common';
 
 import
@@ -18,8 +18,8 @@ import
 
 import { PagoService } from '../services/pago.service';
 
-import 
-{ 
+import
+{
 	GetSalarioNominaDTO
 } from '../models/dto/index.dto';
 
@@ -29,7 +29,7 @@ import {RoleGuard} from "src/Modules/role/guards/roleGuard.index";
 
 
 @Controller('nomina/pago')
-export class PagoController 
+export class PagoController
 {
 	private _Response:responseInterface;
 
@@ -45,16 +45,16 @@ export class PagoController
 	}
 
 	@RolesDecorator('ENRUTATOR_ROLE')
-  	@UseGuards(AuthGuard(), RoleGuard)
+  	@UseGuards(AuthGuard('jwt'), RoleGuard)
 	@Get('calculo/cobrador') //ruta que calcular el salario por cobrador
 	async getCalculoSalarioByCobrador(@Response() res:any, @Body() ids:GetSalarioNominaDTO):Promise<responseInterface>
 	{
 		this._Response = await this._pagoService.getCalculoSalarioByCobrador(ids);
 		return res.status(this._Response.status).json(this._Response);
-	} 
+	}
 
 	@RolesDecorator('ENRUTATOR_ROLE')
-  	@UseGuards(AuthGuard(), RoleGuard)
+  	@UseGuards(AuthGuard('jwt'), RoleGuard)
 	@Get('calculo/enrutador') //ruta que calcular el salario por cobrador
 	async getCalculoSalarioByEnrutador(@Response() res:any, @Body() ids:GetSalarioNominaDTO):Promise<responseInterface>
 	{

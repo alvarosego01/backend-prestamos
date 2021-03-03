@@ -24,7 +24,7 @@ export class EnrutadorController
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard(), RoleGuard)
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Post('referencia')
     async generarReferencia(@Body() body:GenerarReferidoDto, @Response() res:any): Promise<responseInterface>
     {
