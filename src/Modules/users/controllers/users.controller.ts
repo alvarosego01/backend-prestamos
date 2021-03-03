@@ -58,7 +58,7 @@ export class UsersController {
   // @Get("getOne/:id")
   @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
   @UseGuards(AuthGuard('jwt'), RoleGuard)
-  @Get("getOne/:id")
+  @Get(":id")
   async getOneUser(
     @Param("id") id: string,
     @Response() res: any
