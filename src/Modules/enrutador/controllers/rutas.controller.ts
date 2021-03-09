@@ -25,6 +25,13 @@ export class RutasController
     //     return "Controlador de rutas activo";
     // }
 
+    @Get('allRoutes')//obtengo el cliente perteneciente al cobrador
+    async getAllClientsAdmin( @Response() res:any):Promise<responseInterface>
+    {
+        this._Response = await this._rutaService.getAllGlobalRoutes();
+        return res.status(this._Response.status).json(this._Response);
+    }
+
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
     //necesito el id del enrutador para escupir todas las rutas q le pertenecen

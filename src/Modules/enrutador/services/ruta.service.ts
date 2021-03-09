@@ -18,6 +18,45 @@ export class RutaService
         private _dateProcessService:DateProcessService
     ){}
 
+    async getAllGlobalRoutes():Promise<responseInterface>
+    {
+        const parameters: _dataPaginator =
+        {
+            page: 1 || _configPaginator.page,
+            limit: 12 || _configPaginator.limit,
+            customLabels: _configPaginator.customLabels,
+            sort: { _id: -1 },
+            populate: {
+                path: 'clientes_id',
+                // select: '-pass'
+              }
+
+        }
+
+        const args: _argsPagination =
+        {
+            findObject:
+            {
+                populate: [{ path: 'Negocio' }]
+            },
+            options: parameters
+        }
+
+        await this._processData._findDB(this.RutaModel, args).then((r: responseInterface) =>
+        {
+            this._Response = r;
+            this._Response.message = 'Rutas encontradas'
+
+        }, (err: responseInterface) =>
+        {
+            this._Response = err;
+            this._Response.message = err.message || 'Algo ha salido mal, intente más tarde'
+
+        });
+
+        return this._Response;
+    }
+
     //necesito el id del enrutador
     async getAllRoutes(page, enrutador:string):Promise<responseInterface>
     {
