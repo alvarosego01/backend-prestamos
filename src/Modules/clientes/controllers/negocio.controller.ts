@@ -48,15 +48,15 @@ export class NegocioController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    // @Post('/crear/:id/:idRuta')
+    @Post('/crear/:id/:idRuta')
     // async makeOneNegocio( @Param('id') idUser:string, @Param('idRuta') idRuta:string , @Response() res:any, @Body() value: any):Promise<responseInterface>
-    // async makeOneNegocio(@Response() res:any, @Body() value:NegocioCreacionDto):Promise<responseInterface>
-    // {
+    async makeOneNegocio(@Response() res:any, @Body() value: any, @Param('idRuta') idRuta:string ):Promise<responseInterface>
+    {
 
-    //     // console.log('entra');
-    //     this._Response = await this._negocioService.makeOneNegocio(value, idRuta);
-    //     return res.status(this._Response.status).json(this._Response);
-    // }
+        // console.log('entra');
+        this._Response = await this._negocioService.makeOneNegocio(value, idRuta);
+        return res.status(this._Response.status).json(this._Response);
+    }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
@@ -86,14 +86,14 @@ export class NegocioController
 
 
 
-@RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-@UseGuards(AuthGuard('jwt'), RoleGuard)
-@Post('crear')
-async makeOneNegocio(@Response() res:any, @Body() value:NegocioCreacionDto):Promise<responseInterface>
-{
-    this._Response = await this._negocioService.makeOneNegocio(value);
-    return res.status(this._Response.status).json(this._Response);
-}
+// @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+// @UseGuards(AuthGuard('jwt'), RoleGuard)
+// @Post('crear')
+// async makeOneNegocio(@Response() res:any, @Body() value:NegocioCreacionDto):Promise<responseInterface>
+// {
+//     this._Response = await this._negocioService.makeOneNegocio(value);
+//     return res.status(this._Response.status).json(this._Response);
+// }
 
 
 

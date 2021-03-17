@@ -66,10 +66,17 @@ export class RutaService
             limit: 12 || _configPaginator.limit,
             customLabels: _configPaginator.customLabels,
             sort: { _id: -1 },
-            populate: {
-                path: 'clientes_id',
-                // select: '-pass'
-              }
+            // populate: {
+            //     // path: 'clientes_id',
+            //     path: 'negocios_id',
+            //     // select: '-pass'
+            //   }
+            populate: [
+                {
+                    path: 'negocios_id',
+                    // model: 'Negocio'
+                }
+            ]
 
         }
 
@@ -78,10 +85,17 @@ export class RutaService
             findObject:
             {
                 enrutador_id: enrutador,
-                populate: [{ path: 'Negocio' }]
+                // populate: [
+                //     {
+                //         path: 'negocios_id',
+                //         // model: 'Negocio'
+                //     }
+                // ]
             },
             options: parameters
         }
+
+        console.log('los parametros', args);
 
         await this._processData._findDB(this.RutaModel, args).then((r: responseInterface) =>
         {

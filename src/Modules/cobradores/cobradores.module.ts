@@ -20,7 +20,7 @@ import
 	[
 		CajachicaController
 	],
-	imports: 
+	imports:
 	[
 		CajachicaService, CobradoresModelsModule
 	],

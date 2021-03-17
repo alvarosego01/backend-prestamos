@@ -17,6 +17,16 @@ export class CobradorController
     ){}
 
 
+    @Get('test')
+    async test(@Param() params:string[], @Response() res:any):Promise<responseInterface>
+    {
+
+      console.log('prueba test ruta');
+      return;
+
+    }
+
+
 
     // @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
     // @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
@@ -30,9 +40,9 @@ export class CobradorController
 
 
 
-  @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-  @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
-  @Get("byEnrouter/:id")
+  // @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  // @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
+  @Get("/byEnrouter/:id")
   async getUsersMyEnrouters(@Response() res: any, @Request() req: any, @Param("id") id: string, ): Promise<responseInterface>
   {
 

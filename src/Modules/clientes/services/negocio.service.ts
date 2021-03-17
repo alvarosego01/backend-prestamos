@@ -220,7 +220,7 @@ export class NegocioService
         return this._Response;
     }
 
-    async makeOneNegocio(negocio:NegocioCreacionDto):Promise<responseInterface>
+    async makeOneNegocio(negocio:NegocioCreacionDto, idRuta):Promise<responseInterface>
     {
         const data = new this._negocioModel(negocio);
 

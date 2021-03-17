@@ -32,12 +32,12 @@ export class RutasController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    // @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    // @UseGuards(AuthGuard('jwt'), RoleGuard)
     //necesito el id del enrutador para escupir todas las rutas q le pertenecen
-    @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
-    @Get('/:id')
+    // @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
+    // @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
+    @Get('/bysocio/:id')
     async getAllRoutes(@Param('id') enrutador:string, @Request() req: any,@Response() res:any):Promise<responseInterface>
     {
         this._Response = await this._rutaService.getAllRoutes(req.page, enrutador);
@@ -47,15 +47,15 @@ export class RutasController
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
     //necesito el id de ruta para obtener la ruta deseada
-    @Get('/:ruta')
+    @Get('/:ruta/:iduser')
     async getOneRoute(@Param('ruta') params:string, @Response() res:any):Promise<responseInterface>
     {
         this._Response = await this._rutaService.getOneRoute(params);
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    // @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    // @UseGuards(AuthGuard('jwt'), RoleGuard)
     //tomo el formulario de rutas y creo una nueva
     @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard )

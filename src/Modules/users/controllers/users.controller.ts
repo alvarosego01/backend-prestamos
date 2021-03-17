@@ -58,7 +58,7 @@ export class UsersController {
   // @Get("getOne/:id")
   @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
   @UseGuards(AuthGuard('jwt'), RoleGuard)
-  @Get(":id")
+  @Get("/getOne/:id")
   async getOneUser(
     @Param("id") id: string,
     @Response() res: any
@@ -118,3 +118,4 @@ export class UsersController {
     return res.status(this._Response.status).json(this._Response);
   }
 }
+// users/getOne/
