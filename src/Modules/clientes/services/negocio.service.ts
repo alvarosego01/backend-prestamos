@@ -87,41 +87,7 @@ export class NegocioService
 
 
 
-    // async addNegocioToRuta(idRuta: string, idNegocio: string){
 
-    //     const args: _argsFind =
-    //     {
-    //         findObject: { _id: idRuta },
-    //         populate: null
-    //     }
-    //     await this._processData._findOneDB(this.RutaModel, args).then( async (r) =>
-    //     {
-    //        this._Response = r;
-
-    //         let x: any = r.data;
-
-    //         x.negocios_id.push(idNegocio);
-
-
-    //         console.log('la x', x);
-
-    //        await this._processData._saveDB(x).then(r =>
-    //         {
-    //             this._Response = r;
-    //         },
-    //         err =>
-    //         {
-    //             console.log('error1', err);
-    //             this._Response = err;
-    //         });
-
-    //     }, err =>
-    //     {
-    //         console.log('error2', err);
-    //         this._Response = err;
-    //     });
-
-    // }
 
     // async makeOneNegocio(negocio: any, idRuta: string):Promise<responseInterface>
     // {
@@ -171,10 +137,54 @@ export class NegocioService
 
     constructor
     (
+        // @InjectModel(Negocio.name) private _negocioModel:Model<Negocio>,
+        // private _processData:ProcessDataService,
+        // private _dateProcessService:DateProcessService
+
         @InjectModel(Negocio.name) private _negocioModel:Model<Negocio>,
+        @InjectModel(Ruta.name) private RutaModel:Model<Ruta>,
         private _processData:ProcessDataService,
         private _dateProcessService:DateProcessService
+
     ){}
+
+
+
+    async addNegocioToRuta(idRuta: string, idNegocio: string){
+
+        const args: _argsFind =
+        {
+            findObject: { _id: idRuta },
+            populate: null
+        }
+        await this._processData._findOneDB(this.RutaModel, args).then( async (r) =>
+        {
+           this._Response = r;
+
+            let x: any = r.data;
+
+            x.negocios_id.push(idNegocio);
+
+
+            console.log('la x', x);
+
+           await this._processData._saveDB(x).then(r =>
+            {
+                this._Response = r;
+            },
+            err =>
+            {
+                console.log('error1', err);
+                this._Response = err;
+            });
+
+        }, err =>
+        {
+            console.log('error2', err);
+            this._Response = err;
+        });
+
+    }
 
     async getAllNegocio(negocio:NegocioPeticionDto):Promise<responseInterface>
     {
@@ -227,9 +237,13 @@ export class NegocioService
         data.total = negocio.venta + (negocio.venta * (negocio.interes/100));
         data.vcuotas = data.total/negocio.ncuotas;
 
-        await this._processData._saveDB(data).then(r =>
+        await this._processData._saveDB(data).then( async (r) =>
         {
             this._Response = r;
+
+            await this.addNegocioToRuta(idRuta, data._id);
+
+            this._Response.message = 'Venta añadida'
         },
         err =>
         {
@@ -265,3 +279,4 @@ export class NegocioService
 
 
 }
+
