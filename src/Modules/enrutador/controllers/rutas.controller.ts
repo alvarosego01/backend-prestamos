@@ -25,7 +25,18 @@ export class RutasController
     //     return "Controlador de rutas activo";
     // }
 
-    @Get('allRoutes')//obtengo el cliente perteneciente al cobrador
+    // obtener todos los clientes a partir de una ruta
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    @Get('/clientsbyroute/:ruta')
+    async getAllClientsByRoute(@Param('ruta') params:string, @Response() res:any):Promise<responseInterface>
+    {
+        this._Response = await this._rutaService.getAllClientsByRoute(params);
+
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+    @Get('allRoutes')
     async getAllClientsAdmin( @Response() res:any):Promise<responseInterface>
     {
         this._Response = await this._rutaService.getAllGlobalRoutes();
@@ -53,6 +64,8 @@ export class RutasController
         this._Response = await this._rutaService.getOneRoute(params);
         return res.status(this._Response.status).json(this._Response);
     }
+
+
 
     // @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     // @UseGuards(AuthGuard('jwt'), RoleGuard)

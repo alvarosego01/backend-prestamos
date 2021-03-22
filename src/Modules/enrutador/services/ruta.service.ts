@@ -160,6 +160,66 @@ export class RutaService
         return this._Response;
     }
 
+
+    async getAllClientsByRoute(ruta: string) :Promise<responseInterface> {
+
+        const args: _argsFind =
+        {
+            findObject:
+            {
+                _id:ruta
+            },
+            // populate: "clientes_id"
+            populate: {
+
+                path: 'negocios_id',
+                model: 'Negocio', // <- si es un array de ids se debe especificar el model
+                populate: [
+                    {
+                        path: 'cliente_id',
+                        model: 'Cliente',
+                        select: "",
+                    },
+                    {
+                        path: 'cobrador_id',
+                        select: '-pass',
+                        populate: {
+                            path: 'rol',
+                            select: 'rol alias',
+                        }
+                    }
+                ]
+
+            }
+
+        }
+
+        await this._processData._findOneDB(this.RutaModel, args).then( async (r: responseInterface) =>
+        {
+            let l = r;
+            let x = null;
+
+            x = r.data.negocios_id;
+
+            let d = {
+                ruta: ruta,
+                clientes: x
+            }
+
+            l.data = d;
+
+            this._Response = l;
+
+            // console.log('r.data respuesta', this._Response.data);
+        }, err =>
+        {
+            this._Response = err;
+        });
+
+        return this._Response;
+
+    }
+
     //necesito el formulario para añadir
     async createNewRoute(body:RutaDto):Promise<responseInterface>
     {
