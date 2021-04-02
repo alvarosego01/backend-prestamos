@@ -8,7 +8,7 @@ import { DateProcessService } from "../classes.index";
 @Injectable()
 export class ProcessDataService {
   constructor(
-    private _dateProcessService: DateProcessService 
+    private _dateProcessService: DateProcessService
   ){
 
   }
@@ -194,7 +194,7 @@ export class ProcessDataService {
           };
           reject(resp);
         }
-        console.log('todo exitoso', response);
+        console.log('consulta realizada', response);
           const resp: responseInterface = {
             ok: true,
             status: 200,

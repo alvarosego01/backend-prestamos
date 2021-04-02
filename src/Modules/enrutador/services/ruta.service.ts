@@ -210,6 +210,8 @@ export class RutaService
 
             this._Response = l;
 
+            console.log('consulta hecha', l);
+
             // console.log('r.data respuesta', this._Response.data);
         }, err =>
         {

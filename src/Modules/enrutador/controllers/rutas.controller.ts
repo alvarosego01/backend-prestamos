@@ -26,14 +26,17 @@ export class RutasController
     // }
 
     // obtener todos los clientes a partir de una ruta
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    // @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    // @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get('/clientsbyroute/:ruta')
     async getAllClientsByRoute(@Param('ruta') params:string, @Response() res:any):Promise<responseInterface>
     {
         this._Response = await this._rutaService.getAllClientsByRoute(params);
 
+        console.log('respuesta final', this._Response);
+
         return res.status(this._Response.status).json(this._Response);
+
     }
 
     @Get('allRoutes')
