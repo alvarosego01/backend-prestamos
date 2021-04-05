@@ -1,3 +1,4 @@
+
 import { Response, Controller, Get, Post, Body, Put, Param, Delete, UseGuards , Request} from '@nestjs/common';
 import {AuthGuard} from '@nestjs/passport';
 import {SameUserAuthGuard} from 'src/Modules/auth/guards/same-user-auth.guard';
@@ -5,6 +6,7 @@ import {RolesDecorator} from 'src/Modules/role/decorators/role.decorator';
 import {RoleGuard} from 'src/Modules/role/guards/role.guard';
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
 import {CobradorService} from '../services/cobrador.service';
+
 
 @Controller('cobrador')
 export class CobradorController
@@ -26,8 +28,6 @@ export class CobradorController
 
     }
 
-
-
     // @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
     // @UseGuards(AuthGuard('jwt'), RoleGuard, SameUserAuthGuard)
     @Get('/infoRuta/:id/:idRuta')
@@ -47,8 +47,8 @@ export class CobradorController
   {
 
     this._Response = await this._cobradorService.getCollectorsByEnrouter(req.page, id);
-
     return res.status(this._Response.status).json(this._Response);
+
   }
 
 

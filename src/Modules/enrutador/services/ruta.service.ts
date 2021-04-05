@@ -151,7 +151,7 @@ export class RutaService
         await this._processData._findOneDB(this.RutaModel, args).then(r =>
         {
             this._Response = r;
-            console.log('r.data respuesta', r.data);
+            // console.log('r.data respuesta', r.data);
         }, err =>
         {
             this._Response = err;

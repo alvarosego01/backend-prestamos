@@ -8,7 +8,7 @@ import {Negocio} from 'src/Modules/clientes/models/schemas/negocio.schema';
 import {Ruta} from 'src/Modules/enrutador/models/schemas/ruta.schema';
 import {Users} from 'src/Modules/users/models/schemas/userSchema';
 import {responseInterface, _argsFind, _argsPagination, _argsUpdate, _configPaginator, _dataPaginator} from 'src/Response/interfaces/interfaces.index';
-import {_argsPaginationAggregate} from 'src/Response/interfaces/responsePaginator.interface';
+import {_argsPaginationAggregate, _dataPaginatorAggregate} from 'src/Response/interfaces/responsePaginator.interface';
 
 
 import * as Mongoose from "mongoose";
@@ -30,48 +30,269 @@ export class CobradorService {
 
     async getCollectorsByEnrouter(page, id: string): Promise<responseInterface> {
 
-        const parameters: _dataPaginator={ // <- paginate parameters
+        // const parameters: _dataPaginator={ // <- paginate parameters
 
+        //     page: page||_configPaginator.page,
+        //     limit: 12||_configPaginator.limit,
+        //     customLabels: _configPaginator.customLabels,
+        //     sort: {_id: -1},
+        //     populate: [
+        //         {
+        //             path: 'rol',
+        //             select: 'rol alias'
+        //         },
+
+        //     ],
+        //     select: '-pass'
+        // }
+
+        // const args: _argsPagination={
+
+        //     findObject: {
+        //         enrutator_id: id
+        //     },
+        //     options: parameters
+
+        // }
+        // await this._processData._findDB(this.UsersModel, args).then(async (r: responseInterface) => {
+
+
+        const agg = [
+            {
+                // <- Esto funciona como un WHERE, se especifican los detalles para buscar un registro
+                $match: {
+                    enrutator_id: id
+                }
+            },
+            {
+                // <- Esto funciona para esteblecer uniones entre otras tablas, también se hacen Inner Joins con esto.
+                $lookup: {
+                    from: 'roles', // <- Se especifica la otra tabla o coleccion a la que se busca
+
+                    // RELACIONAMIENTO FORANEO VS LOCAL SIN USAR PIPELINE
+                    // ESTA ES LA FORMA DIRECTA DE TRAER OTRA TABLA MEDIANTE RELACIÓN
+                    // localField: 'rol',
+                    // foreignField: '_id',
+                    // OJO <- NO FUNCIONA SI SE USA PIPELINE,
+
+                    // RELACIONAMIENTO USANDO PIPELINE
+                    let: { //  Se declaran variables internas que determinen las variables a relacionar
+                        'local_foreig': '$rol'
+                    },
+                    // El pipeline se usa para ejecutar una  sub consulta  dentro del relacionamiento en $lookup
+                    // por ejemplo es como cuando en SQL se usa algo asi
+                    // SELECT * FROM CULO  WHERE VAGINA=(SELECT * FROM VAGINA)
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { // acá le digo que me traiga los registros que sean iguales entre el _id de la tabla foranea vs la variable local que ya se definio antes en let $$local_foreig
+                                    $eq: [ '$_id', '$$local_foreig' ]
+                                }
+                            }
+                        },
+                        {
+                            $project: { // Acá le especifico que solo me traiga estos campos eligiendo de manera booleana solo los que quiero, 1 traemelo 0 no lo traigas
+                                'rol': 1,
+                                'alias': 1
+                            }
+                        }
+                    ],
+                    // Acá le pido que me ponga el resultado de esta relación/subconsulta dentro de la variable rol
+                    as: 'rol',
+                }
+            },
+            {
+                // con esto convierto el registro rol en un objeto ya que el $lookup retorna resultados dentro de un array[], pero como solo recibo un solo resultado y me interesa es solo ese resultado, lo convierto en objeto.
+                $unwind: '$rol'
+            },
+            {
+                // hago busqueda relacionada en la tabla de negocios para consultar si el vendedor tiene clientes
+                $lookup: {
+                    from: 'negocios',
+                    as: 'clientes', //en lugar de llamar al registro negocios, lo llamo clientes, esto a conveniencia de lo siguiente que mostraré
+
+                    let: {
+                        'local_foreig': '$_id' // establezco variable para relacionar
+                    },
+                    pipeline: [
+                        {
+                            $match: { //pido que me traiga valores que sean iguales a la relación de id del vendedor
+                                $expr: {
+                                    $eq: [ '$cobrador_id', '$$local_foreig' ]
+                                }
+                            }
+                        },
+                        {
+                            $group: { //agrupo los registros en sumatoria para solo tener la cantidad de resultados ignorando todos los demás datos
+                                _id: null,
+                                clientes: {
+                                    $sum: 1
+
+                                }
+
+                            }
+                        },
+                        {
+                            $project: { //evito que mongo coloqué el parametro id en los resultados de clientes
+                                _id: 0,
+
+                            },
+                        },
+
+
+                    ],
+
+
+
+                }
+            },
+            {
+                $unwind : { //convierto el array de clientes a objeto, puesto lo unico que me interesa es contar cuantos clientes tengo..
+                    path: "$clientes",
+                    preserveNullAndEmptyArrays: true //<- con esto le digo que si el elemento no tiene resultados entonces que no lo ponga
+                }
+            },
+
+            {
+                $addFields: { //con esto convierto a conveniencia el parametro clientes a una variable tipo clientes: 1 o clientes: 0 o clientes: 3 para que solo sea una variable individual.
+                    clientes: {
+                        $cond: [ //en esta condicional le digo que si clientes.clientes no existe entonces que le ponga un 0, para esto llamé la tabla negocios -> clientes (lo que mencioné de mi conveniencia)
+                            {
+                                "$ifNull": [
+                                    "$clientes.clientes",
+                                    false
+                                ]
+                            },
+                            "$clientes.clientes",
+                            0
+                        ]
+                    }
+                 }
+            }
+
+
+
+        ]
+
+        const aggOptions: _dataPaginatorAggregate = {
+            pagination: true,
             page: page||_configPaginator.page,
             limit: 12||_configPaginator.limit,
             customLabels: _configPaginator.customLabels,
-            sort: {_id: -1},
-            populate: [
-                {
-                    path: 'rol',
-                    select: 'rol alias'
-                },
-            ],
-            select: '-pass'
         }
 
-        const args: _argsPagination={
-
-            findObject: {
-                enrutator_id: id
-            },
-            options: parameters
-
+        const args: _argsPaginationAggregate = {
+            aggregate: agg,
+            options: aggOptions
         }
+        await this._processData._findDBAggregate(this.UsersModel, args).then(async (r: responseInterface) => {
 
-        await this._processData._findDB(this.UsersModel, args).then(async (r: responseInterface) => {
-            this._Response=r;
+            let l: responseInterface = r;
 
-            // console.log('la puta madre', r.data);
+            // await this.getNumberClients(r.data).then(xx => {
 
-            // await this.setCollectorsAreas(r).then(rr => {
-            //    this._Response.data = rr;
-            //    this._Response.data = rr;
+            //     console.log('respuesta ', xx);
+            //     l.data = xx;
 
-            // //    console.log('la mierda que se retorna', rr);
             // });
+
+
+            this._Response = l;
+
 
         }, (err: responseInterface) => {
             this._Response=err;
             // this._Response.message =
         });
 
+        console.log('return final', this._Response);
+
         return this._Response;
+
+    }
+
+
+    getNumberClients(cobradores: any = null){
+
+        return new Promise( async (resolve, reject) => {
+
+            if(cobradores != null && cobradores.length > 0 ){
+
+                let aux = cobradores;
+
+                let cont = 0;
+
+                while ( cont < cobradores.length ) {
+
+
+                    // await cobradores.forEach(async (ele, idx) => {
+
+                        let x = null;
+                        let arg: _argsFind = {
+                        findObject: {
+                            cobrador_id: cobradores[cont]._id
+                        },
+                        populate: [
+                            {
+                                path: 'cliente_id',
+                                model: 'Cliente',
+                                select: ''
+
+                            },
+                        ]
+                    }
+
+                    await this._processData._findAllDB(this.NegocioModel, arg).then( (rr: responseInterface) => {
+
+                        let j = rr.data;
+
+                        try {
+
+                            if( j.length > 0 ){
+
+                                x = j.length;
+
+                            }else{
+                                x = 0;
+                            }
+
+                        } catch (error) {
+
+                            x = 0;
+
+                        }
+
+                        let o = {
+                            nro_clientes: x
+                        };
+
+                        // cobradores[idx].nro_clientes = x;
+
+                        aux[cont] = this._processData.addToObject(cobradores[cont], o);
+                        // aux[cont] = aux[cont].Promise;
+                        console.log('iteracion ' + cont, aux[cont]);
+
+
+                        cont++;
+
+                    }, ERR => {
+
+                    });
+
+
+
+                }
+
+                // });
+                console.log('paquete que retorna', aux);
+            resolve(aux);
+            }else{
+
+                reject(false);
+
+            }
+
+        });
 
     }
 

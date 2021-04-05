@@ -35,7 +35,7 @@ export class ProcessDataService {
 
         }
 
-        console.log('el retorno aca', response);
+        // console.log('el retorno aca', response);
 
         // console.log('response', response);
         if(!response){
@@ -64,6 +64,20 @@ export class ProcessDataService {
 
     });
   }
+
+  // async _findDBAllAggregate(dataBody: any, parameters: _argsPaginationAggregate = null): Promise<responseInterface> {
+
+  //   return new Promise(async (resolve, reject) => {
+
+
+  //     const myAggregate = dataBody.aggregate(
+  //       parameters.aggregate
+  //     );
+
+  //     });
+
+  // }
+
   async _findDBAggregate(dataBody: any, parameters: _argsPaginationAggregate = null): Promise<responseInterface> {
 
     return new Promise(async (resolve, reject) => {
@@ -91,7 +105,6 @@ export class ProcessDataService {
 
         }
 
-        console.log('el retorno aca', response);
 
         // console.log('response', response);
         if(!response){
@@ -107,12 +120,25 @@ export class ProcessDataService {
 
         }
 
+          console.log('consulta con aggregate', response);
+
+        let paginatorMeta = {
+          itemCount: response.itemCount,
+          perPage: response.perPage,
+          currentPage: response.currentPage,
+          pageCount: response.pageCount,
+          pageCounter: response.pageCounter,
+          hasPrevPage: response.hasPrevPage,
+          hasNextPage: response.hasNextPage,
+          prev: response.prev,
+          next: response.next,
+        }
 
         const resp: responseInterface = {
           ok: true,
           status: 200,
           data: response.itemsList,
-          paginator: response.paginator
+          paginator: paginatorMeta
         };
         resolve(resp);
 
@@ -238,7 +264,7 @@ export class ProcessDataService {
           };
           reject(resp);
         }
-        console.log('todo exitoso', response);
+        // console.log('respuesta petición', response);
           const resp: responseInterface = {
             ok: true,
             status: 200,
@@ -579,6 +605,42 @@ export class ProcessDataService {
   }
 
 
+  async addToObject(objeto, elemento){
+
+    // let o = objeto;
+
+    let o = JSON.stringify(objeto);
+    o = JSON.parse(o);
+
+    // console.log('aaa', Object.assign(o, elemento));
+
+    return Object.assign(o, elemento);
+
+
+  }
+
+
+  // async addToObject (object, key: string, value: any) {
+  //     var res = {};
+  //     var textObject = JSON.stringify(object);
+  //     if (textObject === '{}') {
+  //         res = JSON.parse('{"' + key + '":' + value + '}');
+  //     } else {
+  //         res = JSON.parse('{' + textObject.substring(1, textObject.length - 1) + ',"' + key + '":' + value + '}');
+  //     }
+  //     return res;
+  // }
+
+
+
+  // async addToObject (ElementList: any, element: any) {
+  //   let newList = Object.assign(ElementList, element)
+
+  //   console.log('añadido', element);
+  //   console.log('objeto', ElementList);
+
+  //   return newList
+  // }
 
 
 

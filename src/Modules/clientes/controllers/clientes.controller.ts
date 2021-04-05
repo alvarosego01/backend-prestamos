@@ -68,14 +68,15 @@ export class ClientesController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    // @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    // @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Delete('borrar/:cliente')//tomo el id del cliente y lo borro, pero bajo confirmacion del admin
     async delOneCliente(@Param('cliente') cliente:string, @Response() res:any):Promise<responseInterface>
     {
 
         this._Response = await this._clienteService.delOneCliente(cliente);
         return res.status(this._Response.status).json(this._Response);
+
     }
 
 
