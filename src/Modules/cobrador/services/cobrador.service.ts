@@ -175,7 +175,7 @@ export class CobradorService {
         ]
 
         const aggOptions: _dataPaginatorAggregate = {
-            pagination: true,
+            pagination: false,
             page: page||_configPaginator.page,
             limit: 12||_configPaginator.limit,
             customLabels: _configPaginator.customLabels,
