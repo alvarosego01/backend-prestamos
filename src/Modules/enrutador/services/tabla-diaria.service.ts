@@ -10,7 +10,6 @@ import { Ruta } from '../models/schemas/ruta.schema'
 export class TablaDiariaService 
 {
     private readonly logger:Logger = new Logger("Centinala diario") //log del CRON
-    private readonly thsDay:string  //variable para fecha
     private _Response:responseInterface //interfaz de respuesta
     private clusterRoutes:Array<Ruta> //variable para obtener todas las rutas almacenadas en coleccion
 
@@ -22,7 +21,6 @@ export class TablaDiariaService
     )
     {
         this.logger.setContext("Sistema de Tabla Diaria")
-        this.thsDay = this._dateProcessService.getShortDate()
     }
     
     //reloj de sistema para las tablas diarias
