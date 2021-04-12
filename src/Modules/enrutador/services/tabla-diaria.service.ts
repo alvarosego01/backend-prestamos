@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Cron } from '@nestjs/schedule'
 import { Model } from 'mongoose'
 import { DateProcessService, ProcessDataService } from 'src/Classes/classes.index'
-import { _argsPagination, responseInterface } from 'src/Response/interfaces/interfaces.index'
+import { _argsPagination, responseInterface, _argsFind } from 'src/Response/interfaces/interfaces.index'
 import { Ruta } from '../models/schemas/ruta.schema'
 
 @Injectable()
@@ -12,6 +12,7 @@ export class TablaDiariaService
     private readonly logger:Logger = new Logger("Centinala diario") //log del CRON
     private _Response:responseInterface //interfaz de respuesta
     private clusterRoutes:Array<Ruta> //variable para obtener todas las rutas almacenadas en coleccion
+    private backDay:String //configuro la cantidad de dias hacia atras
 
     constructor
     (
@@ -21,6 +22,7 @@ export class TablaDiariaService
     )
     {
         this.logger.setContext("Sistema de Tabla Diaria")
+        this.backDay = this._dateProcessService.getNextPointInTime(-1) //seteo la cantidad de dias hacia atras, en este caso 1dia
     }
     
     //reloj de sistema para las tablas diarias
@@ -45,27 +47,35 @@ export class TablaDiariaService
     {
         this.logger.debug("2) Buscando modificaciones hechas en menos de un dia...")
         //auxiliar para jalarme todos los items de las rutas y empezar a depurar con respecto a sus fechas
-        let backDay:String = this._dateProcessService.getNextPointInTime(-1) 
         let auxClusterRoutes:Array<Ruta> = Array<Ruta>() 
         auxClusterRoutes = this._Response.data
-
         //empiezo la depuración de aquellas rutas que tengan menos de un dia de modificadas
-        auxClusterRoutes.forEach((cluster) => 
+        if(auxClusterRoutes.length ===1)
         {
-            (cluster.updatedAt === backDay) ? this.clusterRoutes.push(cluster) /* console.log(cluster) */ : false
-        })    
+            this.logger.debug("Procedimiento con 1 item en la pila...")
+
+        }else
+        {
+            this.logger.debug("   Procedimiento con varios items en la pila...")
+            this.clusterRoutes = auxClusterRoutes.filter( cluster =>  cluster.updatedAt[1] == this.backDay ) 
+            this.logger.debug(`   Cantidad de items depurados: ${this.clusterRoutes.length} items`)
+        }
     }
 
     private async getAllRoutes()
-    {
+    {//funcion dedicada a obtener todas las rutas
         this.logger.debug("1) Obteniendo todos los items de la coleccion RUTAS...")
-        const args: _argsPagination = 
+        const args: _argsFind = 
         {
             findObject: {},
-            options: null
+            populate: 
+            [{
+                path: 'negocios_id',
+                model: 'Negocio', // <- si es un array de ids se debe especificar el model
+            }]    
         }
 
-        await this._processData._AllFindDB(this._rutaModel, args).then(r => 
+        await this._processData._findAllDB(this._rutaModel, args).then(r => 
         {
             this._Response = r;
 
@@ -73,7 +83,6 @@ export class TablaDiariaService
         {
             this._Response = err;
         });
-
         return this._Response.data;
     }
 }

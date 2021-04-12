@@ -71,7 +71,7 @@ export class LicecniaUsuarioService
           findObject: {},
           options: parameters 
         }
-        this._Response = await this._processData._AllFindDB(this._licenciaUsuarioModel, args);
+        this._Response = await this._processData._findAllDB(this._licenciaUsuarioModel, args);
         return this._Response;
     }
 

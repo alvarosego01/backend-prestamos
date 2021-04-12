@@ -82,7 +82,8 @@ export class Ruta extends Document
     @Prop({
         type: [Mongoose.Schema.Types.ObjectId],
         ref: 'Negocio',
-        required: false
+        required: false,
+        unique: [true, "Ya existe un negocio enlazado a esta ruta"]
     })
     negocios_id: Array<string>;
 
@@ -133,10 +134,10 @@ export class Ruta extends Document
     createdAt: string;
 
     @Prop({
-        type: String,
+        type: Array,
         default: null
     })
-    updatedAt: string;
+    updatedAt: string[];
 
 }
 

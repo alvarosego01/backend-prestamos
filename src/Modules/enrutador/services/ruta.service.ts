@@ -244,12 +244,12 @@ export class RutaService
     //necesito el id del enrutador y el id de la ruta para modificarla
     async modOneRoute(ruta:string, body:RutaDto):Promise<responseInterface>
     {
-        const data =
+        const data:RutaDto =
         {
             ciudad: body.ciudad,
             departamento: body.departamento,
             enrutador_id: body.enrutador_id,
-            updatedAt: this._dateProcessService.getShortDate()
+            updatedAt: this._dateProcessService.setDate()
         };
 
         const _args:_argsUpdate =

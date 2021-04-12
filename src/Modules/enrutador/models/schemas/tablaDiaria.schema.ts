@@ -22,7 +22,7 @@ export class TablaDiaria extends Document
         ref: 'Users',
         required: [true, 'Debe instanciar al enrutador quien creó la nueva ruta']
     })
-    enrutador_id: string
+    enrutador_id: string 
 
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,

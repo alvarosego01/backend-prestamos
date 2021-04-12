@@ -154,7 +154,7 @@ export class PagoService
     	  options: null
     	}
 
-    	await this._processData._AllFindDB(this.NominaModel, args).then(r => 
+    	await this._processData._findAllDB(this.NominaModel, args).then(r => 
     	{
     	  this._Response = r;
     	}, err => 
@@ -172,7 +172,7 @@ export class PagoService
     	  options: null
     	}
 
-    	await this._processData._AllFindDB(this.CajachicaModel, args).then(r => 
+    	await this._processData._findAllDB(this.CajachicaModel, args).then(r => 
     	{
     	  this._Response = r;
     	}, err => 

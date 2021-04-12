@@ -164,7 +164,7 @@ export class NegocioService
             let x: Ruta = r.data;
 
             x.negocios_id.push(idNegocio);
-            x.updatedAt = this._dateProcessService.getShortDate();
+            x.updatedAt = this._dateProcessService.setDate();
 
             console.log('la x', x);
 

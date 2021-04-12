@@ -147,50 +147,6 @@ export class ProcessDataService {
     });
   }
 
-  async _AllFindDB(dataBody: any, parameters: _argsPagination = null): Promise<responseInterface> {
-
-    return new Promise(async (resolve, reject) => {
-
-    await dataBody.find(
-      parameters.findObject,
-      (error, response) => {
-
-        if (error) {
-
-          const resp: responseInterface = {
-            ok: false,
-            status: 500,
-            message: 'Algo ha salido mal, intente más tarde',
-            err: error,
-          };
-          reject(resp);
-
-        }
-
-        if(!response){
-
-          const resp: responseInterface = {
-            ok: false,
-            status: 404,
-            message: 'No hay resultados en este momento'
-
-          };
-          reject(resp);
-
-        }
-
-        const resp: responseInterface = {
-          ok: true,
-          status: 200,
-          data: response
-        };
-        resolve(resp);
-
-      });
-
-    });
-  }
-
   async _findOneDB( dataBody: any, parameters: _argsFind ): Promise<responseInterface> {
 
     // console.log('llega al findone', parameters);
@@ -202,7 +158,7 @@ export class ProcessDataService {
       .exec((error, response) => {
 
         if(error){
-          console.log('hubo error', error);
+          //console.log('hubo error', error);
           const resp: responseInterface = {
             ok: false,
             status: 500,
@@ -213,14 +169,14 @@ export class ProcessDataService {
         }
 
         if(!response){
-          console.log('inexistente');
+          //console.log('inexistente');
           const resp: responseInterface = {
             ok: false,
             status: 404
           };
           reject(resp);
         }
-        console.log('consulta realizada', response);
+        //console.log('consulta realizada', response);
           const resp: responseInterface = {
             ok: true,
             status: 200,
@@ -245,7 +201,7 @@ export class ProcessDataService {
       .exec((error, response) => {
 
         if(error){
-          console.log('hubo error', error);
+          //console.log('hubo error', error);
           const resp: responseInterface = {
             ok: false,
             status: 500,
@@ -256,7 +212,7 @@ export class ProcessDataService {
         }
 
         if(!response){
-          console.log('inexistente');
+          //console.log('inexistente');
           const resp: responseInterface = {
             ok: false,
             status: 404,
