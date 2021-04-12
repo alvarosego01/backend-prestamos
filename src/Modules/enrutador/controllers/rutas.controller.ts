@@ -73,8 +73,8 @@ export class RutasController
     // @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     // @UseGuards(AuthGuard('jwt'), RoleGuard)
     //tomo el formulario de rutas y creo una nueva
-    @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard )
+    /* @RolesDecorator('ADMIN_ROLE','ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard ) */
     @Post('crear')
     async createNewRoute(@Body() body:RutaDto, @Response() res:any):Promise<responseInterface>
     {
@@ -82,9 +82,9 @@ export class RutasController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    /* @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
-    //tomo el mismo formulario mas el id de ruta y la modifico
+    //tomo el mismo formulario mas el id de ruta y la modifico */
     @Put('modificar/:route')
     async modifyRoute(@Param('route') route:string, @Body() body:RutaDto, @Response() res:any):Promise<responseInterface>
     {

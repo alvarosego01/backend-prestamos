@@ -133,10 +133,10 @@ export class Ruta extends Document
     createdAt: string;
 
     @Prop({
-        type: Array,
+        type: String,
         default: null
     })
-    updatedAt: string[];
+    updatedAt: string;
 
 }
 

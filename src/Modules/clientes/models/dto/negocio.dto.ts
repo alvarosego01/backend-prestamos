@@ -21,6 +21,10 @@ export class NegocioCreacionDto
     @IsNumber()
     @IsNotEmpty()
     ncuotas:number;
+    //habia olvidado añadir la concurrencia, los dias entre cobro y cobro
+    @IsNumber()
+    @IsNotEmpty()
+    concurrencia:number;
 }
 
 export class NegocioUnicoPeticionDto
@@ -64,6 +68,10 @@ export class NegocioModificacionDto
     @IsNumber()
     @IsNotEmpty()
     vcuotas:number;
+    //habia olvidado añadir la concurrencia, los dias entre cobro y cobro
+    @IsNumber()
+    @IsNotEmpty()
+    concurrencia:number;
 }
 
 export class NegocioEliminacionDto

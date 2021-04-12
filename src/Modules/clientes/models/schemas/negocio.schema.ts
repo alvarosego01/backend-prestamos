@@ -77,14 +77,11 @@ export const CuotaSchema = SchemaFactory.createForClass(Cuota);
 @Schema()
 export class Negocio extends Document
 {
-
-
     @Prop({
-        type: concurrencia,
+        type: Number,
         default: null,
       })
-    concurrencia: concurrencia;
-
+    concurrencia: number;
 
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
@@ -92,13 +89,6 @@ export class Negocio extends Document
         required: [true, "Debe incluir el cliente"]
     })
     cliente_id:string;
-
-    // @Prop({
-    //     type: Mongoose.Schema.Types.ObjectId,
-    //     ref: 'Users',
-    //     required: [true, 'Debe incluir el cobrador encargado']
-    // })
-    // cobrador_id:string;
 
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
@@ -144,7 +134,7 @@ export class Negocio extends Document
     pendiente:boolean;
 
     @Prop({
-        type: Array(),
+        type: Array,
         default: null
     })
     cuotas:Array<Cuota>;

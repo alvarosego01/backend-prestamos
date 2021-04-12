@@ -52,7 +52,7 @@ export class RutaClienteService
     private async assignOneCliente(ruta:Ruta, cliente:string):Promise<responseInterface>
     {
         ruta.negocios_id.push(cliente);
-        ruta.updatedAt = this._dateProcessService.setDate();
+        ruta.updatedAt = this._dateProcessService.getShortDate();
 
         const _args:_argsUpdate =
         {

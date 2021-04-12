@@ -58,7 +58,7 @@ export class RutaService
     }
 
     //necesito el id del enrutador
-    async getAllRoutes(page, enrutador:string):Promise<responseInterface>
+    async getAllRoutes(page:any, enrutador:string):Promise<responseInterface>
     {
         const parameters: _dataPaginator =
         {
@@ -244,12 +244,12 @@ export class RutaService
     //necesito el id del enrutador y el id de la ruta para modificarla
     async modOneRoute(ruta:string, body:RutaDto):Promise<responseInterface>
     {
-        const data:RutaDto =
+        const data =
         {
             ciudad: body.ciudad,
             departamento: body.departamento,
             enrutador_id: body.enrutador_id,
-            updatedAt: this._dateProcessService.setDate()
+            updatedAt: this._dateProcessService.getShortDate()
         };
 
         const _args:_argsUpdate =
