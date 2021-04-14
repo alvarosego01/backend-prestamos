@@ -20,16 +20,51 @@ export class TablaDiaria extends Document
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Users',
-        required: [true, 'Debe instanciar al enrutador quien creó la nueva ruta']
+        required: true
     })
     enrutador_id: string 
 
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Negocio',
-        required: false
+        required: true
     })
-    negocios_id: string
+    negocio_id: string
+
+    @Prop({
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'Ruta',
+        required: true
+    })
+    ruta_id: string
+
+    @Prop({
+        type: Boolean,
+        required: true,
+        default: true
+    })
+    pendiente: boolean
+
+    @Prop({
+        type: Array,
+        required: true,
+        default: "No tiene"
+    })
+    prev_pago: Array<string>
+
+    @Prop({
+        type: Array,
+        required: true,
+        default: "No tiene"
+    })
+    next_pago: Array<string>
+
+    @Prop({
+        type: Number,
+        required: true,
+        default: 0
+    })
+    concurrencia: number
 
     @Prop({
         type: Array,

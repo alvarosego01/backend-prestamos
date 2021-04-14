@@ -226,7 +226,7 @@ export class PagoService
 				//verifico si existe una caja chica con respecto a la nomina si no existe el valor de gastos es 0
 				if (_cajaChicaAux[j].cobrador === this._Nomina.cobrador) 
 				{
-					_VGA = await this.getTotalGastosOperByCobrador(_cajaChicaAux[i].gasto, this._Nomina); break;
+					_VGA = await this.getTotalGastosOperByCobrador(_cajaChicaAux[i].gasto, this._Nomina); //break;
 				}
 			}
 			//seteo el monto de pago y retorno los resultados

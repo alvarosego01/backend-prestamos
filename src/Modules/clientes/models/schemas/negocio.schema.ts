@@ -79,8 +79,8 @@ export class Negocio extends Document
 {
     @Prop({
         type: Number,
-        default: null,
-      })
+        default: 0,
+    })
     concurrencia: number;
 
     @Prop({
@@ -143,7 +143,7 @@ export class Negocio extends Document
         type: Array,
         default: _dateService.setDate()
     })
-    createdAt: string;
+    createdAt: string[];
 
     @Prop({
         type: Array,

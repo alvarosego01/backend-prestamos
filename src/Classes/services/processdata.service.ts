@@ -237,7 +237,7 @@ export class ProcessDataService {
   async _saveDB(dataBody: any): Promise<responseInterface> {
     return new Promise(async (resolve, reject) => {
 
-      console.log('DATA', dataBody);
+      //console.log('DATA', dataBody);
 
       dataBody.save((err, response) => {
         if (err) {

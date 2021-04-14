@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
 import * as  Moment from "moment-timezone";
-const dateMoment = Moment().tz("America/Montevideo");
-dateMoment.locale('es');
 
 
 @Injectable()
@@ -10,10 +8,11 @@ export class DateProcessService {
 
 
 
-    setDate(){
-
+    setDate()
+    {
+        const dateMoment = Moment().tz("America/Montevideo");
+        dateMoment.locale('es');
         return dateMoment.format('dddd,LL,h:mm A').split(',');
-
     }
 
     getShortDate()
@@ -25,15 +24,16 @@ export class DateProcessService {
 
     getDiffInDays(date:any)
     {
-        let days:number = 0;
+        date = this.convertHumanDateIntoSystemDate(date)
         let dateMoment = Moment().tz("America/Montevideo");
         dateMoment.locale('es');
-        return dateMoment.diff(Moment(date), 'days');
+        return dateMoment.diff(date, 'days');
     }
 
     //incluimos un nuevo metodo para sacar rango de fechas
     getNextPointToPointInTime(days:number, date:any)
     {
+        date = this.convertHumanDateIntoSystemDate(date)
     	let day_Array:String[] = Array();
 
     	for (let i = 1; i<= days; ++i) 
@@ -42,6 +42,13 @@ export class DateProcessService {
     	}
 
     	return day_Array;
+    }
+
+    //funcion en base a la fecha humana, la transforma a fehca de sistema
+    convertHumanDateIntoSystemDate(date:string)
+    {
+        
+        return Moment(date, 'LL','es').format('YYYYMMDD')
     }
 
     getBackpointInTime(days:number)
@@ -57,6 +64,14 @@ export class DateProcessService {
         let dateMoment = Moment().tz("America/Montevideo");
         dateMoment.locale('es');
         return dateMoment.add(days, 'days').format('LL');
+    }
+
+    getNextPointDate(days:number, date:string)
+    {
+        date = this.convertHumanDateIntoSystemDate(date)
+        let dateMoment = Moment(date).tz("America/Montevideo");
+        dateMoment.locale('es');
+        return dateMoment.add(days, 'days').format('dddd,LL,h:mm A').split(',');
     }
 
 

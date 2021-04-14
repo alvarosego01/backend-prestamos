@@ -3,8 +3,10 @@ import { EnrutadorController, RutasController } from './controllers/controller.i
 import { RutaModule } from './models/rutaModels.module';
 import { EnrutadorService, RutaService, TablaDiariaService } from './services/services.index';
 import { AuthModule } from '../auth/auth.module';
+import { _NEGOCIOSCHEMA } from '../clientes/models/schemas/schemas.index';
+
 @Module({
-  imports:[RutaModule, AuthModule],
+  imports:[RutaModule, AuthModule, _NEGOCIOSCHEMA],
   controllers: [EnrutadorController, RutasController],
   providers: [EnrutadorService, RutaService, TablaDiariaService]
 })
