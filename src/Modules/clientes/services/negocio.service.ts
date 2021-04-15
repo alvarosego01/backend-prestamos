@@ -269,14 +269,5 @@ export class NegocioService
         return this._Response;
     }
 
-
-
-
-
-
-
-
-
-
 }
 

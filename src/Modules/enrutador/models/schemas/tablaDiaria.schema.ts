@@ -26,8 +26,23 @@ export class TablaDiaria extends Document
 
     @Prop({
         type: Mongoose.Schema.Types.ObjectId,
-        ref: 'Negocio',
+        ref: 'Users',
         required: true
+    })
+    cobrador_id: string 
+
+    @Prop({
+        type: Mongoose.Schema.Types.ObjectId,
+        refer: "Cliente",
+        required: true
+    })
+    cliente_id:string;
+
+    @Prop({
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'Negocio',
+        required: true,
+        unique: [true, 'Ya existe un negocio registrado con este codigo']
     })
     negocio_id: string
 
@@ -47,15 +62,15 @@ export class TablaDiaria extends Document
 
     @Prop({
         type: Array,
-        required: true,
-        default: "No tiene"
+        required: false,
+        default: null
     })
     prev_pago: Array<string>
 
     @Prop({
         type: Array,
         required: true,
-        default: "No tiene"
+        default: null
     })
     next_pago: Array<string>
 

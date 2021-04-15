@@ -112,7 +112,7 @@ export class RutaService
         return this._Response;
     }
 
-    //necesito el id del enrutador y el id de la ruta
+    //necesito el id de ruta
     async getOneRoute(ruta:string):Promise<responseInterface>
     {
 

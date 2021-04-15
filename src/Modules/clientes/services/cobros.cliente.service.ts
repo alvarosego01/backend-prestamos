@@ -23,7 +23,7 @@ import
     modifyCobroClienteDto,
 }
 from '../models/dto/index.dto';
-import {createCobroCliente, createCuotaCliente} from '../models/interfaces/interfaces.index';
+//import {createCobroCliente, createCuotaCliente} from '../models/interfaces/interfaces.index';
 import {Cobros} from '../models/schemas/cobros.schema';
 import {Negocio, Cuota} from '../models/schemas/negocio.schema';
 import {CambioCobro} from '../models/schemas/peticion.schema';
@@ -160,13 +160,12 @@ export class CobrosClienteService
             data = await new this._cuotaModel(this.addCompoundCuota(_Negocio, cobro));
         }
 
-            //sino tiene un carajo, se lo empujamos...
-           _Negocio.cuotas.push(data);
-
-           //actualizamos las tablas de cobro y negocio
-           cobro.cuota_nro = data.cuotas_pagas;
-           _Negocio = await this.refreshNegocioCliente(_Negocio);
-           _Cobro = await this.saveNewCobro(cobro);
+         //sino tiene un carajo, se lo empujamos...
+        _Negocio.cuotas.push(data);
+        //actualizamos las tablas de cobro y negocio
+        cobro.cuota_nro = data.cuotas_pagas;
+        _Negocio = await this.refreshNegocioCliente(_Negocio);
+        _Cobro = await this.saveNewCobro(cobro);
 
         value.data = { negocio: _Negocio, cobro: _Cobro, cuota: data};
 
