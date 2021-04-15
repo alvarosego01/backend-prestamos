@@ -254,7 +254,7 @@ export class TablaDiariaService
         auxDiaria.concurrencia  = bussines.concurrencia
         auxDiaria.pendiente     = bussines.pendiente
         auxDiaria.next_pago     = this._dateProcessService.getNextPointDate(concurrencia, bussines.createdAt[1])
-        await this.saveOneBussines(auxDiaria); //guardo automaticamente los nuevos items en base de datos 
+        //await this.saveOneBussines(auxDiaria); //guardo automaticamente los nuevos items en base de datos 
     }
 
     //funcion que verifica si el proximo pago es igual al dia en que se la petición de busqueda
