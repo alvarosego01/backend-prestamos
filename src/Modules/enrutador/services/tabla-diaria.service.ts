@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Cron } from '@nestjs/schedule'
 import { Model } from 'mongoose'
 import { DateProcessService, ProcessDataService } from 'src/Classes/classes.index'
-import { _argsPagination, responseInterface, _argsFind, _configPaginator, _dataPaginator } from 'src/Response/interfaces/interfaces.index'
+import { _argsPagination, responseInterface, _argsFind, _configPaginator, _dataPaginator, _argsUpdate } from 'src/Response/interfaces/interfaces.index'
 import { Ruta } from '../models/schemas/ruta.schema'
 import { Negocio } from 'src/Modules/clientes/models/schemas/negocio.schema'
 import { TablaDiaria } from '../models/schemas/tablaDiaria.schema'
@@ -114,6 +114,42 @@ export class TablaDiariaService
        
     }
 
+    //funcion que me retorna un item en especifico de la tabla diaria
+    async getOneDiallyItem(id:string):Promise<responseInterface>
+    {
+        const args: _argsFind =
+        {
+            findObject: { negocio_id:id },
+            populate: 
+            [   
+                {
+                    path: 'negocios_id',
+                    model: 'Negocio', // <- si es un array de ids se debe especificar el model
+                },
+                {
+                    path: 'ruta_id',
+                    model: 'Ruta', // <- si es un array de ids se debe especificar el model
+                },
+                {
+                    path: 'cliente_id',
+                    model: 'Cliente', // <- si es un array de ids se debe especificar el model
+                },
+                {
+                    path: 'cobrador_id',
+                    model: 'User', // <- si es un array de ids se debe especificar el model
+                },
+            ]
+        }
+        await this._processData._findOneDB(this._tablaDiariaModel, args).then(r =>
+        {
+           this._Response = r;
+        }, err =>
+        {
+            this._Response = err;
+        });
+        return this._Response;
+    }
+
     //funcion para guardar manualmente un item diario en caso de no haberse dado de forma automatica
     public async manualSaveITem(idNegocio:string, idRuta:string):Promise<responseInterface>
     {
@@ -141,6 +177,31 @@ export class TablaDiariaService
         //luego del procemiento anterior, retorno la respuesta
         return this._Response
         
+    }
+
+    //funcion que me permita actualizar los items de tabla diaria
+    public async updateAitemInTable(tabla:TablaDiaria):Promise<TablaDiaria>
+    {
+        let Response:TablaDiaria
+        
+        const args: _argsUpdate = {
+            findObject: {
+                _id: tabla._id,
+            },
+            set: {
+                $set:tabla
+            }
+        }
+
+        await this._processData._updateDB(this._tablaDiariaModel, args).then(r =>
+        {
+            Response = r.data;
+        }, err =>
+        {
+            return err;
+        });
+
+        return Response;
     }
 
     //funcion que se ocupará de revisar si existe fecha de modificación y si tienen 1 dia de haber sido modificadas
