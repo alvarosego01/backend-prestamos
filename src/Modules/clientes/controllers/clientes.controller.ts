@@ -46,7 +46,7 @@ export class ClientesController
     }
 
 
-    @Get('allClients')//obtengo el cliente perteneciente al cobrador
+    @Get('allClients')
     async getAllClientsAdmin( @Response() res:any):Promise<responseInterface>
     {
         this._Response = await this._clienteService.getAllClientsAdmin(  );

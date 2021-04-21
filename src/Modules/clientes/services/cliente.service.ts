@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { DateProcessService, ProcessDataService } from 'src/Classes/classes.index';
 import {Ruta} from 'src/Modules/enrutador/models/schemas/ruta.schema';
 import { responseInterface, _argsFind, _argsPagination, _argsUpdate, _configPaginator, _dataPaginator } from 'src/Response/interfaces/interfaces.index';
+import { _dataPaginatorAggregate, _argsPaginationAggregate } from 'src/Response/interfaces/responsePaginator.interface';
 import { ClienteDto } from '../models/dto/index.dto';
 import { Cliente, ClienteSchema } from '../models/schemas/cliente.schema';
 
@@ -50,21 +51,105 @@ export class ClienteService
 
     async getAllClientsAdmin():Promise<responseInterface>
     {
-        const parameters: _dataPaginator =
-        {
+        // const parameters: _dataPaginator =
+        // {
+        //     page: 1 || _configPaginator.page,
+        //     limit: 12 || _configPaginator.limit,
+        //     customLabels: _configPaginator.customLabels,
+        //     sort: { _id: -1 },
+        // }
+
+        // const args: _argsPagination =
+        // {
+        //     findObject: {  },
+        //     options: parameters
+        // }
+
+        // await this._processData._findDB(this.clienteModel, args).then(r =>
+
+
+        // let id = enrouterId;
+        const agg = [
+
+            // {
+            //     $match: {
+            //         enrutador_id: id
+            //     }
+            // },
+
+            {
+                $lookup: {
+                    from: 'rutas',
+                    as: 'rutas',
+                    let: {
+                        'cliente': "$_id",
+                        'enrutador': "$enrutador_id"
+                    },
+                    pipeline: [
+                        {
+                            $lookup: {
+                                from: 'negocios',
+                                // localField: 'negocios_id',
+                                // foreignField: '_id',
+                                let: {
+                                    'cliente_de_negocio': "$$cliente",
+                                    'negocios_id': "$negocios_id"
+                                },
+                                pipeline: [
+                                     {
+                                        $match: {
+                                            $expr: {
+                                                $and: [
+                                                    {
+                                                        $eq: [ '$cliente_id', '$$cliente_de_negocio' ]
+                                                    },
+
+                                                    {
+                                                        $in: [ '$_id', '$$negocios_id' ]
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                ],
+                                as: "negocios_id"
+                            }
+                        },
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {
+                                            $gt: [ {$size: '$negocios_id'} , 0]
+                                        },
+                                        {
+                                            $eq: [ '$enrutador_id', '$$enrutador' ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+
+
+                    ],
+                }
+            },
+
+        ]
+
+        const aggOptions: _dataPaginatorAggregate = {
+            pagination: false,
             page: 1 || _configPaginator.page,
             limit: 12 || _configPaginator.limit,
             customLabels: _configPaginator.customLabels,
-            sort: { _id: -1 },
         }
 
-        const args: _argsPagination =
-        {
-            findObject: {  },
-            options: parameters
+        const args: _argsPaginationAggregate = {
+            aggregate: agg,
+            options: aggOptions
         }
 
-        await this._processData._findDB(this.clienteModel, args).then(r =>
+        await this._processData._findDBAggregate(this.clienteModel, args).then(async (r: responseInterface) =>
         {
             this._Response = r;
 
@@ -104,27 +189,117 @@ export class ClienteService
     async getClientsByEnrouter( enrouterId: string ):Promise<responseInterface>
     {
 
-        const parameters: _dataPaginator =
-        {
+        // const parameters: _dataPaginator =
+        // {
+        //     page: 1 || _configPaginator.page,
+        //     limit: 12 || _configPaginator.limit,
+        //     customLabels: _configPaginator.customLabels,
+        //     sort: { _id: -1 },
+        //     populate: {
+        //         path: 'enrutador_id',
+        //         select: '-pass'
+        //     }
+        // }
+
+        // const args: _argsPagination =
+        // {
+        //     findObject: { enrutador_id: enrouterId },
+        //     options: parameters
+        // }
+
+        // await this._processData._findDB(this.clienteModel, args).then(r =>
+
+        let id = enrouterId;
+        const agg = [
+
+            {
+                $match: {
+                    enrutador_id: id
+                }
+            },
+
+            {
+                $lookup: {
+                    from: 'rutas',
+                    as: 'rutas',
+                    let: {
+                        'cliente': "$_id",
+                        'enrutador': "$enrutador_id"
+                    },
+                    pipeline: [
+
+                        {
+                            $lookup: {
+                                from: 'negocios',
+                                // localField: 'negocios_id',
+                                // foreignField: '_id',
+                                let: {
+                                    'cliente_de_negocio': "$$cliente",
+                                    'negocios_id': "$negocios_id"
+                                },
+                                pipeline: [
+                                     {
+                                        $match: {
+                                            $expr: {
+                                                $and: [
+                                                    {
+                                                        $eq: [ '$cliente_id', '$$cliente_de_negocio' ]
+                                                    },
+
+                                                    {
+                                                        $in: [ '$_id', '$$negocios_id' ]
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                ],
+                                as: "negocios_id"
+                            }
+                        },
+
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {
+                                            $gt: [ {$size: '$negocios_id'} , 0]
+                                        },
+                                        {
+                                            $eq: [ '$enrutador_id', '$$enrutador' ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+
+
+                    ],
+                }
+            },
+
+        ]
+
+        const aggOptions: _dataPaginatorAggregate = {
+            pagination: false,
             page: 1 || _configPaginator.page,
             limit: 12 || _configPaginator.limit,
             customLabels: _configPaginator.customLabels,
-            sort: { _id: -1 },
-            populate: {
-                path: 'enrutador_id',
-                select: '-pass'
-            }
         }
 
-        const args: _argsPagination =
-        {
-            findObject: { enrutador_id: enrouterId },
-            options: parameters
+        const args: _argsPaginationAggregate = {
+            aggregate: agg,
+            options: aggOptions
         }
 
-        await this._processData._findDB(this.clienteModel, args).then(r =>
-        {
+        await this._processData._findDBAggregate(this.clienteModel, args).then(async (r: responseInterface) => {
+        // await this._processData._findDBAggregate(this.RutaModel, args).then(async (r: responseInterface) => {
+
+
+
             this._Response = r;
+
+
 
         }, err =>
         {
@@ -139,18 +314,91 @@ export class ClienteService
     async getOneClienteById(cliente:string):Promise<responseInterface>
     {
 
-        const args: _argsFind =
-        {
-            findObject:
+        let id = cliente;
+        const agg = [
+
             {
-                _id:cliente,
-                // cobrador_id:cobrador,
+                $match: {
+                    _id: id
+                }
             },
-            populate: null
-            // select: "rol"
+
+            {
+                $lookup: {
+                    from: 'rutas',
+                    as: 'rutas',
+                    let: {
+                        'cliente': "$_id",
+                        'enrutador': "$enrutador_id"
+                    },
+                    pipeline: [
+
+                        {
+                            $lookup: {
+                                from: 'negocios',
+                                // localField: 'negocios_id',
+                                // foreignField: '_id',
+                                let: {
+                                    'cliente_de_negocio': "$$cliente",
+                                    'negocios_id': "$negocios_id"
+                                },
+                                pipeline: [
+                                     {
+                                        $match: {
+                                            $expr: {
+                                                $and: [
+                                                    {
+                                                        $eq: [ '$cliente_id', '$$cliente_de_negocio' ]
+                                                    },
+
+                                                    {
+                                                        $in: [ '$_id', '$$negocios_id' ]
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                ],
+                                as: "negocios_id"
+                            }
+                        },
+
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {
+                                            $gt: [ {$size: '$negocios_id'} , 0]
+                                        },
+                                        {
+                                            $eq: [ '$enrutador_id', '$$enrutador' ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+
+
+                    ],
+                }
+            },
+
+        ]
+
+        const aggOptions: _dataPaginatorAggregate = {
+            pagination: false,
+            page: 1 || _configPaginator.page,
+            limit: 12 || _configPaginator.limit,
+            customLabels: _configPaginator.customLabels,
         }
 
-        await this._processData._findOneDB(this.clienteModel, args).then(r =>
+        const args: _argsPaginationAggregate = {
+            aggregate: agg,
+            options: aggOptions
+        }
+
+        await this._processData._findDBAggregate(this.clienteModel, args).then(async (r: responseInterface) =>
+        // await this._processData._findOneDB(this.clienteModel, args).then(r =>
         {
             this._Response = r;
         }, err =>
@@ -323,6 +571,7 @@ export class ClienteService
         {
 
             this._Response = r;
+            this._Response.message = 'Cliente eliminado';
 
         }, err =>
         {

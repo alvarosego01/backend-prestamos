@@ -45,8 +45,8 @@ export class CobrosClienteController
     }
 
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    // @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    // @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get('realizados/:cliente')
     async getAllPaymentDo(@Param('cliente') id:string, @Response() res:any):Promise<responseInterface>
     {
@@ -54,8 +54,8 @@ export class CobrosClienteController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    // @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
+    // @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get('realizado/:pago')
     async getOnePaymentDo(@Param('pago') id:string, @Response() res:any):Promise<responseInterface>
     {
@@ -63,8 +63,8 @@ export class CobrosClienteController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    // @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
+    // @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Post('generar')
     async createNewPayment(@Body() body:createCobroClienteDto, @Response() res:any):Promise <responseInterface>
     {
@@ -72,8 +72,8 @@ export class CobrosClienteController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    // @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE', 'COLLECTOR_ROLE')
+    // @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Put('modificar')
     async modifyOldPayment(@Body() body:modifyCobroClienteDto, @Response() res:any):Promise<responseInterface>
     {
@@ -81,8 +81,8 @@ export class CobrosClienteController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    // @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    // @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Delete('borrar/:id')
     async deleteOldPayment(@Param('id') id:string, @Response() res:any):Promise<responseInterface>
     {

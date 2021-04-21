@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
 
 import * as  Moment from "moment-timezone";
-const dateMoment = Moment().tz("America/Montevideo");
-dateMoment.locale('es');
+// const dateMoment = Moment().tz("America/Montevideo");
+// dateMoment.locale('es');
+
 
 
 @Injectable()
 export class DateProcessService {
 
-
-
     setDate(){
+
+        let dateMoment = Moment().tz("America/Montevideo");
+        dateMoment.locale('es');
 
         return dateMoment.format('dddd,LL,h:mm A').split(',');
 
@@ -36,7 +38,7 @@ export class DateProcessService {
     {
     	let day_Array:String[] = Array();
 
-    	for (let i = 1; i<= days; ++i) 
+    	for (let i = 1; i<= days; ++i)
     	{
     		day_Array.push(Moment(date).add(i, "days").format('LL'));
     	}

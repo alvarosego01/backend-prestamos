@@ -7,7 +7,7 @@ import { Negocio, NegocioSchema, Cuota, CuotaSchema } from "./negocio.schema"
 
 
 
-console.log('que es', Cliente.name);
+// console.log('que es', Cliente.name);
 
 export const _CLIENTESCHEMA = MongooseModule.forFeature([
     {

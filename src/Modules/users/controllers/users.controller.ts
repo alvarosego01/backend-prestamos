@@ -58,6 +58,19 @@ export class UsersController {
   // @Get("getOne/:id")
   @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
   @UseGuards(AuthGuard('jwt'), RoleGuard)
+  @Get("/:id")
+  async getOneUser1(
+    @Param("id") id: string,
+    @Response() res: any
+  ): Promise<responseInterface>
+  {
+    this._Response = await this._userService.getOne(id);
+
+    return res.status(this._Response.status).json(this._Response);
+  }
+
+  @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Get("/getOne/:id")
   async getOneUser(
     @Param("id") id: string,

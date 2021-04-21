@@ -71,6 +71,13 @@ export class Cuota extends Document
         default: null
     })
     resumen:string;
+
+    @Prop({
+        type: Array,
+        default: _dateService.setDate()
+    })
+    fechaCobro: string;
+
 }
 export const CuotaSchema = SchemaFactory.createForClass(Cuota);
 

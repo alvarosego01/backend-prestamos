@@ -17,6 +17,7 @@ import
     _dataPaginator
 }
 from 'src/Response/interfaces/interfaces.index';
+import { _dataPaginatorAggregate, _argsPaginationAggregate } from 'src/Response/interfaces/responsePaginator.interface';
 import
 {
     createCobroClienteDto,
@@ -75,27 +76,46 @@ export class CobrosClienteService
 
     async getAllPaymentDo(cliente:string):Promise<responseInterface>
     {
-        const parameters: _dataPaginator =
-        {
-            page: 1 || _configPaginator.page,
-            limit: 12 || _configPaginator.limit,
-            customLabels: _configPaginator.customLabels,
-            sort: { _id: -1 },
+
+        let id = cliente;
+
+        const args: _argsFind={
+            findObject: {
+                cliente_id: id,
+            },
+            // populate: null
+             populate:  [
+
+                            {
+                                path: 'cliente_id',
+                                model: 'Cliente',
+                                select: ''
+
+                            },
+                            {
+                                path: 'cobrador_id',
+                                model: 'Users',
+                                select: '-pass'
+
+                            },
+
+
+                ]
+
+
+            // select: "rol"
         }
 
-        const args: _argsPagination =
-        {
-            findObject: { cliente_id: cliente },
-            options: parameters
-        }
+        await this._processData._findAllDB(this._negocioModel, args).then(async (r: responseInterface) => {
 
-        await this._processData._findDB(this._cobrosModel, args).then(r =>
-        {
+
            this._Response = r;
         }, err =>
         {
             this._Response = err;
         });
+
+
         return this._Response;
     }
 
