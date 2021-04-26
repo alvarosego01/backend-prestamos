@@ -161,10 +161,10 @@ export class NegocioService
         {
            this._Response = r;
 
-            let x: any = r.data;
+            let x: Ruta = r.data;
 
             x.negocios_id.push(idNegocio);
-
+            x.updatedAt = this._dateProcessService.setDate();
 
             console.log('la x', x);
 
@@ -268,15 +268,6 @@ export class NegocioService
         });
         return this._Response;
     }
-
-
-
-
-
-
-
-
-
 
 }
 

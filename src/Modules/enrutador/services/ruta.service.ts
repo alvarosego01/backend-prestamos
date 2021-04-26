@@ -58,7 +58,7 @@ export class RutaService
     }
 
     //necesito el id del enrutador
-    async getAllRoutes(page, enrutador:string):Promise<responseInterface>
+    async getAllRoutes(page:any, enrutador:string):Promise<responseInterface>
     {
         const parameters: _dataPaginator =
         {
@@ -112,7 +112,7 @@ export class RutaService
         return this._Response;
     }
 
-    //necesito el id del enrutador y el id de la ruta
+    //necesito el id de ruta
     async getOneRoute(ruta:string):Promise<responseInterface>
     {
 

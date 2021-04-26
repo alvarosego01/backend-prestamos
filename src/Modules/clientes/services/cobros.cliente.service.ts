@@ -7,6 +7,8 @@ import
     ProcessDataService
 }
 from 'src/Classes/classes.index';
+import { TablaDiaria } from 'src/Modules/enrutador/models/schemas/tablaDiaria.schema';
+import { TablaDiariaService } from 'src/Modules/enrutador/services/services.index';
 import
 {
     responseInterface,
@@ -24,10 +26,12 @@ import
     modifyCobroClienteDto,
 }
 from '../models/dto/index.dto';
-import {createCobroCliente, createCuotaCliente} from '../models/interfaces/interfaces.index';
+//import {createCobroCliente, createCuotaCliente} from '../models/interfaces/interfaces.index';
 import {Cobros} from '../models/schemas/cobros.schema';
 import {Negocio, Cuota} from '../models/schemas/negocio.schema';
 import {CambioCobro} from '../models/schemas/peticion.schema';
+
+
 
 @Injectable()
 export class CobrosClienteService
@@ -49,7 +53,8 @@ export class CobrosClienteService
         @InjectModel(Negocio.name) private _negocioModel:Model<Negocio>,
         @InjectModel(Cuota.name) private _cuotaModel:Model<Cuota>,
         private _processData:ProcessDataService,
-        private _dateProcessService:DateProcessService
+        private _dateProcessService:DateProcessService,
+        private _tablaDiaria:TablaDiariaService
     ){}
 
     //aqui creo un nuevo pago
@@ -160,7 +165,7 @@ export class CobrosClienteService
         let _Negocio:Negocio;
         let _Cobro:Cobros;
         let data:Cuota = null;
-        let Response:responseInterface;
+        let tablaDiaria:TablaDiaria;
 
         //verifico si la respuesta de negocio tiene datos
         if(value.data == null){ return this._Response; }
@@ -180,17 +185,40 @@ export class CobrosClienteService
             data = await new this._cuotaModel(this.addCompoundCuota(_Negocio, cobro));
         }
 
-            //sino tiene un carajo, se lo empujamos...
-           _Negocio.cuotas.push(data);
+         //sino tiene un carajo, se lo empujamos...
+        _Negocio.cuotas.push(data);
+        _Negocio.updatedAt = this._dateProcessService.setDate()
+        //actualizamos las tablas de cobro y negocio
+        cobro.cuota_nro = data.cuotas_pagas;
+        _Negocio = await this.refreshNegocioCliente(_Negocio);
+        _Cobro = await this.saveNewCobro(cobro);
+        tablaDiaria = await this.refreshTabla(_Negocio._id);
 
-           //actualizamos las tablas de cobro y negocio
-           cobro.cuota_nro = data.cuotas_pagas;
-           _Negocio = await this.refreshNegocioCliente(_Negocio);
-           _Cobro = await this.saveNewCobro(cobro);
-
-        value.data = { negocio: _Negocio, cobro: _Cobro, cuota: data};
+        value.data = { negocio: _Negocio, cobro: _Cobro, cuota: data, tabla: tablaDiaria};
 
         return value;
+    }
+
+    //funcion que refresca las fehcas de la tabla diaria en base al pago de cuotas
+    private async refreshTabla(id:string):Promise<TablaDiaria>
+    {
+        let response:TablaDiaria = new TablaDiaria()
+        let aux:responseInterface
+        let auxN:number = 0
+        let auxD:string
+
+        //busco la tabla en base al id del negocio
+        aux = await this._tablaDiaria.getOneDiallyItem(id);
+        response = aux.data
+
+        //sencillamente seteo los dias con respecto a la concurrencia
+        auxN = response.concurrencia
+        auxD = this._dateProcessService.setDate()[1]
+        response.prev_pago = response.next_pago
+        response.next_pago = this._dateProcessService.getNextPointDate(auxN,auxD)
+
+        //ahora solo llamo para actualizar el item de tabla
+        return await this._tablaDiaria.updateAitemInTable(response)
     }
 
     private async saveNewCobro(cobro:createCobroClienteDto):Promise<Cobros>
