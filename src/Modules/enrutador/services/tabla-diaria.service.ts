@@ -8,6 +8,7 @@ import { Ruta } from '../models/schemas/ruta.schema'
 import { Negocio } from 'src/Modules/clientes/models/schemas/negocio.schema'
 import { TablaDiaria } from '../models/schemas/tablaDiaria.schema'
 
+
 @Injectable()
 export class TablaDiariaService 
 {
@@ -37,7 +38,7 @@ export class TablaDiariaService
     //reloj de sistema para las tablas diarias
     //("00 30 3 */1 * *")
     
-    @Cron('*/5 * * * * *',
+    @Cron('00 30 3 */1 * *',
     {
         name: "Tabla Diaria" 
     })
@@ -47,17 +48,19 @@ export class TablaDiariaService
         console.clear();
         this.logger.debug("Protocolo para tablas diarias de cobro:")
         this.logger.debug(`Dia parámetro para busqueda de datos: ${this.backDay}`)
+        this.logger.debug("1) Obteniendo todos los items de la coleccion RUTAS...")
         await this.getAllRoutes()
         await this.searchChangeInRouteSchema()
         await this.searchNewBussinesInStackRoutes()
         
         
+        
     }
 
     //funcion para obtener los cobros correspondientes en base al id del enrutador 
-    public async getDiallyByEnrutator(idEnrutator:string)
+    public async getDiallyByEnrutator(idEnrutator:string):Promise<responseInterface>
     {
-       const parameters: _dataPaginator =
+        const parameters: _dataPaginator =
         {
             page: 1 || _configPaginator.page,
             limit: 12 || _configPaginator.limit,
@@ -85,7 +88,7 @@ export class TablaDiariaService
     }
 
     //funcion para obtener los cobros correspondientes en base al id del cobrador
-    public async getDiallyByCollector(idCollector:string)
+    public async getDiallyByCollector(idCollector:string):Promise<responseInterface>
     {
        const parameters: _dataPaginator =
         {
@@ -110,12 +113,11 @@ export class TablaDiariaService
             this._Response = err
         });
 
-        return this._Response
-       
+        return this._Response  
     }
 
     //funcion que me retorna un item en especifico de la tabla diaria
-    async getOneDiallyItem(id:string):Promise<responseInterface>
+    public async getOneDiallyItem(id:string):Promise<responseInterface>
     {
         const args: _argsFind =
         {
@@ -315,7 +317,7 @@ export class TablaDiariaService
         auxDiaria.concurrencia  = bussines.concurrencia
         auxDiaria.pendiente     = bussines.pendiente
         auxDiaria.next_pago     = this._dateProcessService.getNextPointDate(concurrencia, bussines.createdAt[1])
-        //await this.saveOneBussines(auxDiaria); //guardo automaticamente los nuevos items en base de datos 
+        await this.saveOneBussines(auxDiaria); //guardo automaticamente los nuevos items en base de datos 
     }
 
     //funcion que verifica si el proximo pago es igual al dia en que se la petición de busqueda
@@ -354,9 +356,8 @@ export class TablaDiariaService
         return this._Response
     }
 
-    private async getAllRoutes()
+    public async getAllRoutes()
     {//funcion dedicada a obtener todas las rutas para el sistema
-        this.logger.debug("1) Obteniendo todos los items de la coleccion RUTAS...")
         const args: _argsFind = 
         {
             findObject: {},

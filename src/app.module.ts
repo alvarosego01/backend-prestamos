@@ -21,7 +21,6 @@ import {
   BitacoraModule,
   NominaModule,
   PermisosModule,
-  // CobradoresModule
   CobradorModule
 } from "./Modules/Routes.module.index";
 
@@ -44,15 +43,13 @@ import { _MONGOOSEMODULE } from "./Database/mongo-config";
     SearchModule,
     AdminModule,
     RoleModule,
-    // CobradorModule,
     CobradorModule,
     EnrutadorModule,
     ClientesModule,
     LicenciasModule,
     BitacoraModule,
     NominaModule,
-    PermisosModule,
-    // CobradoresModule
+    PermisosModule
   ],
   controllers: [AppController],
   providers: [ AppService],
