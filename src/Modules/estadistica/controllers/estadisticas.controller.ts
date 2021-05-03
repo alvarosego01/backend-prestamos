@@ -1,7 +1,6 @@
 import { Param, Body, Controller, Get, Post, Response, UseGuards } from '@nestjs/common';
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
-import { GenerarReferidoDto } from '../models/dto/dto.index';
-import { EstadisticaService } from '../services/services.index';
+import { EstadisticaService } from '../services/index.services';
 
 import { AuthGuard, PassportModule } from '@nestjs/passport';
 import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";

@@ -1,0 +1,1 @@
+export { EstadisticaService } from './estadistica.service'

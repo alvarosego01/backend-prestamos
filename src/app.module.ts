@@ -21,7 +21,8 @@ import {
   BitacoraModule,
   NominaModule,
   PermisosModule,
-  CobradorModule
+  CobradorModule,
+  EstadisticaModule
 } from "./Modules/Routes.module.index";
 
 // MODULOS DE LOADING Y OTROS
@@ -49,7 +50,8 @@ import { _MONGOOSEMODULE } from "./Database/mongo-config";
     LicenciasModule,
     BitacoraModule,
     NominaModule,
-    PermisosModule
+    PermisosModule,
+    EstadisticaModule
   ],
   controllers: [AppController],
   providers: [ AppService],
