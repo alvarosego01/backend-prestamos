@@ -83,8 +83,7 @@ export class TablaDiariaService
             this._Response = err
         });
 
-        return this._Response
-       
+        return this._Response  
     }
 
     //funcion para obtener los cobros correspondientes en base al id del cobrador

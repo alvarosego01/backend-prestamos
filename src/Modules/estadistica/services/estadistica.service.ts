@@ -18,17 +18,18 @@ import { Cobros } from 'src/Modules/clientes/models/schemas/cobros.schema'
 import { Cliente } from 'src/Modules/clientes/models/schemas/cliente.schema'
 import { Users } from 'src/Modules/users/models/schemas/userSchema' 
 
-/* 
+/* TODO:
+
 	Estas estadisticas hablaran de: 
 	*total de dinero prestado por ruta
 	*total de dinero recogido por ruta
 	*total de dinero recogido
-	*numero de rutas, 
-	*numero de negocios registrados,
+	*numero de rutas, ->listo
+	*numero total de negocios registrados, -> listo
 	*numero de necogios por cliente 
-	*numero total de cobradores
+	*numero total de clientes ->listo
+	*numero total de cobradores -> listo
 	*numero de cobradores por ruta
-	*numero de cobradores regisrados
 	*negocios de mayor prestamo
 	*negocios de menor prestamo
 	*total de recavado el dia anterior
@@ -44,11 +45,11 @@ import { Users } from 'src/Modules/users/models/schemas/userSchema'
 @Injectable()
 export class EstadisticaService 
 {
-	private readonly logger:Logger //log del CRON
-	private readonly roles:number //cantidad de pasadas de revisión según la cantidad de roles
-	private _Response:responseInterface //variable de respuesta de backend
-	private AuxUser:Array<Users> //auxiliar de modelo usuarios
-	private _SystemResponse:responseInterface //interfaz de respuesta para sistema
+	private readonly logger:	Logger //log del CRON
+	private readonly roles:		number //cantidad de pasadas de revisión según la cantidad de roles
+	private _Response:			responseInterface //variable de respuesta de backend
+	private AuxUser:			Array<Users> //auxiliar de modelo usuarios
+	private _SystemResponse:	responseInterface //interfaz de respuesta para sistema
 	private ClusterCliente:		Array<any> 	//array de clientes 
 	private ClusterNegocios:	Array<Negocio> 	//array de negocios
 	private ClusterRutas:		Array<any> 	//array de rutas
@@ -87,28 +88,125 @@ export class EstadisticaService
 		this.logger.debug(' 2)Obteniendo los datos de los modelos...')
 		await this.getAllUserBySystem()  //me jalo a todos los usuarios registrados
 		await this.purifyRolesInCluster() //purifico los cluster con la data del mdoelo users
+		await this.getAllClientsBySystem() //me jalo todos los clientes registrados en el sistema
 		await this.getAllRouteBySystem() //me jalo a todos los datos de rutas
 		await this.getAllBussinesBySystem() //me jalo toda la data respectiva de necogios
 		await this.getAllPaymentBySystem() //me jalo todos los cobros dentro del sistema
 		this.logger.debug(' 3)Limpiando y contabilizando datos de los modelos requeridos...')
-		this.logger.debug(` *Cantidad total de Users: ${this.ClusterUsers.length}`)
-		this.logger.debug(` *Cantidad total de Rutas: ${this.ClusterRutas.length}`)
-		this.logger.debug(` *Cantidad total de Cobros: ${this.ClusterCobros.length}`)
-		this.logger.debug(` *Cantidad total de Clintes: ${this.ClusterCliente.length}`)
-		this.logger.debug(` *Cantidad total de Negocios: ${this.ClusterNegocios.length}`)
-		this.logger.debug(` *Cantidad total de Cobradores: ${this.ClusterCobradores.length}`)
-		this.logger.debug(` *Cantidad total de Enrutadores: ${this.ClusterEnrutadores.length}`)
+		this.logger.debug(`   *Cantidad total de Users: ${this.ClusterUsers.length}`)
+		this.logger.debug(`   *Cantidad total de Rutas: ${this.ClusterRutas.length}`)
+		this.logger.debug(`   *Cantidad total de Cobros: ${this.ClusterCobros.length}`)
+		this.logger.debug(`   *Cantidad total de Clintes: ${this.ClusterCliente.length}`)
+		this.logger.debug(`   *Cantidad total de Negocios: ${this.ClusterNegocios.length}`)
+		this.logger.debug(`   *Cantidad total de Cobradores: ${this.ClusterCobradores.length}`)
+		this.logger.debug(`   *Cantidad total de Enrutadores: ${this.ClusterEnrutadores.length}`)
 		this.logger.debug(' 4)Limpiando y finalizando clusters...')
 		await this.ClusterWipe()//llamo a la funcion para finalizar los arrays
+		//await this.getAllSystemResumeByAdmin("5f9a8465a39bda0c1c5b971a")
     }
 
 	public async getTraceOfRoutesByEnrutator(id:string):Promise<responseInterface>
 	{//función que retorna la traza de cantidad de rutas por dias, puede usar el front para aplicar filtros por fecha y otros
-		
+		this._Response.ok = true
 		this._Response.status = 200;
 		this._Response.message = "Servicio incompleto por el momento";
 		return this._Response
 	}
+
+	public async getAllSystemResumeByAdmin():Promise<responseInterface>
+	{//funcion de admin que le permite ver la cantidad de datos totales registrados en el sistema
+
+		this.ClusterInitialization();
+		await this.getAllUserBySystem()  //me jalo a todos los usuarios registrados
+		await this.purifyRolesInCluster() //purifico los cluster con la data del mdoelo users
+		await this.getAllClientsBySystem() //me jalo todos los clientes registrados en el sistema
+		await this.getAllRouteBySystem() //me jalo a todos los datos de rutas
+		await this.getAllBussinesBySystem() //me jalo toda la data respectiva de necogios
+		await this.getAllPaymentBySystem() //me jalo todos los cobros dentro del sistema
+
+		const stats:object =
+		{
+			'users':this.ClusterUsers.length,
+			'rutas':this.ClusterRutas.length,
+			'cobros':this.ClusterCobros.length,
+			'clientes':this.ClusterCliente.length,
+			'negocios':this.ClusterNegocios.length,
+			'cobradores':this.ClusterCobradores.length,
+			'enrutdores':this.ClusterEnrutadores.length
+		}
+
+		this._Response = this._SystemResponse
+		this._Response.data = stats
+		this.ClusterWipe()
+
+		return this._Response
+	}
+
+	public async countRoutesByEnrutator(id:string):Promise<responseInterface>
+	{//funcion que le cuenta cuantas rutas tiene a dispocion el enrutador
+		await this.getRoutesByEnrutator(id)
+
+		this._Response = this._SystemResponse
+		this._Response.data = this._SystemResponse.data.length
+		return this._Response;
+	}
+
+	public async countCollectorByEnrutator(id:string):Promise<responseInterface>
+	{//funcion que le cuenta al momento cuantos cobradores tiene a dispodicion el enrutador
+		await this.getCollectorsByEnrutator(id)
+
+		this._Response = this._SystemResponse
+		this._Response.data = this._SystemResponse.data.length
+		return this._Response; 
+	}
+
+	public async countClientByEnrutator(id:string):Promise<responseInterface>
+	{
+		await this.getClientsByEnrutator(id)
+		this._Response = this._SystemResponse
+		this._Response.data = this._SystemResponse.data.length
+
+		return this._Response
+	}
+
+	public async countBussinesByEnrutator(id:string):Promise<responseInterface>
+	{//funcion que le cuenta al momento cuantos negocios tiene a dispodicion el enrutador
+
+		let UserArrayAux:Array<Users> 		= new Array<Users>()//creo una variable auxiliar para manejar los _id
+		let BussinesArrayAux:Array<Negocio> = new Array<Negocio>()//creo una variable auxiliar para manejar los negocios
+		let countBussinesByEnrutator:number = 0//creo una variable auxiliar que cuente la cantidad de negocios
+		//primero saco todos los cobrador que hayan sido referenciados por el enrutador de parametro
+		await this.getCollectorsByEnrutator(id);
+		//compruebo que la respuesta del sistema contenga datos
+
+		if(!this._SystemResponse.data || this._SystemResponse.data.length <= 0)
+		{
+			this._Response.data    = null
+			this._Response.status  = 404
+			this._Response.message = "No se encontró negocios asignados a este enrutador"
+			this._Response.ok 	   = true
+
+		}else
+		{
+			
+			UserArrayAux = this._SystemResponse.data; //libero la respuesta del sistema para la nueva busqueda
+			//por cada id buscaré los negocios asignados a esos _id de cobradores y luego los contaré
+			//el resultado final será la cantidad de nogecios totales que meneja el enrutador
+			for (let i:number = 0; i < UserArrayAux.length; ++i) 
+			{//saco la información correspondiente
+				BussinesArrayAux = await(await this.getBussinesByCollector(UserArrayAux[i]._id)).data
+				//cuanto la cantidad de ngocios, repito el ciclo por cada _id referenciado del enrutador
+				countBussinesByEnrutator += BussinesArrayAux.length
+			}
+
+			//le agisno la respuesta de sistem a la respuesta de api
+			this._Response 	= this._SystemResponse
+			this._Response.data = countBussinesByEnrutator //le asigno el conteo
+		}
+		return this._Response; 
+	}
+
+	//---------- funciones privadas-------------
 
 	private ClusterInitialization()
 	{//funcion que inicializa los cluster para poder almacenar datos
@@ -132,28 +230,48 @@ export class EstadisticaService
 		this.ClusterCobros		= null//array de cobros
 	}
 
-	public async countCollectorByEnrutator(id:string):Promise<responseInterface>
-	{//funcion que le cuenta al momento cuantos cobradores tiene a dispodicion el enrutador
-		let countCollector:number = 0;
-
-		await this.ClusterCobradores.forEach((collector, index)=>
+	private async getClientsByEnrutator(id:string):Promise<responseInterface>
+	{//funcion que me retorna todos las clientes al mando de un enrutador
+		const args:_argsFind=
 		{
-			
-		})
+			findObject:{enrutador_id:id}
+		}
 
-		return this._Response;
+		await this.getDataBySystem(this._clienteModel,args)
+		return this._SystemResponse
 	}
 
-	public async countBussinesByEnrutator(id:string):Promise<responseInterface>
-	{//función que le cuenta al momento cuantos negocios tiene a su disposición el enrutador
-		let countBussines:number = 0;
-
-		await this.ClusterNegocios.forEach((bussines, index)=>
+	private async getRoutesByEnrutator(id:string):Promise<responseInterface>
+	{//funcion que me retorna todos las rutas al mando de un enrutador
+		const args:_argsFind=
 		{
-			
-		})
+			findObject:{enrutador_id:id}
+		}
 
-		return this._Response;
+		await this.getDataBySystem(this._rutaModel,args)
+		return this._SystemResponse
+	}
+
+	private async getCollectorsByEnrutator(id:string):Promise<responseInterface>
+	{//funcion que me retorna todos los cobradores al mando de un enrutador
+		const args:_argsFind =
+		{ 
+			findObject:{enrutator_id:id}
+		}
+
+		await this.getDataBySystem(this._usuariosModel,args)
+		return this._SystemResponse;
+	}
+
+	private async getBussinesByCollector(id:string):Promise<responseInterface>
+	{//función que le cuenta al momento cuantos negocios tiene a su disposición el cobrador
+		const args:_argsFind =
+		{
+			findObject:{cobrador_id:id}
+		}
+
+        await this.getDataBySystem(this._negocioModel,args)
+		return this._SystemResponse;
 	}
 
 	private purifyRolesInCluster()
@@ -187,26 +305,34 @@ export class EstadisticaService
 
 	private async getAllUserBySystem()
     {//funcion dedicada a obtener todas las rutas registrados en el sistema
-        this.ClusterUsers = await (await this.getDataBySystem(this._usuariosModel,{ path:'rol', model:'Roles', select:'rol' })).data
+    	const args: _argsFind = 
+        {
+            findObject: {},
+            populate: 
+            { 
+            	path:'rol', 
+            	model:'Roles',
+            	select:'rol' 
+            }   
+        }
+
+        this.ClusterUsers = await (await this.getDataBySystem(this._usuariosModel,args)).data
     }
 
 	private async getAllBussinesBySystem()
 	{//funcion dedicada a obtener toos los datos de negocios registrados en el sistema
+
 		this.ClusterNegocios = await (await this.getDataBySystem(this._negocioModel)).data
 	}
 
 	private async getAllClientsBySystem()
 	{//funcion de dedicada a obtner los datos de clientes registrados en el sistema
+
 		this.ClusterCliente = await (await this.getDataBySystem(this._clienteModel)).data
 	}
 
-	private async getDataBySystem(schema:Model<any>, populate:any = null, findObject:any =null):Promise<responseInterface>
+	private async getDataBySystem(schema:Model<any>, args:_argsFind = {findObject:{}}):Promise<responseInterface>
 	{//funcion interfaz que me permite traerme todo las datas dependiendo del modelo parametrizado
-		const args: _argsFind = 
-        {
-            findObject: findObject,
-            populate: populate    
-        }
 
         await this._processData._findAllDB(schema, args).then(r => 
         {
@@ -219,6 +345,21 @@ export class EstadisticaService
 
 		return this._SystemResponse
 	}
+
+    private async getDataBySystemWithPaginator(schema:Model<any>, args:_argsPagination):Promise<responseInterface>
+    {//funcion para obtener los datos del sistema con paginador
+        
+        await this._processData._findDB(schema, args).then(r =>
+        {
+           this._SystemResponse = r
+
+        }, err =>
+        {
+            this._SystemResponse = err
+        });
+
+        return this._SystemResponse  
+    }
 
 	
 }
