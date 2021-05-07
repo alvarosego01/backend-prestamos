@@ -172,9 +172,9 @@ export const UsersSchema = SchemaFactory.createForClass(Users)
   .plugin(uniqueValidator, {
     message: "El {PATH} {VALUE} ya está registrado en sistema",
   })
-  .plugin(mongoosePaginate)
+.plugin(mongoosePaginate)
 .plugin(aggregatePaginate)
 .plugin(castAggregation)
-  .plugin(mongoose_delete, { overrideMethods: 'all' });
+.plugin(mongoose_delete, { overrideMethods: 'all' });
 
 
