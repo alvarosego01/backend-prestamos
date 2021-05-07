@@ -16,6 +16,8 @@ export { BitacoraModule } from "./bitacora/bitacora.module"
 export { NominaModule } from "./nomina/nomina.module"
 export { PermisosModule } from "./permisos/permisos.module"
 export { CobradoresModule } from "./cobradores/cobradores.module"
+export { EstadisticaModule } from "./estadistica/estadistica.module"
+
 
 
 

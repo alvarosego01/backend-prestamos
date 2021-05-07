@@ -57,7 +57,7 @@ export class LicecniaUsuarioService
         
         await this.getALLInternalLicencias();
         await this.modifyAllInternalLicense();
-        this.logger.debug(this.userLicense);
+        //this.logger.debug(this.userLicense);
 
     }
 

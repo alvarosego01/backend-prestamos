@@ -3,11 +3,13 @@ import { EnrutadorController, RutasController, TablaDiariaController } from './c
 import { RutaModule } from './models/rutaModels.module';
 import { EnrutadorService, RutaService, TablaDiariaService } from './services/services.index';
 import { AuthModule } from '../auth/auth.module';
-import { _NEGOCIOSCHEMA } from '../clientes/models/schemas/schemas.index';
+import { _CLIENTESCHEMA, _NEGOCIOSCHEMA } from '../clientes/models/schemas/schemas.index';
+import { _USERSCHEMA } from '../users/models/schemas.index';
 
 @Module({
-  imports:[RutaModule, AuthModule, _NEGOCIOSCHEMA],
+  imports:[RutaModule, AuthModule, _NEGOCIOSCHEMA, _USERSCHEMA, _CLIENTESCHEMA],
   controllers: [EnrutadorController, RutasController, TablaDiariaController],
-  providers: [EnrutadorService, RutaService, TablaDiariaService]
+  providers: [EnrutadorService, RutaService, TablaDiariaService],
+  exports:[TablaDiariaService]
 })
 export class EnrutadorModule {}
