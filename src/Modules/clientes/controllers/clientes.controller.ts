@@ -1,14 +1,14 @@
 import { Controller, Response, Get, Post, Body, Param, Delete, UseGuards, Put } from '@nestjs/common';
 import {AuthGuard} from '@nestjs/passport';
 import {SameUserAuthGuard} from 'src/Modules/auth/guards/same-user-auth.guard';
-import {RolesDecorator} from 'src/Modules/role/decorators/role.decorator';
-import {RoleGuard} from 'src/Modules/role/guards/role.guard';
+import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
+import {RoleGuard} from "src/Modules/role/guards/roleGuard.index";
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
 import { ClienteDto } from '../models/dto/index.dto';
 import { ClienteService, RutaClienteService } from '../services/services.index';
 
 
-@Controller('clientes')
+@Controller('clientes') 
 export class ClientesController
 {
     private _Response:responseInterface;

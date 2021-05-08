@@ -1,10 +1,16 @@
 import { Module } from '@nestjs/common';
 import {EstadisticasController} from './controllers/estadisticas.controller';
-import {EstadisticaService} from './services/index.services';
+import 
+{
+    EstadisticaService,
+    Negocio_EstadisticaService
+} from './services/index.services';
 import { AuthModule } from '../auth/auth.module';
 import { _CLIENTESCHEMA, _NEGOCIOSCHEMA, _COBROSCHEMA } from '../clientes/models/schemas/schemas.index';
 import { _USERSCHEMA } from '../users/models/schemas.index';
 import { RutaModule } from '../enrutador/models/rutaModels.module';
+import { SchemasModule } from '../nomina/models/schemas/schemas.module'
+import { ClientesModule } from '../clientes/clientes.module';
 
 @Module({
     controllers:
@@ -14,6 +20,7 @@ import { RutaModule } from '../enrutador/models/rutaModels.module';
     providers:
     [
     	EstadisticaService,
+        Negocio_EstadisticaService
     ],
     imports:
     [
@@ -22,7 +29,8 @@ import { RutaModule } from '../enrutador/models/rutaModels.module';
     	_USERSCHEMA, 
     	_CLIENTESCHEMA,
         _COBROSCHEMA, 
-        RutaModule
+        RutaModule,
+        SchemasModule
     ]
 })
 export class EstadisticaModule {}
