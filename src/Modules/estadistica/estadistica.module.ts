@@ -5,6 +5,10 @@ import
     EstadisticaService,
     Negocio_EstadisticaService
 } from './services/index.services';
+import
+{
+    _TRAZAESTADISTICASYSTEMACHEMA
+}from './models/schemas/index.schema'
 import { AuthModule } from '../auth/auth.module';
 import { _CLIENTESCHEMA, _NEGOCIOSCHEMA, _COBROSCHEMA } from '../clientes/models/schemas/schemas.index';
 import { _USERSCHEMA } from '../users/models/schemas.index';
@@ -30,7 +34,8 @@ import { ClientesModule } from '../clientes/clientes.module';
     	_CLIENTESCHEMA,
         _COBROSCHEMA, 
         RutaModule,
-        SchemasModule
+        SchemasModule,
+        _TRAZAESTADISTICASYSTEMACHEMA
     ]
 })
 export class EstadisticaModule {}

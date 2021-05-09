@@ -62,13 +62,23 @@ export class EstadisticasController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @RolesDecorator('ADMIN_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Get('admin/stats')
     async getAdminStats(@Response() res:any): Promise<responseInterface>
     {//función que retorna resumen del sistema, la cantidad de todos los datos registrados...
         
         this._Response = await this._estadisticaServices.getAllSystemResumeByAdmin();
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+    @RolesDecorator('ADMIN_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    @Get('admin/traza/stats')
+    async getAdminTraceStats(@Response() res:any): Promise<responseInterface>
+    {//función que retorna resumen del sistema, la cantidad de todos los datos registrados...
+        
+        this._Response = await this._estadisticaServices.getTraceSystemStatsByAdmin();
         return res.status(this._Response.status).json(this._Response);
     }
 }

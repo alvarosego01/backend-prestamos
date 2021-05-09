@@ -19,6 +19,7 @@ import { Cliente } from 'src/Modules/clientes/models/schemas/cliente.schema'
 import { Users } from 'src/Modules/users/models/schemas/userSchema' 
 import { Nomina } from 'src/Modules/nomina/models/schemas/nomina.schema'
 import { CajaChica } from 'src/Modules/nomina/models/schemas/cajachica.schema'
+import { TrazaEstadisticaSystema } from 'src/Modules/estadistica/models/schemas/traza.estadistica.schema'
 
 /* TODO:
 
@@ -39,8 +40,10 @@ import { CajaChica } from 'src/Modules/nomina/models/schemas/cajachica.schema'
 	*total gastos de operación por enrutador
 	*caja chica con mayor dinero
 	*caja chica con menor dinero
+	*caja chica con menor gastos de op
+	*caja chica con mayor gastos de op
 	*total de recavado el dia anterior
-	*guardar las trazas totales en base de datos
+	*guardar las trazas totales en base de datos, para ruta admin
 */
 
 /*
@@ -78,7 +81,8 @@ export class EstadisticaService
 		@InjectModel(Users.name) private readonly _usuariosModel:Model<Users>, 
 		@InjectModel(Cobros.name) private readonly _cobrosModel:Model<Cobros>,
 		@InjectModel(CajaChica.name) private readonly _cajachModel:Model<CajaChica>,
-		@InjectModel(Nomina.name) private readonly _nominahModel:Model<Nomina>
+		@InjectModel(Nomina.name) private readonly _nominahModel:Model<Nomina>,
+		@InjectModel(TrazaEstadisticaSystema.name) private _trazaModel:Model<TrazaEstadisticaSystema>
     )
 	{
 		this.logger = new Logger("Estadisticas") 
@@ -87,7 +91,7 @@ export class EstadisticaService
 	}
 
 	//00 30 4 */2 * *
-	@Cron('*/5 * * * * *',
+	@Cron('00 30 4 */1 * *',
     {
         name: "Manejo de Estadísticas" 
     })
@@ -111,18 +115,44 @@ export class EstadisticaService
 		this.logger.debug(`   *Cantidad total de Rutas: ${this.ClusterRutas.length}`)
 		this.logger.debug(`   *Cantidad total de Cobros: ${this.ClusterCobros.length}`)
 		this.logger.debug(`   *Cantidad total de Nomina: ${this.ClusterNomina.length}`)
-		this.logger.debug(`   *Cantidad total de Clintes: ${this.ClusterCliente.length}`)
+		this.logger.debug(`   *Cantidad total de Clientes: ${this.ClusterCliente.length}`)
 		this.logger.debug(`   *Cantidad total de Caja chica: ${this.ClusterCajaCh.length}`)
 		this.logger.debug(`   *Cantidad total de Negocios: ${this.ClusterNegocios.length}`)
 		this.logger.debug(`   *Cantidad total de Cobradores: ${this.ClusterCobradores.length}`)
 		this.logger.debug(`   *Cantidad total de Enrutadores: ${this.ClusterEnrutadores.length}`)
-		this.logger.debug(' 4)Limpiando y finalizando clusters...')
+		await this.saveTraceSystemInDataBase() //guardo la traza de los datos recolectados anteriormente
+		this.logger.debug(` 4)Guardando datos para histórico en la base de datos... ${this._SystemResponse.ok}`)
+		this.logger.debug(' 5)Limpiando y finalizando clusters...')
 		await this.ClusterWipe()//llamo a la funcion para finalizar los arrays
-		/*await this.countBussinesByEnrutator("5f9a8465a39bda0c1c5b971a")
-		this.logger.debug(this._Response)*/
+		/*await this.getTraceSystemStatsByAdmin("5f9a8465a39bda0c1c5b971a")
+		console.log(this._Response)*/
     }
 
     //---------- funciones publicas de usuario-------------
+
+    public async getTraceSystemStatsByAdmin():Promise<responseInterface>
+    {//funcion administrativa que retorna la traza de la cantidad de modelo 
+     //presentes en el sistema con paginador
+
+    	const parameters: _dataPaginator =
+        {
+            page: 1 || _configPaginator.page,
+            limit: 12 || _configPaginator.limit,
+            customLabels: _configPaginator.customLabels,
+            sort: { _id: -1 },
+        }
+
+        const args: _argsPagination =
+        {
+            findObject: {},
+            options: parameters
+        }
+
+        await this.getDataBySystemWithPaginator(this._trazaModel,args)
+
+        this._Response = this._SystemResponse
+    	return this._Response
+    }
 
 	public async getAllSystemResumeByAdmin():Promise<responseInterface>
 	{//funcion de admin que le permite ver la cantidad de datos totales registrados en el sistema
@@ -244,9 +274,22 @@ export class EstadisticaService
 	    this.ClusterCajaCh	    = null//array de cajas chichas
 	}
 
-	private async saveTraceSystemInDataBase()
+	private async saveTraceSystemInDataBase():Promise<responseInterface>
 	{//funcion que guarda cada cluster en la base de datos
-		
+		const trazaSystema:TrazaEstadisticaSystema = new this._trazaModel({
+			'rutas': 		this.ClusterRutas.length,
+			'negocios':		this.ClusterNegocios.length,
+			'enrutadores':	this.ClusterEnrutadores.length,
+			'clientes':		this.ClusterCliente.length,
+			'cobradores':   this.ClusterCobradores.length,
+			'cobros':		this.ClusterCobros.length,
+			'nomina':		this.ClusterNomina.length,
+			'usuarios':		this.ClusterUsers.length,
+			'caja_ch':		this.ClusterCajaCh.length
+		})
+
+		await this.saveDataBySystem(trazaSystema)
+		return this._SystemResponse
 	}
 
 	private async getAllPettyCashByEnrutator(id:string):Promise<responseInterface>
@@ -301,7 +344,7 @@ export class EstadisticaService
 		}
 
 		await this.getDataBySystem(this._usuariosModel,args)
-		return this._SystemResponse;
+		return this._SystemResponse
 	}
 
 	private async getBussinesByCollector(id:string):Promise<responseInterface>
@@ -312,7 +355,7 @@ export class EstadisticaService
 		}
 
         await this.getDataBySystem(this._negocioModel,args)
-		return this._SystemResponse;
+		return this._SystemResponse
 	}
 
 	private purifyRolesInCluster()
@@ -323,9 +366,9 @@ export class EstadisticaService
 			{
 				let role:any = this.ClusterUsers[i].rol;
 
-				(role.rol === 'COLLECTOR_ROLE')? this.ClusterCobradores.push(this.ClusterUsers.splice(i,1)) : false;
+				(role.rol === 'COLLECTOR_ROLE')? this.ClusterCobradores.push(this.ClusterUsers[i]) : false;
 
-				(role.rol === 'ENRUTATOR_ROLE')? this.ClusterEnrutadores.push(this.ClusterUsers.splice(i,1)) : false;
+				(role.rol === 'ENRUTATOR_ROLE')? this.ClusterEnrutadores.push(this.ClusterUsers[i]) : false;
 
 				(role.rol === 'ADMINOR_ROLE')? true : false;//roles pendiente por funcionalidades futuras
 
@@ -409,7 +452,7 @@ export class EstadisticaService
 		return this._SystemResponse
 	}
 
-	public async saveDataBySystem(data:Model<any>)
+	public async saveDataBySystem(data:Object)
 	{//funcion que garda en la base de datos pasando el modelo que se require guardar
 
 		await this._processData._saveDB(data).then( r => 
@@ -421,7 +464,7 @@ export class EstadisticaService
 			this.logger.debug(`Error: ${err}`)
 		})
 
-		return this._SystemResponse;
+		return this._SystemResponse
 	}
 
 	public async getDataBySystem(schema:Model<any>, args:_argsFind = {findObject:{}}):Promise<responseInterface>

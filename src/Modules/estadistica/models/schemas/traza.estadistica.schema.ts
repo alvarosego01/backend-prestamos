@@ -27,37 +27,37 @@ export class TrazaEstadisticaSystema extends Document
     type: Number,
     required: true
   })//numero total de negocios que maneja el sistema
-  neogcio: number
+  negocios: number
 
   @Prop({
     type: Number,
     required: true
   })//numero total de enrutadores que maneja el sistema
-  enrutador: number
+  enrutadores: number
 
   @Prop({
     type: Number,
     required: true
   })//numero total de clientes que maneja el sistema
-  cliente: number
+  clientes: number
 
   @Prop({
     type: Number,
     required: true
   })//numero total de cobradores que maneja el sistema
-  cobrador: number
+  cobradores: number
 
   @Prop({
     type: Number,
     required: true
   })//numero total de usuarios que maneja el sistema
-  usuario: number
+  usuarios: number
 
   @Prop({
     type: Number,
     required: true
   })//numero total de cobros que maneja el sistema
-  cobro: number
+  cobros: number
 
   @Prop({
     type: Number,
@@ -72,7 +72,6 @@ export class TrazaEstadisticaSystema extends Document
   caja_ch: number
 
   @Prop({
-    required: false,
     type: Array,
     default: _dateService.setDate()
   })
