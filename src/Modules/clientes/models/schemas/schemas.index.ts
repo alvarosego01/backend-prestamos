@@ -4,11 +4,6 @@ import { Cobros, CobrosSchema } from "./cobros.schema"
 import { CambioCobro, CambioCobroSchema } from "./peticion.schema"
 import { Negocio, NegocioSchema, Cuota, CuotaSchema } from "./negocio.schema"
 
-
-
-
-console.log('que es', Cliente.name);
-
 export const _CLIENTESCHEMA = MongooseModule.forFeature([
     {
         name: Cliente.name,

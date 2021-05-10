@@ -21,6 +21,7 @@ import { Nomina } from 'src/Modules/nomina/models/schemas/nomina.schema'
 import { CajaChica } from 'src/Modules/nomina/models/schemas/cajachica.schema'
 import { TrazaEstadisticaSystema } from 'src/Modules/estadistica/models/schemas/traza.estadistica.schema'
 
+
 /* TODO:
 
 	Estas estadisticas hablaran de: 
@@ -87,46 +88,9 @@ export class EstadisticaService
 	{
 		this.logger = new Logger("Estadisticas") 
 		this.logger.setContext("Sistema de Estadisticas")
+		
 		this.roles = 2;//seteo la cantidad de roles que limpiaré dentro del bucle de depurado
 	}
-
-	//00 30 4 */2 * *
-	@Cron('00 30 4 */1 * *',
-    {
-        name: "Manejo de Estadísticas" 
-    })
-    private async handleCron()
-    {
-		console.clear()
-		this.logger.debug('Protocolo de estadisticas:')
-		this.logger.debug(' 1)Inicilizando variables cluster...')
-		this.ClusterInitialization()//aqui inicializo los arrays
-		this.logger.debug(' 2)Obteniendo los datos de los modelos...')
-		await this.getAllUserBySystem()  //me jalo a todos los usuarios registrados
-		await this.purifyRolesInCluster() //purifico los cluster con la data del mdoelo users
-		await this.getAllClientsBySystem() //me jalo todos los clientes registrados en el sistema
-		await this.getAllRouteBySystem() //me jalo a todos los datos de rutas
-		await this.getAllBussinesBySystem() //me jalo toda la data respectiva de necogios
-		await this.getAllPaymentBySystem() //me jalo todos los cobros dentro del sistema
-		await this.getAllPayRollBySystem() //me jalo todas las nominas dentro del sistema
-		await this.getAllPettyCashBySystem() //me jalo todas los cajas chicas dentro del sistema
-		this.logger.debug(' 3)Limpiando y contabilizando datos de los modelos en el sistema...')
-		this.logger.debug(`   *Cantidad total de Users: ${this.ClusterUsers.length}`)
-		this.logger.debug(`   *Cantidad total de Rutas: ${this.ClusterRutas.length}`)
-		this.logger.debug(`   *Cantidad total de Cobros: ${this.ClusterCobros.length}`)
-		this.logger.debug(`   *Cantidad total de Nomina: ${this.ClusterNomina.length}`)
-		this.logger.debug(`   *Cantidad total de Clientes: ${this.ClusterCliente.length}`)
-		this.logger.debug(`   *Cantidad total de Caja chica: ${this.ClusterCajaCh.length}`)
-		this.logger.debug(`   *Cantidad total de Negocios: ${this.ClusterNegocios.length}`)
-		this.logger.debug(`   *Cantidad total de Cobradores: ${this.ClusterCobradores.length}`)
-		this.logger.debug(`   *Cantidad total de Enrutadores: ${this.ClusterEnrutadores.length}`)
-		await this.saveTraceSystemInDataBase() //guardo la traza de los datos recolectados anteriormente
-		this.logger.debug(` 4)Guardando datos para histórico en la base de datos... ${this._SystemResponse.ok}`)
-		this.logger.debug(' 5)Limpiando y finalizando clusters...')
-		await this.ClusterWipe()//llamo a la funcion para finalizar los arrays
-		/*await this.getTraceSystemStatsByAdmin("5f9a8465a39bda0c1c5b971a")
-		console.log(this._Response)*/
-    }
 
     //---------- funciones publicas de usuario-------------
 
@@ -360,7 +324,7 @@ export class EstadisticaService
 
 	private purifyRolesInCluster()
 	{//función que extrae los elementos del cluster de ususrio según el tipo
-		for(let j:number = 0; j < this.roles; j++)
+		/* for(let j:number = 0; j < this.roles; j++)
 		{
 			for( let i:number = 0; i<this.ClusterUsers.length; i++)
 			{
@@ -374,6 +338,19 @@ export class EstadisticaService
 
 				(role.rol === 'DEFAULT_ROLE')? true : false;//roles pendiente por funcionalidades futuras
 			}
+		} */
+
+		for (let i: number = 0; i < this.ClusterUsers.length; i++) 
+		{
+			let role: any = this.ClusterUsers[i].rol;
+
+			(role.rol === 'COLLECTOR_ROLE') ? this.ClusterCobradores.push(this.ClusterUsers[i]) : false;
+
+			(role.rol === 'ENRUTATOR_ROLE') ? this.ClusterEnrutadores.push(this.ClusterUsers[i]) : false;
+
+			(role.rol === 'ADMINOR_ROLE') ? true : false;//roles pendiente por funcionalidades futuras
+
+			(role.rol === 'DEFAULT_ROLE') ? true : false;//roles pendiente por funcionalidades futuras
 		}
 	}
 
@@ -428,6 +405,104 @@ export class EstadisticaService
 	}
 
 	//---------- funciones publicas de sistema-------------
+	
+	public async getEnrutatorsToOtherService():Promise<Array<Users>>
+	{//funcion que me permite trasladar el cluster de enrutadores a los servicios dedicados 
+		let aux:Array<Users> = new Array<Users>()
+
+		this.ClusterInitialization()
+		await this.getAllUserBySystem()
+		this.purifyRolesInCluster()
+		aux = this.ClusterEnrutadores
+		this.ClusterWipe()
+
+		return aux
+	}
+
+	public async getCollectorsToOtherService():Promise<Array<Users>>
+	{//funcion que me permite trasladar el cluster de cobradores a los servicios dedicados 
+		let aux:Array<Users> = new Array<Users>()
+
+		this.ClusterInitialization()
+		await this.getAllUserBySystem()
+		this.purifyRolesInCluster()
+		aux = this.ClusterCobradores
+		this.ClusterWipe()
+
+		return aux
+	}
+
+	public async getBussinesToOtherService():Promise<Array<Negocio>>
+	{//funcion que me permite trasladar el cluster de negocios a los servicios dedicados 
+		let aux:Array<Negocio> = new Array<Negocio>()
+
+		this.ClusterInitialization()
+		await this.getAllBussinesBySystem()
+		aux = this.ClusterNegocios
+		this.ClusterWipe()
+
+		return aux
+	}
+
+	public async getClientsToOtherService():Promise<Array<Cliente>>
+	{//funcion que me permite trasladar el cluster de clientes a los servicios dedicados 
+		let aux:Array<Cliente> = new Array<Cliente>()
+
+		this.ClusterInitialization()
+		await this.getAllClientsBySystem()
+		aux = this.ClusterCliente
+		this.ClusterWipe()
+
+		return aux
+	}
+
+	public async getRoutesToOtherService():Promise<Array<Ruta>>
+	{//funcion que me permite trasladar el cluster de clientes a los servicios dedicados 
+		let aux:Array<Ruta> = new Array<Ruta>()
+
+		this.ClusterInitialization()
+		await this.getAllRouteBySystem()
+		aux = this.ClusterRutas
+		this.ClusterWipe()
+
+		return aux
+	}
+
+	public async systemStats(debug:boolean =false)
+	{//funcion que genera los protocolos de estadisticas generales de sistema
+		this.logger.debug('Protocolo de estadisticas:')
+		this.logger.debug(' 1)Inicilizando variables cluster...')
+		this.ClusterInitialization()//aqui inicializo los arrays
+		this.logger.debug(' 2)Obteniendo los datos de los modelos...')
+		await this.getAllUserBySystem()  //me jalo a todos los usuarios registrados
+		await this.purifyRolesInCluster() //purifico los cluster con la data del mdoelo users
+		await this.getAllClientsBySystem() //me jalo todos los clientes registrados en el sistema
+		await this.getAllRouteBySystem() //me jalo a todos los datos de rutas
+		await this.getAllBussinesBySystem() //me jalo toda la data respectiva de necogios
+		await this.getAllPaymentBySystem() //me jalo todos los cobros dentro del sistema
+		await this.getAllPayRollBySystem() //me jalo todas las nominas dentro del sistema
+		await this.getAllPettyCashBySystem() //me jalo todas los cajas chicas dentro del sistema
+		this.logger.debug(' 3)Limpiando y contabilizando datos de los modelos en el sistema...')
+		this.logger.debug(`   *Cantidad total de Users: ${this.ClusterUsers.length}`)
+		this.logger.debug(`   *Cantidad total de Rutas: ${this.ClusterRutas.length}`)
+		this.logger.debug(`   *Cantidad total de Cobros: ${this.ClusterCobros.length}`)
+		this.logger.debug(`   *Cantidad total de Nomina: ${this.ClusterNomina.length}`)
+		this.logger.debug(`   *Cantidad total de Clientes: ${this.ClusterCliente.length}`)
+		this.logger.debug(`   *Cantidad total de Caja chica: ${this.ClusterCajaCh.length}`)
+		this.logger.debug(`   *Cantidad total de Negocios: ${this.ClusterNegocios.length}`)
+		this.logger.debug(`   *Cantidad total de Cobradores: ${this.ClusterCobradores.length}`)
+		this.logger.debug(`   *Cantidad total de Enrutadores: ${this.ClusterEnrutadores.length}`);
+		if(debug)
+		{
+			this.logger.debug(' ESTADISTICAS DE SISTEMA EN MODO DEBUG, NO GUARDA DATOS EN BASE...')
+		}else
+		{
+			await this.saveTraceSystemInDataBase() //guardo la traza de los datos recolectados anteriormente
+			this.logger.debug(` 4)Guardando datos para histórico en la base de datos... ${this._SystemResponse.ok}`)
+		}
+		this.logger.debug(' 5)Limpiando y finalizando clusters...')
+		await this.ClusterWipe()//llamo a la funcion para finalizar los arrays
+	}
 
 	public async countBussinesBySystem(id:string):Promise<responseInterface>
 	{//funcion que le cuenta al momento cuantos negocios tiene a dispodicion el enrutador

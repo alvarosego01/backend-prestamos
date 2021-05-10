@@ -3,7 +3,8 @@ import {EstadisticasController} from './controllers/estadisticas.controller';
 import 
 {
     EstadisticaService,
-    Negocio_EstadisticaService
+    Negocio_EstadisticaService,
+    HandlerStatService
 } from './services/index.services';
 import
 {
@@ -15,6 +16,7 @@ import { _USERSCHEMA } from '../users/models/schemas.index';
 import { RutaModule } from '../enrutador/models/rutaModels.module';
 import { SchemasModule } from '../nomina/models/schemas/schemas.module'
 import { ClientesModule } from '../clientes/clientes.module';
+import { Negocio, NegocioSchema } from '../clientes/models/schemas/negocio.schema';
 
 @Module({
     controllers:
@@ -23,8 +25,10 @@ import { ClientesModule } from '../clientes/clientes.module';
     ],
     providers:
     [
+        ClientesModule,
     	EstadisticaService,
-        Negocio_EstadisticaService
+        Negocio_EstadisticaService,
+        HandlerStatService
     ],
     imports:
     [
@@ -35,6 +39,7 @@ import { ClientesModule } from '../clientes/clientes.module';
         _COBROSCHEMA, 
         RutaModule,
         SchemasModule,
+        ClientesModule,
         _TRAZAESTADISTICASYSTEMACHEMA
     ]
 })
