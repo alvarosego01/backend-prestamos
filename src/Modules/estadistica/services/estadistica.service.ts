@@ -402,10 +402,10 @@ export class EstadisticaService
 	{//funcion de dedicada a obtner los datos de clientes registrados en el sistema
 
 		this.ClusterCliente = await (await this.getDataBySystem(this._clienteModel)).data
-	}
+	} 
 
 	//---------- funciones publicas de sistema-------------
-	
+
 	public async getEnrutatorsToOtherService():Promise<Array<Users>>
 	{//funcion que me permite trasladar el cluster de enrutadores a los servicios dedicados 
 		let aux:Array<Users> = new Array<Users>()
