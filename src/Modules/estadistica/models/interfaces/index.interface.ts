@@ -1,0 +1,1 @@
+export {traceBussines} from './trace.bussines.interface'
