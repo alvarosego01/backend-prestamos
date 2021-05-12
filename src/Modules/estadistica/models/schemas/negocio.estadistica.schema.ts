@@ -14,8 +14,37 @@ import { DateProcessService } from "src/Classes/classes.index"
 const _dateService = new DateProcessService()
 
 @Schema()//schema que almacenará en base la cantidad de rutas por dia y a que enrutador le pertenece
-export class TrazaEstadisticaSystema extends Document
+export class TrazaNegocioSystema extends Document
 {
+  @Prop({
+    type: String,
+    required: true
+  })//enrutador que maneja el prestamo
+  enrutador_id: string
+  
+  @Prop({
+    type: String,
+    required: true
+  })//cobrdor manejando el menor prestamo
+  cobrador_id_low: string
+
+  @Prop({
+    type: String,
+    required: true
+  })//cobrdor manejando el mayor prestamo
+  cobrador_id_high: string
+  
+  @Prop({
+    type: String,
+    required: true
+  })//cliente con el menor prestamo
+  pclient_low: string
+
+  @Prop({
+    type: String,
+    required: true
+  })//cliente con el mayor prestamo
+  pclient_high: string
 
   @Prop({
     type: Number,
@@ -36,32 +65,13 @@ export class TrazaEstadisticaSystema extends Document
   prestamo_count: number
 
   @Prop({
-    type: Number,
-    required: true
-  })//total prestamos
-  prestamo_total: number
-
-  @Prop({
-    type: Number,
-    required: true
-  })//cliente con el menor prestamo
-  pclient_low: number
-
-  @Prop({
-    type: Number,
-    required: true
-  })//cliente con el mayor prestamo
-  pclient_high: number
-
-  @Prop({
     type: Array,
     default: _dateService.setDate()
   })
-  createdAt: string;
-
+  createdAt: string[]
 }
 
-export const TrazaEstadisticaSystemaSchema = SchemaFactory.createForClass(TrazaEstadisticaSystema)
+export const TrazaNegocioSystemaSchema = SchemaFactory.createForClass(TrazaNegocioSystema)
 .plugin(uniqueValidator, {message: "Acción de ${PATH} inválida, ${VALUE}"})
 .plugin(mongoosePaginate)
 .plugin(aggregatePaginate)

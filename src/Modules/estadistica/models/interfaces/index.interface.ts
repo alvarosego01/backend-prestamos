@@ -1,1 +1,1 @@
-export {traceBussines} from './trace.bussines.interface'
+export {TraceBussines} from './trace.bussines.interface'

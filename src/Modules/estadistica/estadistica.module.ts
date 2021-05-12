@@ -8,7 +8,7 @@ import
 } from './services/index.services';
 import
 {
-    _TRAZAESTADISTICASYSTEMACHEMA
+    _TRAZAESTADISTICASYSTEMACHEMA, _TRAZANEGOCIOSYSTEMACHEMA
 }from './models/schemas/index.schema'
 import { AuthModule } from '../auth/auth.module';
 import { _CLIENTESCHEMA, _NEGOCIOSCHEMA, _COBROSCHEMA } from '../clientes/models/schemas/schemas.index';
@@ -16,7 +16,7 @@ import { _USERSCHEMA } from '../users/models/schemas.index';
 import { RutaModule } from '../enrutador/models/rutaModels.module';
 import { SchemasModule } from '../nomina/models/schemas/schemas.module'
 import { ClientesModule } from '../clientes/clientes.module';
-import { Negocio, NegocioSchema } from '../clientes/models/schemas/negocio.schema';
+import { Estadisticas_ModelsModule } from './models/estadisticas.models.module';
 
 @Module({
     controllers:
@@ -40,7 +40,7 @@ import { Negocio, NegocioSchema } from '../clientes/models/schemas/negocio.schem
         RutaModule,
         SchemasModule,
         ClientesModule,
-        _TRAZAESTADISTICASYSTEMACHEMA
+        Estadisticas_ModelsModule
     ]
 })
 export class EstadisticaModule {}

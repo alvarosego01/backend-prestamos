@@ -1,6 +1,6 @@
 import { Param, Body, Controller, Get, Post, Response, UseGuards } from '@nestjs/common';
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
-import { EstadisticaService } from '../services/index.services';
+import { EstadisticaService, Negocio_EstadisticaService } from '../services/index.services';
 
 import { AuthGuard, PassportModule } from '@nestjs/passport';
 import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
@@ -13,7 +13,8 @@ export class EstadisticasController
 
 	constructor
 	(
-		private _estadisticaServices:EstadisticaService
+		private readonly _estadisticaServices:EstadisticaService,
+        private readonly _bussinesServices:Negocio_EstadisticaService
 	){} 
 
 	@Get("hello")
@@ -29,6 +30,26 @@ export class EstadisticasController
     {//función que retorna la cantidad de negocios totales que maneja el enrutador
         
         this._Response = await this._estadisticaServices.countBussinesByEnrutator(id);
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    @Get('negocios/stats/:enrutador')
+    async getBussinesStatsByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
+    {//función que retorna el estatus de los negocios manejados por un enrutador
+        
+        this._Response = await this._bussinesServices.getStatsBussinesByEnrutator(id);
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    @Get('negocios/traza/stats:enrutador')
+    async getBussinesTraceByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
+    {//función que retorna el historico de los negocios manejados por un enrutador
+        
+        this._Response = await this._bussinesServices.getTraceBussinesByEnrutator(id);
         return res.status(this._Response.status).json(this._Response);
     }
 

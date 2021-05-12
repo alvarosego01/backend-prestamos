@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { Cron } from '@nestjs/schedule'
 import { Model } from 'mongoose'
 import { DateProcessService, ProcessDataService } from 'src/Classes/classes.index'
 import 
@@ -23,28 +22,13 @@ import { TrazaEstadisticaSystema } from 'src/Modules/estadistica/models/schemas/
 
 
 /* TODO:
-
-	Estas estadisticas hablaran de: 
-	*total de dinero prestado por ruta
-	*total de dinero recogido por ruta
-	*total de dinero recogido
 	*numero de rutas, ->listo para admin y enrtador
 	*numero total de negocios -> listo para admin y enrutador
 	*numero total de clientes ->listo para admin y enrutador
 	*numero total de cobradores -> listo para admin y enrutador
 	*numero total de cajas chichas -> listo para admin y enrutador
 	*numero total de nominas -> listo para admin y enrutador
-	*numero de cobradores por ruta
-	*negocios de mayor prestamo
-	*negocios de menor prestamo
-	*total caja chica por enrutador
-	*total gastos de operación por enrutador
-	*caja chica con mayor dinero
-	*caja chica con menor dinero
-	*caja chica con menor gastos de op
-	*caja chica con mayor gastos de op
-	*total de recavado el dia anterior
-	*guardar las trazas totales en base de datos, para ruta admin
+	*guardar las trazas totales en base de datos, para ruta admin -> listo
 */
 
 /*
@@ -404,7 +388,28 @@ export class EstadisticaService
 		this.ClusterCliente = await (await this.getDataBySystem(this._clienteModel)).data
 	} 
 
+	private async getTotalEnrutatorsBySystem():Promise<number>
+	{//funcion que me permite saber el numero de enrutadores a los servicios dedicados 
+		let aux:number = 0
+
+		this.ClusterInitialization()
+		await this.getAllUserBySystem()
+		this.purifyRolesInCluster()
+		aux = this.ClusterEnrutadores.length
+		this.ClusterWipe()
+		return aux
+	}
+
 	//---------- funciones publicas de sistema-------------
+	public async getCollectorsByEnrutetorToOtherService(id:string):Promise<responseInterface>
+	{
+		return await this.getCollectorsByEnrutator(id)
+	}
+
+	public async getTotalEnrutatorsToOtherService():Promise<number>
+	{//funcion que me permite trasladar el numero de enrutadores a los servicios dedicados 
+		return await this.getTotalEnrutatorsBySystem()
+	}
 
 	public async getEnrutatorsToOtherService():Promise<Array<Users>>
 	{//funcion que me permite trasladar el cluster de enrutadores a los servicios dedicados 
@@ -495,6 +500,7 @@ export class EstadisticaService
 		if(debug)
 		{
 			this.logger.debug(' ESTADISTICAS DE SISTEMA EN MODO DEBUG, NO GUARDA DATOS EN BASE...')
+			//this.logger.debug(await this.countBussinesByEnrutator('5f9a8465a39bda0c1c5b971a'))
 		}else
 		{
 			await this.saveTraceSystemInDataBase() //guardo la traza de los datos recolectados anteriormente
@@ -504,9 +510,8 @@ export class EstadisticaService
 		await this.ClusterWipe()//llamo a la funcion para finalizar los arrays
 	}
 
-	public async countBussinesBySystem(id:string):Promise<responseInterface>
-	{//funcion que le cuenta al momento cuantos negocios tiene a dispodicion el enrutador
-
+	public async getBussinesBySystemUsingIdEnrutator(id:string):Promise<responseInterface>
+	{
 		let UserArrayAux:Array<Users> 		= new Array<Users>()//creo una variable auxiliar para manejar los _id
 		let BussinesArrayAux:Array<Negocio> = new Array<Negocio>()//creo una variable auxiliar para manejar los negocios
 		let countBussinesByEnrutator:number = 0//creo una variable auxiliar que cuente la cantidad de negocios
@@ -516,14 +521,24 @@ export class EstadisticaService
 		UserArrayAux = this._SystemResponse.data; //libero la respuesta del sistema para la nueva busqueda
 		//por cada id buscaré los negocios asignados a esos _id de cobradores y luego los contaré
 		//el resultado final será la cantidad de nogecios totales que meneja el enrutador
+		this._SystemResponse.ok = false //en el caso de que no exista ningun negocio registrado con un enrutador
 		for (let i:number = 0; i < UserArrayAux.length; ++i) 
 		{//saco la información correspondiente
 			BussinesArrayAux = await(await this.getBussinesByCollector(UserArrayAux[i]._id)).data
 			//cuanto la cantidad de ngocios, repito el ciclo por cada _id referenciado del enrutador
 			countBussinesByEnrutator += BussinesArrayAux.length
+			this._SystemResponse.ok = true
 		}
+		this._SystemResponse.data = {'total_bussines': countBussinesByEnrutator, 'bussines': BussinesArrayAux}
 
-		this._SystemResponse.data = countBussinesByEnrutator
+		return this._SystemResponse
+	}
+
+	public async countBussinesBySystem(id:string):Promise<responseInterface>
+	{//funcion que le cuenta al momento cuantos negocios tiene a dispodicion el enrutador
+
+		await this.getBussinesBySystemUsingIdEnrutator(id)
+		this._SystemResponse.data = this._SystemResponse.data.total_bussines
 		return this._SystemResponse
 	}
 
