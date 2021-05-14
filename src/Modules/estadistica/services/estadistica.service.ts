@@ -306,24 +306,20 @@ export class EstadisticaService
 		return this._SystemResponse
 	}
 
+	private async getPaymentsByCollector(id:string):Promise<responseInterface>
+	{//función que le cuenta al momento cuantos negocios tiene a su disposición el cobrador
+		const args:_argsFind =
+		{
+			findObject:{cobrador_id:id}
+		}
+
+        await this.getDataBySystem(this._cobrosModel,args)
+		return this._SystemResponse
+	}
+
 	private purifyRolesInCluster()
 	{//función que extrae los elementos del cluster de ususrio según el tipo
-		/* for(let j:number = 0; j < this.roles; j++)
-		{
-			for( let i:number = 0; i<this.ClusterUsers.length; i++)
-			{
-				let role:any = this.ClusterUsers[i].rol;
-
-				(role.rol === 'COLLECTOR_ROLE')? this.ClusterCobradores.push(this.ClusterUsers[i]) : false;
-
-				(role.rol === 'ENRUTATOR_ROLE')? this.ClusterEnrutadores.push(this.ClusterUsers[i]) : false;
-
-				(role.rol === 'ADMINOR_ROLE')? true : false;//roles pendiente por funcionalidades futuras
-
-				(role.rol === 'DEFAULT_ROLE')? true : false;//roles pendiente por funcionalidades futuras
-			}
-		} */
-
+		
 		for (let i: number = 0; i < this.ClusterUsers.length; i++) 
 		{
 			let role: any = this.ClusterUsers[i].rol;
@@ -350,9 +346,11 @@ export class EstadisticaService
 		this.ClusterCajaCh = await (await this.getDataBySystem(this._cajachModel)).data
 	}
 
-	private async getAllPaymentBySystem()
+	private async getAllPaymentBySystem():Promise<Array<Cobros>>
 	{//funcio que me retorna todas los cobros registrados en el sistema
 		this.ClusterCobros = await (await this.getDataBySystem(this._cobrosModel)).data
+
+		return this.ClusterCobros
 	}
 
 	private async getAllRouteBySystem()
@@ -530,6 +528,39 @@ export class EstadisticaService
 			this._SystemResponse.ok = true
 		}
 		this._SystemResponse.data = {'total_bussines': countBussinesByEnrutator, 'bussines': BussinesArrayAux}
+
+		return this._SystemResponse
+	}
+
+	public async getPaymentsBySystemUsingIdEnrutator(id:string):Promise<responseInterface>
+	{
+		let CollectorsArrayAux:Array<Users>    = await(await this.getCollectorsByEnrutator(id)).data
+		let countPaymentsByEnrutator:number    = 0//creo una variable auxiliar que cuente la cantidad de negocios
+		let auxClusterPayments:Array<Cobros>   = await this.getAllPaymentBySystem() //me jalo todos los cobros
+		let resultClusterPayment:Array<Cobros> = Array<Cobros>() //una variable axuliar que retorna el resultado de la depuracion
+		let dateTopay:string 				   = this._dateProcessService.getNextPointInTime(-1)//seteo los pagos del dia anterior
+		this._SystemResponse.ok                = false // mientras que no se entre al bucle de filtrado a operacion será fallida
+
+		for(let i:number =0; i < CollectorsArrayAux.length; i++)
+		{
+			for(let j:number =0; j < auxClusterPayments.length; j++)
+			{
+				if
+				( 
+					(auxClusterPayments[j].cobrador_id.toString() == CollectorsArrayAux[i]._id.toString()) //busco por cobrador
+					&& 	(auxClusterPayments[j].createdAt[1] == dateTopay) //busco por fechha de ayer
+				)
+				{
+					resultClusterPayment.push(auxClusterPayments[j])
+				}
+			}
+		}
+
+		countPaymentsByEnrutator = resultClusterPayment.length;
+
+		(countPaymentsByEnrutator > 0)? this._SystemResponse.ok = true : false //seteo el valor de logrado si el cluster resultante tiene objetos
+
+		this._SystemResponse.data = {'total_payments': resultClusterPayment.length, 'payments': resultClusterPayment}
 
 		return this._SystemResponse
 	}

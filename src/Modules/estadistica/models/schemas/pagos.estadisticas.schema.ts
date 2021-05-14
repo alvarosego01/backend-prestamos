@@ -37,32 +37,32 @@ export class TrazaPagoSystema extends Document
   @Prop({
     type: String,
     required: true
-  })//cliente con el menor pago
-  pclient_low: string
+  })//negocio con el menor pago
+  pbussines_id_low: string
 
   @Prop({
     type: String,
     required: true
-  })//cliente con el mayor pago
-  pclient_high: string
+  })//negocio con el mayor pago
+  pbussines_id_high: string
 
   @Prop({
     type: Number,
     required: true
-  })//menor prestamo
-  prestamo_low: number
+  })//menor pago
+  payment_low: number
 
   @Prop({
     type: Number,
     required: true
-  })//myor prestamo
-  prestamo_high: number
+  })//myor pago
+  payment_high: number
 
   @Prop({
     type: Number,
     required: true
-  })//cantidad prestamo
-  prestamo_count: number
+  })//cantidad pagos hechos ese dia
+  payment_count: number
 
   @Prop({
     type: Array,

@@ -1,6 +1,6 @@
 import { Param, Body, Controller, Get, Post, Response, UseGuards } from '@nestjs/common';
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
-import { EstadisticaService, Negocio_EstadisticaService } from '../services/index.services';
+import { EstadisticaService, Negocio_EstadisticaService, Pagos_EstadisticaService } from '../services/index.services';
 
 import { AuthGuard, PassportModule } from '@nestjs/passport';
 import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
@@ -14,13 +14,34 @@ export class EstadisticasController
 	constructor
 	(
 		private readonly _estadisticaServices:EstadisticaService,
-        private readonly _bussinesServices:Negocio_EstadisticaService
+        private readonly _bussinesServices:Negocio_EstadisticaService,
+        private readonly _paymentServices:Pagos_EstadisticaService
 	){} 
 
 	@Get("hello")
     async sayHello()
     {
         return "Controlador de las estadisticas, funcionando";
+    }
+
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    @Get('cobros/stats/:enrutador')
+    async getPaymentStatsByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
+    {//función que retorna la cantidad de negocios totales que maneja el enrutador
+        
+        this._Response = await this._paymentServices.getStatsPaymentByEnrutator(id);
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    @Get('cobros/traza/stats/:enrutador')
+    async getPaymentTraceByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
+    {//función que retorna la cantidad de negocios totales que maneja el enrutador
+        
+        this._Response = await this._paymentServices.getTraceBussinesByEnrutator(id);
+        return res.status(this._Response.status).json(this._Response);
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')

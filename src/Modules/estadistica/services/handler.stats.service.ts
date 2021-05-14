@@ -9,7 +9,7 @@ export class HandlerStatService
 {
 	private readonly debug:boolean //true paa modo de pruebas y fals para modo de produccion
 	private readonly logger:Logger //log del CRON
-	private static readonly timeDBG:string = '*/30 * * * * *' //tiempo para debugeo
+	private static readonly timeDBG:string = '*/20 * * * * *' //tiempo para debugeo
 	private static readonly timePRD:string = '00 30 4 */1 * *' //tiempo para producccion
 	private ClusterErutators:Array<any> //Cluster de enrutadores globales para evitar llamados extra a la base de datos
 	private t_Enrutators:number //Cantidad total de enrutadores dentro del sistema
