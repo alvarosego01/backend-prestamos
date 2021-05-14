@@ -11,9 +11,9 @@ import
 	_configPaginator, 
 	_dataPaginator 
 } from 'src/Response/interfaces/interfaces.index'
-import { TraceBussines } from '../models/interfaces/index.interface';
-import { _TRAZAESTADISTICASYSTEMACHEMA } from '../models/schemas/index.schema';
-import { Negocio } from 'src/Modules/clientes/models/schemas/negocio.schema';
+import { BussinesTrace } from '../models/interfaces/index.interface'
+import { _TRAZAESTADISTICASYSTEMACHEMA } from '../models/schemas/index.schema'
+import { Negocio } from 'src/Modules/clientes/models/schemas/negocio.schema'
 import { TrazaNegocioSystema } from '../models/schemas/negocio.estadistica.schema'
 
 /**TODO
@@ -28,7 +28,7 @@ import { TrazaNegocioSystema } from '../models/schemas/negocio.estadistica.schem
 export class Negocio_EstadisticaService 
 {
 
-	private traceBussines:TraceBussines//objeto que contendrá los datos estadisticos de negocio
+	private traceBussines:BussinesTrace//objeto que contendrá los datos estadisticos de negocio
 	private _Response:responseInterface //interfaz de respuesta a usuario
 	private _SystemResponse:responseInterface //interfaz de respuesta a sistema
 	private logger:Logger //logger
@@ -89,14 +89,14 @@ export class Negocio_EstadisticaService
 
 		if(this._SystemResponse.ok)
 		{   //primero buscaré los valores altos para mostrar
-			aux = this.getLowerOrHigherBussines(this._SystemResponse.data.bussines, 1)
+			aux = this.getLowerOrHigherModel(this._SystemResponse.data.bussines, 1)
 			//empiezo a llenar la traza para mostrar
 			this.traceBussines.pclient_high      = aux.cliente_id.toString()
 			this.traceBussines.cobrador_id_high  = aux.cobrador_id.toString()
 			this.traceBussines.prestamo_high     = aux.total
 			
 			//ahora busco los valores mas bajos
-			aux = this.getLowerOrHigherBussines(this._SystemResponse.data.bussines, 2)
+			aux = this.getLowerOrHigherModel(this._SystemResponse.data.bussines, 2)
 			//empiezo a llenar la traza para mostrar
 			this.traceBussines.pclient_low      = aux.cliente_id.toString()
 			this.traceBussines.cobrador_id_low  = aux.cobrador_id.toString()
@@ -113,7 +113,7 @@ export class Negocio_EstadisticaService
 		return this._SystemResponse
 	}
 
-	private getLowerOrHigherBussines(dataCluster:Array<Negocio>, type:number =1)
+	private getLowerOrHigherModel(dataCluster:Array<any>, type:number =1)
 	{//funcion que me retorna el mayor y el menor valor de un cluster
 	 //1 para mayor 2 para menor	
 		let func:any = ()=>{}
@@ -136,7 +136,6 @@ export class Negocio_EstadisticaService
 
 	private async saveClusterTraceBussines()
 	{//Guardo en base de datos la traza generada de negocios por cada enrutador
-		this.logger.debug("   *GUARDANDO histórico de préstamos/negocios en base de datos...")
 		for(let i:number =0; i <this.t_Enrutator; i++)
 		{
 			this._SystemResponse = await this._statService.saveDataBySystem(this.ClustertraceDB[i])
@@ -153,7 +152,6 @@ export class Negocio_EstadisticaService
 	{//funcion que genera la traza paa guardarle en base
 
 		this.ClustertraceDB = new Array<TrazaNegocioSystema>() //inicializo el cluster
-		this.ClusterEnrutators = new Array<any>()
 
 		if(this.ClusterEnrutators.length > 0)
 		{
@@ -173,23 +171,30 @@ export class Negocio_EstadisticaService
 	}
 
 	//--------funciones públicas de sistema-------------
-	public async generateTraceStatsBussines(debug:boolean =false)
+	public async generateTraceStatsBussines(dataCluster:Array<any>, t_Enrutators:number, debug:boolean =false)
 	{//funcion que genera la traza de ngocios para estudios de control de datos
 		this.logger.debug(' 6)Generando estadisticas de prestamos...')
-		this.t_Enrutator = await this._statService.getTotalEnrutatorsToOtherService()//obtengo el total de enrutadores existentes en el sistema
-		this.ClusterEnrutators = await this._statService.getEnrutatorsToOtherService() //obtengo a todos los enrutadores
+		this.ClusterEnrutators = new Array<any>() //inicializo el cluster de enrutadores
+		this.t_Enrutator = t_Enrutators//obtengo el total de enrutadores existentes en el sistema
+		this.ClusterEnrutators = dataCluster //obtengo a todos los enrutadores
 		await this.generateTrace()//genero la traza de negocio
 		
 		if(debug)
 		{
 			this.logger.debug(' ESTADISTICAS DE NEGOCIOS EN MODO DEBUG, NO GUARDA DATOS EN BASE...')
 			console.log("\nRUTA AL CONTROLADOR server/negocios/stats/:enrutador :\n", await this.getStatsBussinesByEnrutator('5f9a8465a39bda0c1c5b971a'))
+			console.log("\nCLUSTER DE ENRUTADORES en negocios:\n", this.ClusterEnrutators)
 			console.log("\nCLUSTER DE TRAZA DE NEGOCIOS:\n", this.ClustertraceDB)
 		}else
 		{
 			this.logger.debug(' 7)Guardando para histórico de estadisticas de prestamos...')
 			await this.saveClusterTraceBussines() //guardo uno x uno por enrutador las trazas de negocios
 		}
+
+		//finalizo ambos clusters hasta la siguiente traza
+		this.ClusterEnrutators = null
+		this.ClustertraceDB    = null
+		this.t_Enrutator 	   = null
 	}
 	
 }

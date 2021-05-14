@@ -4,12 +4,9 @@ import
 {
     EstadisticaService,
     Negocio_EstadisticaService,
+    Pagos_EstadisticaService,
     HandlerStatService
 } from './services/index.services';
-import
-{
-    _TRAZAESTADISTICASYSTEMACHEMA, _TRAZANEGOCIOSYSTEMACHEMA
-}from './models/schemas/index.schema'
 import { AuthModule } from '../auth/auth.module';
 import { _CLIENTESCHEMA, _NEGOCIOSCHEMA, _COBROSCHEMA } from '../clientes/models/schemas/schemas.index';
 import { _USERSCHEMA } from '../users/models/schemas.index';
@@ -28,6 +25,7 @@ import { Estadisticas_ModelsModule } from './models/estadisticas.models.module';
         ClientesModule,
     	EstadisticaService,
         Negocio_EstadisticaService,
+        Pagos_EstadisticaService,
         HandlerStatService
     ],
     imports:

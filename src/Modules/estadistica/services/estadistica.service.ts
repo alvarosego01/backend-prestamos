@@ -42,7 +42,7 @@ import { TrazaEstadisticaSystema } from 'src/Modules/estadistica/models/schemas/
 export class EstadisticaService 
 {
 	private readonly logger:	Logger //log del CRON
-	private readonly roles:		number //cantidad de pasadas de revisión según la cantidad de roles
+	//private readonly roles:		number //cantidad de pasadas de revisión según la cantidad de roles
 	private _Response:			responseInterface //variable de respuesta de backend
 	private AuxUser:			Array<Users> //auxiliar de modelo usuarios
 	private _SystemResponse:	responseInterface //interfaz de respuesta para sistema
@@ -73,7 +73,7 @@ export class EstadisticaService
 		this.logger = new Logger("Estadisticas") 
 		this.logger.setContext("Sistema de Estadisticas")
 		
-		this.roles = 2;//seteo la cantidad de roles que limpiaré dentro del bucle de depurado
+		//this.roles = 2;//seteo la cantidad de roles que limpiaré dentro del bucle de depurado
 	}
 
     //---------- funciones publicas de usuario-------------
@@ -115,15 +115,15 @@ export class EstadisticaService
 
 		const stats:object =
 		{
-			'users':this.ClusterUsers.length, 
-			'rutas':this.ClusterRutas.length,  
-			'cobros':this.ClusterCobros.length,
-			'nomina': this.ClusterNomina.length, 
-			'clientes':this.ClusterCliente.length,
-			'caja_chica': this.ClusterCajaCh.length, 
-			'negocios':this.ClusterNegocios.length, 
-			'cobradores':this.ClusterCobradores.length, 
-			'enrutdores':this.ClusterEnrutadores.length
+			'users':     	this.ClusterUsers.length, 
+			'rutas':     	this.ClusterRutas.length,  
+			'cobros':    	this.ClusterCobros.length,
+			'nomina':    	this.ClusterNomina.length, 
+			'clientes':  	this.ClusterCliente.length,
+			'caja_chica':	this.ClusterCajaCh.length, 
+			'negocios':	 	this.ClusterNegocios.length, 
+			'cobradores':	this.ClusterCobradores.length, 
+			'enrutdores':	this.ClusterEnrutadores.length
 		}
 
 		this._Response = this._SystemResponse
