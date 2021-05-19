@@ -1,6 +1,12 @@
 import { Param, Body, Controller, Get, Post, Response, UseGuards } from '@nestjs/common';
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
-import { EstadisticaService, Negocio_EstadisticaService, Pagos_EstadisticaService } from '../services/index.services';
+import 
+{ 
+    EstadisticaService, 
+    Negocio_EstadisticaService, 
+    Pagos_EstadisticaService, 
+    Rutas_EstadisticaService 
+} from '../services/index.services';
 
 import { AuthGuard, PassportModule } from '@nestjs/passport';
 import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
@@ -15,7 +21,8 @@ export class EstadisticasController
 	(
 		private readonly _estadisticaServices:EstadisticaService,
         private readonly _bussinesServices:Negocio_EstadisticaService,
-        private readonly _paymentServices:Pagos_EstadisticaService
+        private readonly _paymentServices:Pagos_EstadisticaService,
+        private readonly _routeServices:Rutas_EstadisticaService
 	){} 
 
 	@Get("hello")
@@ -91,6 +98,26 @@ export class EstadisticasController
     {//función que retorna la cantidad de rutas totales que maneja el enrutador
         
         this._Response = await this._estadisticaServices.countRoutesByEnrutator(id);
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    @Get('rutas/stats/:enrutador')
+    async getRouteStatsByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
+    {//función que retorna la data del dia que se maneja en las rutas por el enrutador
+        
+        this._Response = await this._routeServices.getStatsRoutesByEnrutator(id);
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    @Get('rutas/traza/stats/:enrutador')
+    async getRouteTraceByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
+    {//función que retorna la traza de rutas totales que maneja el enrutador
+        
+        this._Response = await this._routeServices.getTraceRoutesByEnrutator(id);
         return res.status(this._Response.status).json(this._Response);
     }
 

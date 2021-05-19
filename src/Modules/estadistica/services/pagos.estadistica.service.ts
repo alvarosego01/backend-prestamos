@@ -16,6 +16,7 @@ import { TrazaPagoSystema } from '../models/schemas/pagos.estadisticas.schema'
 import { Cobros } from 'src/Modules/clientes/models/schemas/cobros.schema'
 
 
+
 @Injectable()
 export class Pagos_EstadisticaService 
 {
@@ -36,7 +37,6 @@ export class Pagos_EstadisticaService
 	{
 		this.logger = new Logger("Estadisticas de cobros") 
 		this.logger.setContext("Estadisticas de cobros")
-		this.t_Enrutator = 0
 		this.paymentTrace =
 		{
 			enrutador_id		:"", //id del enrutador
@@ -52,7 +52,7 @@ export class Pagos_EstadisticaService
 	//--------funciones publicas de usuario-------------
 	public async getStatsPaymentByEnrutator(id:string):Promise<responseInterface>
 	{//funcion que me retorno la traza del dia
-		this._Response = await this.getStatsPaymentsByEnrutatorInSystem(id)
+		this._Response = await this.getStatsPaymentsByEnrutatorInSystem(id, 0)
 
 		return this._Response
 	}
@@ -69,10 +69,10 @@ export class Pagos_EstadisticaService
 	}
 
 	//--------funciones privadas de sistema-------------
-	private async getStatsPaymentsByEnrutatorInSystem(id:string):Promise<responseInterface>
+	private async getStatsPaymentsByEnrutatorInSystem(id:string, days:number):Promise<responseInterface>
 	{//funcion que me retorna estadistica de cobros basado en el enrutador
 		let aux:Cobros
-		this._SystemResponse = await this._statService.getPaymentsBySystemUsingIdEnrutator(id)
+		this._SystemResponse = await this._statService.getPaymentsBySystemUsingIdEnrutator(id, days)
 		this.paymentTrace.enrutador_id = id.toString()
 
 		if(this._SystemResponse.ok)
@@ -95,7 +95,8 @@ export class Pagos_EstadisticaService
 		}else
 		{
 			this._SystemResponse.data = []
-			this._SystemResponse.message = 'No se encontró ningún pago registrado con este enrutador...'
+			this._SystemResponse.message = 'No se encontró ningún pago registrado con este enrutador hoy...'
+			this._SystemResponse.ok = false
 		}
 		
 		return this._SystemResponse
@@ -125,34 +126,34 @@ export class Pagos_EstadisticaService
 	private async generateTrace()
 	{//funcion que genera la traza paa guardarle en base
 
-		this.ClustertraceDB = new Array<TrazaPagoSystema>() //inicializo el cluster
-
 		if(this.ClusterEnrutators.length > 0)
 		{
 			for(let i:number =0; i <this.t_Enrutator; i++)
 			{
-				await this.getStatsPaymentByEnrutator(this.ClusterEnrutators[i]._id)
-				await this.ClustertraceDB.push(new this._trazaPagoModel(this.paymentTrace))
+				await this.getStatsPaymentsByEnrutatorInSystem(this.ClusterEnrutators[i]._id.toString(), -1);
+				(this._SystemResponse.ok)? await this.ClustertraceDB.push(new this._trazaPagoModel(this.paymentTrace)) : false;
 			}
 
 		}else
 		{
-			this.logger.debug('No existen enrutadores en estos momentos..., saltando procedimiento...')
-			this.ClustertraceDB = null
-			this.ClusterEnrutators = null
+			this.logger.debug('   No existen enrutadores en estos momentos..., saltando procedimiento...')
 		}
 	}
 	
 	private async saveClusterTracePayment()
 	{//Guardo en base de datos la traza generada de negocios por cada enrutador
-		for(let i:number =0; i <this.t_Enrutator; i++)
+		if (this.ClustertraceDB.length  > 0) 
 		{
-			this._SystemResponse = await this._statService.saveDataBySystem(this.ClustertraceDB[i])
-			
-		}
-		this.ClustertraceDB = null
-		this.ClusterEnrutators = null
+			for(let i:number =0; i <this.t_Enrutator; i++)
+			{
+				this._SystemResponse = await this._statService.saveDataBySystem(this.ClustertraceDB[i])
+				
+			}
 
+		}else
+		{
+			this.logger.debug('   No existen cobros en estos momentos..., saltando procedimiento...')
+		}
 	}
 
 	//--------funciones públicas de sistema-------------
@@ -168,8 +169,9 @@ export class Pagos_EstadisticaService
 		if(debug)
 		{
 			this.logger.debug(' ESTADISTICAS DE NEGOCIOS/PAGOS EN MODO DEBUG, NO GUARDA DATOS EN BASE...')
-			console.log("\nRUTA AL CONTROLADOR server/cobros/stats/:enrutador :\n", await this.getStatsPaymentByEnrutator('5f9a8465a39bda0c1c5b971a'));
-			console.log("\nCLUSTER DE ENRUTADORES en pagos:\n", this.ClusterEnrutators)
+			console.log("RUTA AL CONTROLADOR server/cobros/stats/:enrutador :\n", await this.getStatsPaymentByEnrutator('5f9a8465a39bda0c1c5b971a'));
+			console.log("CANTIDAD DE ENRUTADORES en pagos:", this.t_Enrutator,'\n')
+			//console.log("\nCLUSTER DE ENRUTADORES en pagos:\n", this.ClusterEnrutators)
 			console.log("\nCLUSTER DE TRAZA DE PAGOS/NEGOCIO:\n", this.ClustertraceDB)
 		
 		}else

@@ -5,7 +5,9 @@ import
     EstadisticaService,
     Negocio_EstadisticaService,
     Pagos_EstadisticaService,
-    HandlerStatService
+    HandlerStatService,
+    Rutas_EstadisticaService,
+    Cajachica_EstadisticaService
 } from './services/index.services';
 import { AuthModule } from '../auth/auth.module';
 import { _CLIENTESCHEMA, _NEGOCIOSCHEMA, _COBROSCHEMA } from '../clientes/models/schemas/schemas.index';
@@ -26,6 +28,8 @@ import { Estadisticas_ModelsModule } from './models/estadisticas.models.module';
     	EstadisticaService,
         Negocio_EstadisticaService,
         Pagos_EstadisticaService,
+        Rutas_EstadisticaService,
+        Cajachica_EstadisticaService,
         HandlerStatService
     ],
     imports:

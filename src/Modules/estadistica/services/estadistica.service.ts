@@ -280,7 +280,8 @@ export class EstadisticaService
 			findObject:{enrutador_id:id}
 		}
 
-		await this.getDataBySystem(this._rutaModel,args)
+		await this.getDataBySystem(this._rutaModel,args);
+		(this._SystemResponse.data.length >0)? this._SystemResponse.ok = true : this._SystemResponse.ok = false
 		return this._SystemResponse
 	}
 
@@ -406,7 +407,17 @@ export class EstadisticaService
 
 	public async getTotalEnrutatorsToOtherService():Promise<number>
 	{//funcion que me permite trasladar el numero de enrutadores a los servicios dedicados 
-		return await this.getTotalEnrutatorsBySystem()
+		return await this.getTotalEnrutatorsBySystem() || 0
+	}
+
+	public async getTotalRoutesByEnrutatorsToOtherService(id:string):Promise<number>
+	{//funcion que me permite trasladar el numero de rutas a los servicios dedicados 
+		return await (await this.countRoutesByEnrutator(id)).data || 0
+	}
+
+	public async getRoutesByEnrutatorsToOtherService(id:string):Promise<responseInterface>
+	{//funcion que me permite trasladar las rutas de enrutadores a los servicios dedicados 
+		return await this.getRoutesByEnrutator(id)
 	}
 
 	public async getEnrutatorsToOtherService():Promise<Array<Users>>
@@ -532,13 +543,13 @@ export class EstadisticaService
 		return this._SystemResponse
 	}
 
-	public async getPaymentsBySystemUsingIdEnrutator(id:string):Promise<responseInterface>
+	public async getPaymentsBySystemUsingIdEnrutator(id:string, days:number):Promise<responseInterface>
 	{
 		let CollectorsArrayAux:Array<Users>    = await(await this.getCollectorsByEnrutator(id)).data
 		let countPaymentsByEnrutator:number    = 0//creo una variable auxiliar que cuente la cantidad de negocios
 		let auxClusterPayments:Array<Cobros>   = await this.getAllPaymentBySystem() //me jalo todos los cobros
 		let resultClusterPayment:Array<Cobros> = Array<Cobros>() //una variable axuliar que retorna el resultado de la depuracion
-		let dateTopay:string 				   = this._dateProcessService.getNextPointInTime(-1)//seteo los pagos del dia anterior
+		let dateTopay:string 				   = this._dateProcessService.getNextPointInTime(days)//seteo los pagos del dia anterior
 		this._SystemResponse.ok                = false // mientras que no se entre al bucle de filtrado a operacion será fallida
 
 		for(let i:number =0; i < CollectorsArrayAux.length; i++)
