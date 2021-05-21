@@ -1,9 +1,33 @@
 import { MongooseModule } from "@nestjs/mongoose"; 
-import { TrazaRutas, TrazaRutasSchema } from './traza_rutas.estadistica.schema'
+import { TrazaEstadisticaSystema, TrazaEstadisticaSystemaSchema } from './traza.estadistica.schema'
+import { TrazaNegocioSystema, TrazaNegocioSystemaSchema } from './negocio.estadistica.schema'
+import { TrazaPagoSystema, TrazaPagoSystemaSchema } from './pagos.estadisticas.schema'
+import { TrazaRutaSystema, TrazaRutaSystemaSchema } from './rutas.estadistica.schema'
 
-export const _TRAZARUTASCHEMA = MongooseModule.forFeature([
+export const _TRAZAESTADISTICASYSTEMACHEMA = MongooseModule.forFeature([
   { 
-    name: TrazaRutas.name,  
-    schema: TrazaRutasSchema,
+    name: TrazaEstadisticaSystema.name,  
+    schema: TrazaEstadisticaSystemaSchema,
+  },
+]);
+
+export const _TRAZANEGOCIOSYSTEMACHEMA = MongooseModule.forFeature([
+  { 
+    name: TrazaNegocioSystema.name,  
+    schema: TrazaNegocioSystemaSchema,
+  },
+]);
+
+export const _TRAZAPAGOSYSTEMACHEMA = MongooseModule.forFeature([
+  { 
+    name: TrazaPagoSystema.name,  
+    schema: TrazaPagoSystemaSchema,
+  },
+]);
+
+export const _TRAZARUTASYSTEMACHEMA = MongooseModule.forFeature([
+  { 
+    name: TrazaRutaSystema.name,  
+    schema: TrazaRutaSystemaSchema,
   },
 ]);
