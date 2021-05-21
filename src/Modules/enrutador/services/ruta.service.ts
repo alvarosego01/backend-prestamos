@@ -18,18 +18,22 @@ export class RutaService
         private _dateProcessService:DateProcessService
     ){}
 
-    async getAllGlobalRoutes():Promise<responseInterface>
+    async getAllGlobalRoutes(page):Promise<responseInterface>
     {
         const parameters: _dataPaginator =
         {
-            page: 1 || _configPaginator.page,
+            page: page || _configPaginator.page,
             limit: 12 || _configPaginator.limit,
             customLabels: _configPaginator.customLabels,
             sort: { _id: -1 },
-            populate: {
-                path: 'clientes_id',
-                // select: '-pass'
-              }
+            populate: [
+                {
+                    path: 'enrutador_id',
+                    model: 'Users',
+                    select: '-pass'
+                }
+            ]
+
 
         }
 
@@ -37,7 +41,7 @@ export class RutaService
         {
             findObject:
             {
-                populate: [{ path: 'Negocio' }]
+                // populate: [{ path: 'Negocio' }]
             },
             options: parameters
         }

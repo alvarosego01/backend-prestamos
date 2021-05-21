@@ -18,12 +18,6 @@ export class RutasController
         private _rutaService:RutaService
     ){}
 
-    // @Get('hello')
-    // sayHello()
-    // {
-    //     console.clear();
-    //     return "Controlador de rutas activo";
-    // }
 
     // obtener todos los clientes a partir de una ruta
     // @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
@@ -40,9 +34,9 @@ export class RutasController
     }
 
     @Get('allRoutes')
-    async getAllClientsAdmin( @Response() res:any):Promise<responseInterface>
+    async getAllClientsAdmin( @Response() res:any, @Request() req: any ):Promise<responseInterface>
     {
-        this._Response = await this._rutaService.getAllGlobalRoutes();
+        this._Response = await this._rutaService.getAllGlobalRoutes( req.page );
         return res.status(this._Response.status).json(this._Response);
     }
 
