@@ -50,7 +50,7 @@ export class GastosOperacion extends Document
 }
 export const GastosOperacionSchema = SchemaFactory.createForClass(GastosOperacion);
 
-@Schema() 
+@Schema()
 export class CajaChica extends Document 
 {
 

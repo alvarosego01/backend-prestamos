@@ -44,10 +44,6 @@ import { AuthModule } from "../auth/auth.module";
 		CajachicaService,
 		GastosoperacionesService,
 		PagoService
-	],
-	exports:
-	[
-		SchemasModule 
 	]
 })
 export class NominaModule {}

@@ -1,12 +1,6 @@
 import { Param, Body, Controller, Get, Post, Response, UseGuards } from '@nestjs/common';
 import { responseInterface } from 'src/Response/interfaces/interfaces.index';
-import 
-{ 
-    EstadisticaService, 
-    Negocio_EstadisticaService, 
-    Pagos_EstadisticaService, 
-    Rutas_EstadisticaService 
-} from '../services/index.services';
+import { EstadisticaService } from '../services/index.services';
 
 import { AuthGuard, PassportModule } from '@nestjs/passport';
 import {RolesDecorator} from "src/Modules/role/decorators/role.decorator";
@@ -19,10 +13,7 @@ export class EstadisticasController
 
 	constructor
 	(
-		private readonly _estadisticaServices:EstadisticaService,
-        private readonly _bussinesServices:Negocio_EstadisticaService,
-        private readonly _paymentServices:Pagos_EstadisticaService,
-        private readonly _routeServices:Rutas_EstadisticaService
+		private _estadisticaServices:EstadisticaService
 	){} 
 
 	@Get("hello")
@@ -33,27 +24,17 @@ export class EstadisticasController
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Get('cobros/stats/:enrutador')
-    async getPaymentStatsByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
-    {//función que retorna la cantidad de negocios totales que maneja el enrutador
-        
-        this._Response = await this._paymentServices.getStatsPaymentByEnrutator(id);
+    @Post('ruta/traza/:enrutador')
+    async getTraceOfRoutesByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
+    {//función que retorna la traza de cantidad de rutas por dias, puede usar el front para aplicar filtros por fecha y otros
+    	
+        this._Response = await this._estadisticaServices.getTraceOfRoutesByEnrutator(id);
         return res.status(this._Response.status).json(this._Response);
     }
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Get('cobros/traza/stats/:enrutador')
-    async getPaymentTraceByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
-    {//función que retorna la cantidad de negocios totales que maneja el enrutador
-        
-        this._Response = await this._paymentServices.getTraceBussinesByEnrutator(id);
-        return res.status(this._Response.status).json(this._Response);
-    }
-
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Get('negocios/cantidad/:enrutador')
+    @Post('negocios/cantidad:enrutador')
     async countBussinesByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
     {//función que retorna la cantidad de negocios totales que maneja el enrutador
         
@@ -63,27 +44,7 @@ export class EstadisticasController
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Get('negocios/stats/:enrutador')
-    async getBussinesStatsByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
-    {//función que retorna el estatus de los negocios manejados por un enrutador
-        
-        this._Response = await this._bussinesServices.getStatsBussinesByEnrutator(id);
-        return res.status(this._Response.status).json(this._Response);
-    }
-
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Get('negocios/traza/stats:enrutador')
-    async getBussinesTraceByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
-    {//función que retorna el historico de los negocios manejados por un enrutador
-        
-        this._Response = await this._bussinesServices.getTraceBussinesByEnrutator(id);
-        return res.status(this._Response.status).json(this._Response);
-    }
-
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Get('cobradores/cantidad/:enrutador')
+    @Post('cobradores/cantidad:enrutador')
     async countCollectorByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
     {//función que retorna la cantidad de cobradores totales que maneja el enrutador
         
@@ -93,7 +54,7 @@ export class EstadisticasController
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Get('rutas/cantidad/:enrutador')
+    @Post('rutas/cantidad:enrutador')
     async countRoutesByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
     {//función que retorna la cantidad de rutas totales que maneja el enrutador
         
@@ -103,27 +64,7 @@ export class EstadisticasController
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Get('rutas/stats/:enrutador')
-    async getRouteStatsByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
-    {//función que retorna la data del dia que se maneja en las rutas por el enrutador
-        
-        this._Response = await this._routeServices.getStatsRoutesByEnrutator(id);
-        return res.status(this._Response.status).json(this._Response);
-    }
-
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Get('rutas/traza/stats/:enrutador')
-    async getRouteTraceByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
-    {//función que retorna la traza de rutas totales que maneja el enrutador
-        
-        this._Response = await this._routeServices.getTraceRoutesByEnrutator(id);
-        return res.status(this._Response.status).json(this._Response);
-    }
-
-    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Get('clientes/cantidad/:enrutador')
+    @Post('clientes/cantidad:enrutador')
     async countClientByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
     {//función que retorna la cantidad de clientes totales que maneja el enrutador
         
@@ -131,23 +72,13 @@ export class EstadisticasController
         return res.status(this._Response.status).json(this._Response);
     }
 
-    @RolesDecorator('ADMIN_ROLE')
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Get('admin/stats')
+    @Post('admin/stats')
     async getAdminStats(@Response() res:any): Promise<responseInterface>
     {//función que retorna resumen del sistema, la cantidad de todos los datos registrados...
         
         this._Response = await this._estadisticaServices.getAllSystemResumeByAdmin();
-        return res.status(this._Response.status).json(this._Response);
-    }
-
-    @RolesDecorator('ADMIN_ROLE')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Get('admin/traza/stats')
-    async getAdminTraceStats(@Response() res:any): Promise<responseInterface>
-    {//función que retorna resumen del sistema, la cantidad de todos los datos registrados...
-        
-        this._Response = await this._estadisticaServices.getTraceSystemStatsByAdmin();
         return res.status(this._Response.status).json(this._Response);
     }
 }
