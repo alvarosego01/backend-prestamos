@@ -135,7 +135,7 @@ export class EstadisticasController
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Get('rutas/traza/stats/:enrutador')
+    @Get('cajach/stats/:enrutador')
     async getStatPettyCashByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
     {//función que retorna las estadisticas diarias de las cajas chichas
         
@@ -145,7 +145,7 @@ export class EstadisticasController
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Get('rutas/traza/stats/:enrutador')
+    @Get('cajach/traza/stats/:enrutador')
     async getTracePettyCashByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
     {//función que retorna la traza de caja chicas totales que maneja el enrutador
         
