@@ -34,6 +34,6 @@ import { TablaDiariaService } from '../enrutador/services/services.index';
     imports:[_CLIENTESCHEMA, _COBROSCHEMA, _CAMBIOCOBROSCHEMA, _NEGOCIOSCHEMA, _CUOTASCHEMA, AuthModule, ],
     controllers:[ClientesController, CobrosClienteController, PeticionCobrosController, NegocioController],
     providers:[ClienteService, RutaClienteService, CobrosClienteService, PeticionesCobrosService, NegocioService, TablaDiariaService],
-    exports:[ClienteService, RutaClienteService, CobrosClienteService, _COBROSCHEMA, _NEGOCIOSCHEMA, _CLIENTESCHEMA]
+    exports:[ClienteService, RutaClienteService, CobrosClienteService, _COBROSCHEMA]
 })
 export class ClientesModule {}
