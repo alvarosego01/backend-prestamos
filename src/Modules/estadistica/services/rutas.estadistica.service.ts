@@ -116,7 +116,7 @@ export class Rutas_EstadisticaService
 	private getCountLowerOrHigherModel(dataCluster:Array<any>, type:string)
 	{
 
-		let func:object =
+		const func:object =
 		{
 			higherCountBussines: (prev:Ruta, current:Ruta) => //rutas con mas negocios
 						    	 (prev.negocios_id.length > current.negocios_id.length)? 

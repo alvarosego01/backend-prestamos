@@ -64,7 +64,7 @@ export class CajaChica extends Document
     @Prop({//dueño de la caja y solo debe existir un solo cobrador con una sola caja
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Users',
-        required: [true, 'Debe instanciar al dueño de la caja chicha'],
+        required: [true, 'Debe instanciar alsylas dueño de la caja chicha'],
         unique: true
     })
     cobrador: string; 

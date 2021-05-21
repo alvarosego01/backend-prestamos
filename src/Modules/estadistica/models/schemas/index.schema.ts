@@ -3,6 +3,7 @@ import { TrazaEstadisticaSystema, TrazaEstadisticaSystemaSchema } from './traza.
 import { TrazaNegocioSystema, TrazaNegocioSystemaSchema } from './negocio.estadistica.schema'
 import { TrazaPagoSystema, TrazaPagoSystemaSchema } from './pagos.estadisticas.schema'
 import { TrazaRutaSystema, TrazaRutaSystemaSchema } from './rutas.estadistica.schema'
+import { TrazaCajaCHSystema, TrazaCajaCHSystemaSchema } from './cajachica.estadistica.schema'
 
 export const _TRAZAESTADISTICASYSTEMACHEMA = MongooseModule.forFeature([
   { 
@@ -29,5 +30,12 @@ export const _TRAZARUTASYSTEMACHEMA = MongooseModule.forFeature([
   { 
     name: TrazaRutaSystema.name,  
     schema: TrazaRutaSystemaSchema,
+  },
+]);
+
+export const _TRAZACAJACHSYSTEMACHEMA = MongooseModule.forFeature([
+  { 
+    name: TrazaCajaCHSystema.name,  
+    schema: TrazaCajaCHSystemaSchema,
   },
 ]);

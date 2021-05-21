@@ -4,6 +4,7 @@ import { EstadisticaService } from './estadistica.service'
 import { Negocio_EstadisticaService } from './negocio.stadistica.service'
 import { Pagos_EstadisticaService } from './pagos.estadistica.service'
 import { Rutas_EstadisticaService } from './rutas.estadistica.service'
+import { Cajachica_EstadisticaService } from './cajachica.estadistica.service'
 
 @Injectable()
 /**
@@ -13,7 +14,7 @@ export class HandlerStatService
 {
 	private readonly debug:boolean //true paa modo de pruebas y fals para modo de produccion
 	private readonly logger:Logger //log del CRON
-	private static readonly timeDBG:string = '*/20 * * * * *' //tiempo para debugeo
+	private static readonly timeDBG:string = '*/10 * * * * *' //tiempo para debugeo
 	private static readonly timePRD:string = '00 30 4 */1 * *' //tiempo para producccion
 	private ClusterErutators:Array<any> //Cluster de enrutadores globales para evitar llamados extra a la base de datos
 	private t_Enrutators:number //Cantidad total de enrutadores dentro del sistema
@@ -24,14 +25,13 @@ export class HandlerStatService
 		private readonly _statServices:EstadisticaService,
 		private readonly _bussinesStatService:Negocio_EstadisticaService,
 		private readonly _paytmentStatService:Pagos_EstadisticaService,
-		private readonly _routeStatService:Rutas_EstadisticaService
+		private readonly _routeStatService:Rutas_EstadisticaService,
+		private readonly _cajaCHStatService:Cajachica_EstadisticaService
 	)
 	{
 		this.debug = true //seteo de modo de pruebas
 		this.logger = new Logger("CRONHANDLER") 
-		this.logger.setContext("Sistema automatizado de estadisticas")
-		
-		
+		this.logger.setContext("Sistema automatizado de estadisticas") 
 	}
 
 	
@@ -50,21 +50,16 @@ export class HandlerStatService
 
 		if (this.debug) //condicional que me permite debuguear procesos y funciones
 		{
-			console.clear()
+			console.clear() 
 			console.log('\n');
 			this.logger.debug(' #MODO DEBUG, procedimientos en pruebas... \n\n')
-			await this._statServices.systemStats(this.debug)
-			await this._bussinesStatService.generateTraceStatsBussines(this.ClusterErutators, this.t_Enrutators, this.debug)
-			await this._paytmentStatService.generateTraceStatsPayment(this.ClusterErutators, this.t_Enrutators, this.debug)
-			await this._routeStatService.generateTraceStatRoutes(this.ClusterErutators, this.ClusterRoutes, this.t_Enrutators, this.debug)
+		} 
 
-		} else 
-		{
-			await this._statServices.systemStats()//llamo a la funcion para generar estadisticas
-			await this._bussinesStatService.generateTraceStatsBussines(this.ClusterErutators, this.t_Enrutators )//llamo a la funcion para generar estadisticas de negocios
-			await this._paytmentStatService.generateTraceStatsPayment(this.ClusterErutators, this.t_Enrutators )
-			await this._routeStatService.generateTraceStatRoutes(this.ClusterErutators, this.ClusterRoutes, this.t_Enrutators)
-		}
+		await this._statServices.systemStats(this.debug)
+		await this._bussinesStatService.generateTraceStatsBussines(this.ClusterErutators, this.t_Enrutators, this.debug)
+		await this._paytmentStatService.generateTraceStatsPayment(this.ClusterErutators, this.t_Enrutators, this.debug)
+		await this._routeStatService.generateTraceStatRoutes(this.ClusterErutators, this.ClusterRoutes, this.t_Enrutators, this.debug)
+		await this._cajaCHStatService.generateTraceStatsPettyCash(this.ClusterErutators, this.t_Enrutators, this.debug)
 
 		this.ClusterErutators = null
 		this.t_Enrutators = null

@@ -5,7 +5,8 @@ import
     EstadisticaService, 
     Negocio_EstadisticaService, 
     Pagos_EstadisticaService, 
-    Rutas_EstadisticaService 
+    Rutas_EstadisticaService,
+    Cajachica_EstadisticaService 
 } from '../services/index.services';
 
 import { AuthGuard, PassportModule } from '@nestjs/passport';
@@ -22,7 +23,8 @@ export class EstadisticasController
 		private readonly _estadisticaServices:EstadisticaService,
         private readonly _bussinesServices:Negocio_EstadisticaService,
         private readonly _paymentServices:Pagos_EstadisticaService,
-        private readonly _routeServices:Rutas_EstadisticaService
+        private readonly _routeServices:Rutas_EstadisticaService,
+        private readonly _cajaCHService:Cajachica_EstadisticaService
 	){} 
 
 	@Get("hello")
@@ -128,6 +130,26 @@ export class EstadisticasController
     {//función que retorna la cantidad de clientes totales que maneja el enrutador
         
         this._Response = await this._estadisticaServices.countClientByEnrutator(id);
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    @Get('rutas/traza/stats/:enrutador')
+    async getStatPettyCashByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
+    {//función que retorna las estadisticas diarias de las cajas chichas
+        
+        this._Response = await this._cajaCHService.getStatsPettyCashByEnrutator(id);
+        return res.status(this._Response.status).json(this._Response);
+    }
+
+    @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    @Get('rutas/traza/stats/:enrutador')
+    async getTracePettyCashByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
+    {//función que retorna la traza de caja chicas totales que maneja el enrutador
+        
+        this._Response = await this._cajaCHService.getTracePettyCashByEnrutator(id);
         return res.status(this._Response.status).json(this._Response);
     }
 

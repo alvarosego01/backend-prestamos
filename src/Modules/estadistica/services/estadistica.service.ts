@@ -67,6 +67,7 @@ export class EstadisticaService
 		@InjectModel(Cobros.name) private readonly _cobrosModel:Model<Cobros>,
 		@InjectModel(CajaChica.name) private readonly _cajachModel:Model<CajaChica>,
 		@InjectModel(Nomina.name) private readonly _nominahModel:Model<Nomina>,
+		@InjectModel(CajaChica.name) private readonly _pettyCashModel:Model<CajaChica>,
 		@InjectModel(TrazaEstadisticaSystema.name) private _trazaModel:Model<TrazaEstadisticaSystema>
     )
 	{
@@ -247,7 +248,8 @@ export class EstadisticaService
 			findObject:{enrutador:id}
 		}
 
-		await this.getDataBySystem(this._cajachModel,args)
+		await this.getDataBySystem(this._cajachModel,args);
+        (this._SystemResponse.data.length > 0)? this._SystemResponse.ok = true : this._SystemResponse.ok = false
 		return this._SystemResponse
 	}
 
@@ -258,7 +260,8 @@ export class EstadisticaService
 			findObject:{enrutador:id}
 		}
 
-		await this.getDataBySystem(this._nominahModel,args)
+		await this.getDataBySystem(this._nominahModel,args);
+        (this._SystemResponse.data.length > 0)? this._SystemResponse.ok = true : this._SystemResponse.ok = false
 		return this._SystemResponse
 	}
 
@@ -269,7 +272,8 @@ export class EstadisticaService
 			findObject:{enrutador_id:id}
 		}
 
-		await this.getDataBySystem(this._clienteModel,args)
+		await this.getDataBySystem(this._clienteModel,args);
+        (this._SystemResponse.data.length > 0)? this._SystemResponse.ok = true : this._SystemResponse.ok = false
 		return this._SystemResponse
 	}
 
@@ -292,7 +296,8 @@ export class EstadisticaService
 			findObject:{enrutator_id:id}
 		}
 
-		await this.getDataBySystem(this._usuariosModel,args)
+		await this.getDataBySystem(this._usuariosModel,args);
+        (this._SystemResponse.data.length > 0)? this._SystemResponse.ok = true : this._SystemResponse.ok = false
 		return this._SystemResponse
 	}
 
@@ -314,7 +319,20 @@ export class EstadisticaService
 			findObject:{cobrador_id:id}
 		}
 
-        await this.getDataBySystem(this._cobrosModel,args)
+        await this.getDataBySystem(this._cobrosModel,args);
+        (this._SystemResponse.data.length > 0)? this._SystemResponse.ok = true : this._SystemResponse.ok = false
+		return this._SystemResponse
+	}
+
+	private async getPettyCashByCollector(id:string):Promise<responseInterface>
+	{//función que le cuenta al momento cuantos negocios tiene a su disposición el cobrador
+		const args:_argsFind =
+		{
+			findObject:{enrutador:id}
+		}
+
+        await this.getDataBySystem(this._pettyCashModel,args);
+        (this._SystemResponse.data.length > 0)? this._SystemResponse.ok = true : this._SystemResponse.ok = false
 		return this._SystemResponse
 	}
 
@@ -418,6 +436,11 @@ export class EstadisticaService
 	public async getRoutesByEnrutatorsToOtherService(id:string):Promise<responseInterface>
 	{//funcion que me permite trasladar las rutas de enrutadores a los servicios dedicados 
 		return await this.getRoutesByEnrutator(id)
+	}
+
+	public async getPettyCashByEnrutatorsToOtherService(id:string):Promise<responseInterface>
+	{//funcion que me permite trasladar las rutas de enrutadores a los servicios dedicados 
+		return await this.getPettyCashByCollector(id)
 	}
 
 	public async getEnrutatorsToOtherService():Promise<Array<Users>>
