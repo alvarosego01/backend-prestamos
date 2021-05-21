@@ -89,7 +89,7 @@ export class TablaDiariaService
     //funcion para obtener los cobros correspondientes en base al id del cobrador
     public async getDiallyByCollector(idCollector:string):Promise<responseInterface>
     {
-       const parameters: _dataPaginator =
+        const parameters: _dataPaginator =
         {
             page: 1 || _configPaginator.page,
             limit: 12 || _configPaginator.limit,
