@@ -75,7 +75,7 @@ export class EstadisticasController
 
     @RolesDecorator('ADMIN_ROLE', 'ENRUTATOR_ROLE')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Get('negocios/traza/stats:enrutador')
+    @Get('negocios/traza/stats/:enrutador')
     async getBussinesTraceByEnrutator(@Param('enrutador') id:string, @Response() res:any): Promise<responseInterface>
     {//función que retorna el historico de los negocios manejados por un enrutador
         

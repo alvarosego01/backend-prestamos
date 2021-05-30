@@ -22,17 +22,18 @@ import
 {
     NegocioCreacionDto,
     NegocioModificacionDto,
-    NegocioPeticionDto, NegocioUnicoPeticionDto,
+    NegocioPeticionDto, 
+    NegocioUnicoPeticionDto,
 
 }
 from '../models/dto/index.dto';
 import {Negocio} from '../models/schemas/negocio.schema';
+import {TablaDiariaService} from 'src/Modules/enrutador/services/tabla-diaria.service';
 
 @Injectable()
 export class NegocioService
 {
     // private _Response:responseInterface;
-
     // constructor
     // (
     //     @InjectModel(Negocio.name) private _negocioModel:Model<Negocio>,
@@ -143,6 +144,7 @@ export class NegocioService
 
         @InjectModel(Negocio.name) private _negocioModel:Model<Negocio>,
         @InjectModel(Ruta.name) private RutaModel:Model<Ruta>,
+        private _tablaDiariaService:TablaDiariaService,
         private _processData:ProcessDataService,
         private _dateProcessService:DateProcessService
 
@@ -243,7 +245,8 @@ export class NegocioService
 
             await this.addNegocioToRuta(idRuta, data._id);
 
-            this._Response.message = 'Venta añadida'
+            this._Response.message = 'Venta añadida';
+            await this._tablaDiariaService.manualSaveITem(data._id, idRuta);
         },
         err =>
         {
